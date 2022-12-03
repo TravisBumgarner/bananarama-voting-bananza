@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import { colors } from 'theme'
 
 const H1 = styled.h1`
+    font-size: 3rem;
     color: ${colors.PRIMARY.base};
+    margin: 0 0 1rem;
 `
 
 const H2 = styled.h2`

@@ -1,5 +1,6 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql'
 import { RedisPubSub } from 'graphql-redis-subscriptions'
+import { MessageType } from '../redis/types'
 
 const pubsub = new RedisPubSub({ connection: 'redis' })
 
@@ -9,7 +10,7 @@ const RootQueryType = new GraphQLObjectType({
     fields: {
         greetings: {
             type: GraphQLString,
-            subscribe: () => pubsub.asyncIterator('GREETING'),
+            subscribe: () => pubsub.asyncIterator(MessageType.Greeting),
             resolve: (payload) => {
                 return 'nasdjlasd'
             }

@@ -10,8 +10,15 @@ const logger = (message: any) => {
     console.log(JSON.stringify(message)) // eslint-disable-line
 }
 
+const sanitizeRoomId = (dangerousString: string) => {
+    const re = /[^a-z0-9-]/gi
+    const cleanString = dangerousString.replace(re, '')
+    return cleanString
+}
+
 export {
     logger,
     AtLeast,
     Exactly,
+    sanitizeRoomId
 }

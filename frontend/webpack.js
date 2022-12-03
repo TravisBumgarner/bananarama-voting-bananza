@@ -6,15 +6,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const PLUGIN_VARS = {
     local: {
         __API_ENDPOINT__: "'http://localhost:8080'",
-        __FIREBASE_CONFIG__: "'staging'",
         __LOGGING_LEVEL__: "'local'",
-        __FEEDBACK_FORM_URL__: "'https://forms.gle/qQLtbhgJP1QMKxSZ6'"
     },
     production: {
         __API_ENDPOINT__: "' https://backend-26zg2vwovq-uc.a.run.app'",
-        __FIREBASE_CONFIG__: "'production'",
         __LOGGING_LEVEL__: "'sentry'",
-        __FEEDBACK_FORM_URL__: "'https://forms.gle/qQLtbhgJP1QMKxSZ6'"
     }
 }
 

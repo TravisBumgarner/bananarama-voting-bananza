@@ -13,6 +13,15 @@ const EntryType = new GraphQLObjectType({
     }),
 })
 
+const RoomType = new GraphQLObjectType({
+    name: 'Room',
+    description: 'This represents a Room',
+    fields: () => ({
+        id: { type: new GraphQLNonNull(GraphQLString) },
+    }),
+})
+
 export {
     EntryType,
+    RoomType
 }

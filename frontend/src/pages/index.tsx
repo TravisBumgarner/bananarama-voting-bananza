@@ -1,10 +1,12 @@
 import { Context, context } from 'context'
 import Error from './Error'
-import LandingPage from './LandingPage'
+import CreateRoom from './CreateRoom'
+import Room from './Room'
 
 export {
     Context,
     context,
     Error,
-    LandingPage,
+    Room,
+    CreateRoom,
 }

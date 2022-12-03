@@ -1,5 +1,4 @@
 import { useReducer, createContext } from 'react'
-import { User } from 'firebase/auth'
 
 import { logger } from 'utilities'
 
@@ -8,41 +7,16 @@ type State = {
         body: string,
         timeToLiveMS: number | undefined
     } | null
-    appHydrated: boolean
-    currentUser: User | null | undefined
     hasErrored: boolean
 }
 
 const EMPTY_STATE: State = {
     message: null,
-    appHydrated: false,
-    currentUser: undefined,
     hasErrored: false
 }
 
 type HasErrored = {
     type: 'HAS_ERRORED'
-}
-
-type UserSignup = {
-    type: 'USER_SIGNED_UP'
-    data: {
-        currentUser: User
-    }
-}
-
-type UserLogin = {
-    type: 'USER_LOGGED_IN'
-    data: {
-        currentUser: User
-    }
-}
-
-type UserSignedOut = {
-    type: 'USER_SIGNED_OUT'
-    data: {
-        currentUser: null
-    }
 }
 
 type AddMessage = {
@@ -60,9 +34,6 @@ type DeleteMessage = {
 type Action =
     | AddMessage
     | DeleteMessage
-    | UserLogin
-    | UserSignup
-    | UserSignedOut
     | HasErrored
 
 const context = createContext(

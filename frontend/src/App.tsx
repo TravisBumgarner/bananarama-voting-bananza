@@ -1,5 +1,6 @@
 import { useCallback, useContext } from 'react'
 import { BrowserRouter } from 'react-router-dom'
+import styled from 'styled-components'
 import {
     ApolloClient,
     HttpLink,
@@ -17,7 +18,15 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 
 import { GlobalStyle } from 'theme'
 import { context, Context } from 'context'
-import { Header, AlertMessage, Router } from './components'
+import { AlertMessage, Router } from './components'
+
+const AppWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+`
 
 const wsLink = new GraphQLWsLink(createClient({ url: 'ws://localhost:4000/graphql', }))
 const httpLink = new HttpLink({ uri: 'http://localhost:8080/graphql' })
@@ -92,47 +101,13 @@ const App = () => {
     }
 
     return (
-        <>
+        <AppWrapper>
             {state.message ? <AlertMessage /> : null}
-            <Header />
             <Router />
             <button type="button" onClick={mutate}>Mutate</button>
-        </>
+        </AppWrapper>
     )
 }
-
-// const GraphQLWrapper = () => {
-//     const [client, setClient] = useState<ApolloClient<NormalizedCacheObject> | null>(null)
-//     // const [isLoading, setIsLoading] = useState<boolean>(true)
-
-//     // useEffect(() => {
-//     //     const getClient = async () => {
-//     //         const httpLink = createHttpLink({
-//     //             uri: `${__API_ENDPOINT__}/graphql`,
-//     //         })
-
-//     //         const newClient = new ApolloClient({
-//     //             cache: new InMemoryCache(),
-//     //             link: httpLink,
-//     //         })
-//     //         setClient(newClient)
-//     //         setIsLoading(false)
-//     //     }
-
-//     //     getClient()
-//     // }, [])
-//     console.log(isLoading)
-//     if (isLoading) {
-//         console.log('um')
-//         return <Loading />
-//     }
-
-//     return (
-//         <ApolloProvider client={client!}>
-//             <App />
-//         </ApolloProvider>
-//     )
-// }
 
 const ContextWrapper = () => (
     <BrowserRouter>
