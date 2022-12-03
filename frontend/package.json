@@ -8,6 +8,7 @@
         "@sentry/tracing": "^6.18.1",
         "axios": "^0.26.0",
         "graphql": "^16.6.0",
+        "graphql-ws": "^5.11.2",
         "polished": "^4.1.4",
         "react": "^16.14.0",
         "react-dom": "^16.14.0",

@@ -1,11 +1,13 @@
 import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
+import { useServer } from 'graphql-ws/lib/use/ws'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import * as Sentry from '@sentry/node'
-import schema from './schemas'
+import * as Tracing from '@sentry/tracing'
+import { WebSocketServer } from 'ws' // yarn add ws
 
-type ModifiedExpressRequest = express.Request & { firebaseId: string }
+import schema from './schemas'
 
 const app = express()
 
@@ -20,25 +22,48 @@ app.use((req, res, next) => {
 })
 app.use(cors({
     origin: [
-        'https://placeaday-fd46a.web.app/'
+        'localhost:3000'
     ]
 }))
 
 app.use(bodyParser.json())
 
-app.get('/ok', async (req: ModifiedExpressRequest, res: express.Response) => {
+app.get('/ok', async (req: express.Request, res: express.Response) => {
     res.send('pong!')
 })
 
-app.use('/graphql', graphqlHTTP((req: ModifiedExpressRequest) => ({
+app.use('/graphql', graphqlHTTP(() => ({
     schema,
     graphiql: process.env.NODE_ENV !== 'production',
-    context: { firebaseId: req.firebaseId },
 })))
 
 app.use(Sentry.Handlers.errorHandler())
-app.use((err, req: ModifiedExpressRequest, res: express.Response) => {
+app.use((err, req: express.Request, res: express.Response) => {
     res.statusCode = 500
 })
 
-export default app
+Sentry.init({
+    dsn: 'https://c381a2e3d0dc403b9ed5fa31ee701265@o196886.ingest.sentry.io/4504143134785536',
+    integrations: [
+        new Sentry.Integrations.Http({ tracing: true }),
+        new Tracing.Integrations.Express({ app }),
+    ],
+    tracesSampleRate: 1.0,
+})
+
+const startup = async () => {
+    await app.listen(8080, '0.0.0.0', () => {
+        console.log('App listening at http://0.0.0.0:8080') //eslint-disable-line
+    })
+
+    const server = app.listen(4000, () => {
+        console.log('starting on 4000')
+    })
+    const wsServer = new WebSocketServer({
+        server,
+        path: '/graphql',
+    })
+    useServer({ schema }, wsServer)
+}
+
+export default startup

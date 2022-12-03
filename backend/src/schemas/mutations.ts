@@ -1,8 +1,9 @@
-import {
-    GraphQLObjectType,
-} from 'graphql'
+import { GraphQLObjectType, } from 'graphql'
+import { RedisPubSub } from 'graphql-redis-subscriptions'
 
 import { EntryType } from './types'
+
+const pubsub = new RedisPubSub({ connection: 'redis' })
 
 const addEntry = {
     type: EntryType,
@@ -10,7 +11,11 @@ const addEntry = {
     args: {
     },
     resolve: async () => {
-        return 'foo got barred'
+        await pubsub.publish('GREETING', 'hi')
+        return {
+            foo: 'foo',
+            bar: 'bar'
+        }
     },
 }
 
