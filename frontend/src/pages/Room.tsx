@@ -1,11 +1,6 @@
-import { Heading, Button } from 'sharedComponents'
-import {
-    gql,
-    useMutation,
-} from '@apollo/client'
-import { useNavigate, useParams } from 'react-router-dom'
-import { context } from 'context'
-import { useContext, useMemo } from 'react'
+import { Heading } from 'sharedComponents'
+import { useParams } from 'react-router-dom'
+import { useMemo } from 'react'
 import { sanitizeRoomId } from 'utilities'
 
 const CreateRoom = () => {
@@ -18,6 +13,7 @@ const CreateRoom = () => {
                 Bananarama Voting Bananza
             </Heading.H1>
             <p>{sanitizedRoomId}</p>
+            <ul>Members</ul>
 
         </div>
     )

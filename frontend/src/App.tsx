@@ -50,24 +50,6 @@ const apolloClient = new ApolloClient({
     link: splitLink
 })
 
-const GET_ENTRIES = gql`
-    query entry {
-        entry {
-            foo,
-            bar
-        }
-    }    
-`
-
-const ENTRY_MUTATION = gql`
-    mutation EntryMutation {
-        addEntry {
-            foo,
-            bar
-        }
-    }    
-`
-
 const GREETING_SUBSCRIPTION = gql`
   subscription Greeting {
     greetings
@@ -77,18 +59,6 @@ const GREETING_SUBSCRIPTION = gql`
 const App = () => {
     const { state } = useContext(context)
     const [showJoinModal, setShowJoinModal] = useState<boolean>(true)
-
-    const onGetEntryCompleted = useCallback((data) => {
-        console.log('success', data)
-    }, [])
-    const onGetEntryFailed = useCallback(() => {
-        console.log('fail')
-    }, [])
-    useQuery(GET_ENTRIES, {
-        onCompleted: onGetEntryCompleted,
-        onError: onGetEntryFailed,
-        fetchPolicy: 'network-only'
-    })
 
     useSubscription(GREETING_SUBSCRIPTION, {
         onData: (data) => {
@@ -102,13 +72,13 @@ const App = () => {
                 {state.message ? <AlertMessage /> : null}
                 <Router />
             </AppWrapper>
-            {/* <Modal
+            <Modal
                 showModal={showJoinModal}
                 closeModal={() => setShowJoinModal(false)}
                 contentLabel="Welcome!"
             >
                 <JoinModal closeModal={() => setShowJoinModal(false)} />
-            </Modal> */}
+            </Modal>
         </>
     )
 }

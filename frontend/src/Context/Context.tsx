@@ -14,7 +14,7 @@ type State = {
 const EMPTY_STATE: State = {
     message: null,
     hasErrored: false,
-    name: ''
+    name: 'bob'
 }
 
 type HasErrored = {

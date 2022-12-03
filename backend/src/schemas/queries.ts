@@ -1,17 +1,22 @@
-import { GraphQLList, GraphQLObjectType, } from 'graphql'
+import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql'
 
-import { EntryType, } from './types'
+import inMemoryDatastore from '../inMemoryDatastore'
+import { RoomType } from './types'
 
-const entry = {
-    type: new GraphQLList(EntryType),
-    description: 'List of Entries',
+type RoomArgs = {
+    id: string
+}
+
+const room = {
+    type: RoomType,
+    description: 'Get a roomRoom',
     args: {
+        id: { type: new GraphQLNonNull(GraphQLString) }
     },
-    resolve: async () => {
-        return ([{
-            foo: 'foo',
-            bar: 'bar',
-        }])
+    resolve: async (_, args: RoomArgs) => {
+        const result = inMemoryDatastore.getRoom(args.id)
+
+        return result
     },
 }
 
@@ -19,7 +24,7 @@ const RootQueryType = new GraphQLObjectType({
     name: 'Query',
     description: 'Root Query',
     fields: () => ({
-        entry,
+        room
     }),
 })
 

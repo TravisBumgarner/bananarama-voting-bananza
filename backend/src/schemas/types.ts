@@ -2,14 +2,16 @@ import {
     GraphQLObjectType,
     GraphQLString,
     GraphQLNonNull,
+    GraphQLInt,
+    GraphQLList,
 } from 'graphql'
 
-const EntryType = new GraphQLObjectType({
-    name: 'Entry',
-    description: 'This represents an Entry',
+const ParticipantType = new GraphQLObjectType({
+    name: 'Participant',
+    description: 'This represents a Participant',
     fields: () => ({
-        foo: { type: new GraphQLNonNull(GraphQLString) },
-        bar: { type: new GraphQLNonNull(GraphQLString) },
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
     }),
 })
 
@@ -18,10 +20,13 @@ const RoomType = new GraphQLObjectType({
     description: 'This represents a Room',
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
+        ownerId: { type: new GraphQLNonNull(GraphQLString) },
+        maxVotes: { type: new GraphQLNonNull(GraphQLInt) },
+        icon: { type: new GraphQLNonNull(GraphQLString) },
+        members: { type: new GraphQLList(ParticipantType) }
     }),
 })
 
 export {
-    EntryType,
     RoomType
 }
