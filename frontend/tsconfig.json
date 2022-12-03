@@ -1,0 +1,39 @@
+{
+  "exclude": [
+    "*.unit.spec.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "es6",
+    "noEmitOnError": true,
+    "target": "es5",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "paths": {
+      "sharedComponents": [
+        "src/sharedComponents"
+      ],
+      "theme": [
+        "src/theme.js"
+      ],
+      "utilities": [
+        "src/utilities.ts"
+      ],
+      "types": [
+        "src/types.ts"
+      ],
+      "context": [
+        "src/Context/"
+      ],
+      "modals": [
+        "src/modals/"
+      ],
+    }
+  }
+}

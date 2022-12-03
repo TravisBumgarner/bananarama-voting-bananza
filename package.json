@@ -1,0 +1,14 @@
+{
+    "name": "bananarama-voting-bananaza",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "private": true,
+    "scripts": {
+        "sd": "docker-compose up",
+        "bootstrap": "cd backend && yarn && cd ../frontend && yarn && cd .. && yarn",
+        "lint:run": "cd backend && yarn run lint:run && cd ../frontend && yarn run lint:run",
+        "lint:fix": "cd backend && yarn run lint:fix && cd ../frontend && yarn run lint:fix"
+    },
+    "license": "bananas"
+}

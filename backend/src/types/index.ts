@@ -1,0 +1,6 @@
+type TContext = {
+}
+
+export {
+    TContext
+}
