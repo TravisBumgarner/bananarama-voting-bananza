@@ -1,11 +1,9 @@
-import { Heading, Button } from 'sharedComponents'
-import {
-    gql,
-    useMutation,
-} from '@apollo/client'
+import { gql, useMutation, } from '@apollo/client'
+import { useContext, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { Heading, Button, LabelAndInput } from 'sharedComponents'
 import { context } from 'context'
-import { useContext } from 'react'
 
 const CREATE_ROOM_MUTATION = gql`
     mutation CreateRoom {
@@ -15,19 +13,25 @@ const CREATE_ROOM_MUTATION = gql`
     }    
 `
 
-const CreateRoom = () => {
+const Lobby = () => {
     const [createRoomMutation] = useMutation<{ createRoom: { id: string } }>(CREATE_ROOM_MUTATION)
     const navigate = useNavigate()
     const { dispatch } = useContext(context)
+    const [roomName, setRoomName] = useState<string>('')
 
-    const createRoom = async () => {
+    const createRoom = useCallback(async () => {
         const response = await createRoomMutation()
         if (response.data?.createRoom.id) {
             navigate(response.data?.createRoom.id)
         } else {
             dispatch({ type: 'ADD_MESSAGE', data: { message: 'Failed to create room :(' } })
         }
-    }
+    }, [])
+
+    const joinRoom = useCallback(() => {
+        console.log('hi')
+        navigate(roomName)
+    }, [roomName])
 
     return (
         <div>
@@ -37,7 +41,19 @@ const CreateRoom = () => {
             <Button onClick={createRoom} fullWidth type="button" variation="primary">
                 Create Room
             </Button>
+            <p style={{ textAlign: 'center' }}>OR</p>
+            <div>
+                <LabelAndInput
+                    name="joinroom"
+                    value={roomName}
+                    handleChange={(value) => setRoomName(value)}
+                />
+                <Button fullWidth onClick={joinRoom} type="button" variation="primary">
+                    Join Room
+                </Button>
+            </div>
         </div>
     )
 }
-export default CreateRoom
+
+export default Lobby

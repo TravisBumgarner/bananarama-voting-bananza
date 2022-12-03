@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { Routes, Route } from 'react-router'
 
 import { context } from 'context'
-import { CreateRoom, Error, Room } from '../pages'
+import { Lobby, Error, Room } from '../pages'
 
 const Router = () => {
     const { state } = useContext(context)
@@ -14,7 +14,7 @@ const Router = () => {
     return (
         <Routes>
             <Route path="/error" element={<Error />} />
-            <Route path="/" element={<CreateRoom />} />
+            <Route path="/" element={<Lobby />} />
             <Route path="/:roomId" element={<Room />} />
         </Routes>
     )

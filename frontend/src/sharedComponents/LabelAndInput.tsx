@@ -53,7 +53,7 @@ const LabelAndInputWrapper = styled.div`
 
 type LabelAndInputProps = {
     name: string
-    label: string
+    label?: string
     value: string
     handleChange: (value: string) => void
     type?: 'textarea' | 'password'

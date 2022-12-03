@@ -102,13 +102,13 @@ const App = () => {
                 {state.message ? <AlertMessage /> : null}
                 <Router />
             </AppWrapper>
-            <Modal
+            {/* <Modal
                 showModal={showJoinModal}
                 closeModal={() => setShowJoinModal(false)}
                 contentLabel="Welcome!"
             >
                 <JoinModal closeModal={() => setShowJoinModal(false)} />
-            </Modal>
+            </Modal> */}
         </>
     )
 }

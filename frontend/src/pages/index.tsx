@@ -1,6 +1,6 @@
 import { Context, context } from 'context'
 import Error from './Error'
-import CreateRoom from './CreateRoom'
+import Lobby from './Lobby'
 import Room from './Room'
 
 export {
@@ -8,5 +8,5 @@ export {
     context,
     Error,
     Room,
-    CreateRoom,
+    Lobby,
 }
