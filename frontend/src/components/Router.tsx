@@ -12,10 +12,6 @@ const Router = () => {
         return <Error />
     }
 
-    if (state.currentUser === undefined) {
-        return <Loading />
-    }
-
     return (
         <Routes>
             <Route path="/error" element={<Error />} />

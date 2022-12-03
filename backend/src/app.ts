@@ -3,6 +3,7 @@ import { graphqlHTTP } from 'express-graphql'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import * as Sentry from '@sentry/node'
+import schema from './schemas'
 
 type ModifiedExpressRequest = express.Request & { firebaseId: string }
 
@@ -29,11 +30,11 @@ app.get('/ok', async (req: ModifiedExpressRequest, res: express.Response) => {
     res.send('pong!')
 })
 
-// app.use('/graphql', graphqlHTTP((req: ModifiedExpressRequest) => ({
-//     schema,
-//     graphiql: process.env.NODE_ENV !== 'production',
-//     context: { firebaseId: req.firebaseId },
-// })))
+app.use('/graphql', graphqlHTTP((req: ModifiedExpressRequest) => ({
+    schema,
+    graphiql: process.env.NODE_ENV !== 'production',
+    context: { firebaseId: req.firebaseId },
+})))
 
 app.use(Sentry.Handlers.errorHandler())
 app.use((err, req: ModifiedExpressRequest, res: express.Response) => {
