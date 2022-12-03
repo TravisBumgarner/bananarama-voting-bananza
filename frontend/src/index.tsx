@@ -1,4 +1,3 @@
-
 import * as ReactDOM from 'react-dom'
 import Modal from 'react-modal'
 import * as Sentry from '@sentry/react'

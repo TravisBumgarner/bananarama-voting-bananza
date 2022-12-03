@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import {
@@ -19,6 +19,8 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { GlobalStyle } from 'theme'
 import { context, Context } from 'context'
 import { AlertMessage, Router } from './components'
+import { JoinModal } from './modals'
+import Modal from './sharedComponents/Modal'
 
 const AppWrapper = styled.div`
     display: flex;
@@ -74,8 +76,7 @@ const GREETING_SUBSCRIPTION = gql`
 
 const App = () => {
     const { state } = useContext(context)
-
-    const [addEntryMutation] = useMutation(ENTRY_MUTATION)
+    const [showJoinModal, setShowJoinModal] = useState<boolean>(true)
 
     const onGetEntryCompleted = useCallback((data) => {
         console.log('success', data)
@@ -95,17 +96,20 @@ const App = () => {
         },
     })
 
-    const mutate = async () => {
-        const response = await addEntryMutation()
-        console.log(response.data)
-    }
-
     return (
-        <AppWrapper>
-            {state.message ? <AlertMessage /> : null}
-            <Router />
-            <button type="button" onClick={mutate}>Mutate</button>
-        </AppWrapper>
+        <>
+            <AppWrapper>
+                {state.message ? <AlertMessage /> : null}
+                <Router />
+            </AppWrapper>
+            <Modal
+                showModal={showJoinModal}
+                closeModal={() => setShowJoinModal(false)}
+                contentLabel="Welcome!"
+            >
+                <JoinModal closeModal={() => setShowJoinModal(false)} />
+            </Modal>
+        </>
     )
 }
 

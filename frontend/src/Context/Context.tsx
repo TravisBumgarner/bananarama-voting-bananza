@@ -8,11 +8,13 @@ type State = {
         timeToLiveMS: number | undefined
     } | null
     hasErrored: boolean
+    name: string
 }
 
 const EMPTY_STATE: State = {
     message: null,
-    hasErrored: false
+    hasErrored: false,
+    name: ''
 }
 
 type HasErrored = {
@@ -31,10 +33,18 @@ type DeleteMessage = {
     type: 'DELETE_MESSAGE'
 }
 
+type Join = {
+    type: 'JOIN'
+    data: {
+        name: string
+    }
+}
+
 type Action =
     | AddMessage
     | DeleteMessage
     | HasErrored
+    | Join
 
 const context = createContext(
     {
@@ -57,10 +67,8 @@ const reducer = (state: State, action: Action): State => {
         case 'DELETE_MESSAGE': {
             return { ...state, message: null }
         }
-        case 'USER_SIGNED_OUT':
-        case 'USER_LOGGED_IN':
-        case 'USER_SIGNED_UP': {
-            return { ...state, currentUser: action.data.currentUser }
+        case 'JOIN': {
+            return { ...state, name: action.data.name }
         }
         default: {
             logger(`Swallowing action: ${JSON.stringify(action)}`)

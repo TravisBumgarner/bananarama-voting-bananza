@@ -1,9 +1,5 @@
-import AddRecommendationModal from './AddRecommendationModal'
-import EditRecommendationModal from './EditRecommendationModal'
-import EditProfileModal from './EditProfileModal'
+import JoinModal from './JoinModal'
 
 export {
-    AddRecommendationModal,
-    EditRecommendationModal,
-    EditProfileModal
+    JoinModal,
 }
