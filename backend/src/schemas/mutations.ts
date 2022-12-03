@@ -1,7 +1,8 @@
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString, } from 'graphql'
 import { RedisPubSub } from 'graphql-redis-subscriptions'
 
-import inMemoryDatastore, { ErrorMessages } from '../inMemoryDatastore'
+import { EErrorMessages } from '../types'
+import inMemoryDatastore from '../inMemoryDatastore'
 import { RoomType } from './types'
 import { MessageType } from '../redis/types'
 
@@ -44,7 +45,7 @@ const joinRoom = {
     },
     resolve: async (_, args: JoinRoomArgs) => {
         const result = inMemoryDatastore.addMember(args.roomId, { name: args.memberName, id: args.memberId })
-        if (result.success || result.error === ErrorMessages.MemberAlreadyExists) {
+        if (result.success || result.error === EErrorMessages.MemberAlreadyExists) {
             const room = inMemoryDatastore.getRoom(args.roomId)
             return room
         }

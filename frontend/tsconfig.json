@@ -16,6 +16,9 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "paths": {
+      "@globalTypes/*": [
+        "../globalTypes/*"
+      ],
       "sharedComponents": [
         "src/sharedComponents"
       ],

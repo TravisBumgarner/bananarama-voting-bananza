@@ -1,25 +1,9 @@
 import { hri } from 'human-readable-ids'
 
-type Participant = {
-    id: string
-    name: string
-}
-
-type Room = {
-    id: string,
-    ownerId: Participant['id'],
-    icon: 'banana',
-    maxVotes: number,
-    members: Participant[]
-}
-
-enum ErrorMessages {
-    MemberAlreadyExists = 'MemberAlreadyExists',
-    RoomDoesNotExist = 'RoomDoesNotExist'
-}
+import { TRoom, TParticipant, EErrorMessages } from '../types'
 
 class InMemoryDatastore {
-    rooms: Record<string, Room>
+    rooms: Record<string, TRoom>
 
     constructor() {
         this.rooms = {
@@ -28,12 +12,15 @@ class InMemoryDatastore {
                 ownerId: 'foobar',
                 icon: 'banana',
                 maxVotes: 2,
-                members: []
+                members: [{
+                    name: 'foobar',
+                    id: 'foobar'
+                }]
             }
         }
     }
 
-    createRoom(owner: Participant) {
+    createRoom(owner: TParticipant) {
         const roomId = hri.random()
         this.rooms[roomId] = {
             id: roomId,
@@ -45,7 +32,7 @@ class InMemoryDatastore {
         return roomId
     }
 
-    getRoom(id: string): Room | undefined {
+    getRoom(id: string): TRoom | undefined {
         return this.rooms[id]
     }
 
@@ -53,7 +40,7 @@ class InMemoryDatastore {
         return delete this.rooms[id]
     }
 
-    addMember(roomId: string, member: Participant) {
+    addMember(roomId: string, member: TParticipant) {
         if (roomId in this.rooms) {
             const currentMemberIds = this.rooms[roomId].members.map(({ id }) => id)
 
@@ -65,12 +52,12 @@ class InMemoryDatastore {
             }
             return {
                 success: false,
-                error: ErrorMessages.MemberAlreadyExists
+                error: EErrorMessages.MemberAlreadyExists
             }
         }
         return {
             success: false,
-            error: ErrorMessages.RoomDoesNotExist
+            error: EErrorMessages.RoomDoesNotExist
         }
     }
 }
@@ -78,4 +65,3 @@ class InMemoryDatastore {
 const inMemoryDatastore = new InMemoryDatastore()
 
 export default inMemoryDatastore
-export { ErrorMessages }

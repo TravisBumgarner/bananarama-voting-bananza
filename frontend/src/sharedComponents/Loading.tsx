@@ -14,14 +14,14 @@ const LoadingText = styled.p`
     font-size: 2rem;
 `
 
-const FULL_MESSAGE = 'One moment please!'
+const FULL_MESSAGE = '🍌🍌🍌🍌🍌🍌'
 
 const Loading = () => {
     const [displayLength, setDisplayLength] = useState<number>(FULL_MESSAGE.length)
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            setDisplayLength((prev) => (prev === FULL_MESSAGE.length ? 0 : prev + 1))
+            setDisplayLength((prev) => (prev === FULL_MESSAGE.length ? 0 : prev + 2))
         }, 125)
 
         return () => clearInterval(intervalId)
