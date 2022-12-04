@@ -17,8 +17,13 @@ const JOIN_ROOM_MUTATION = gql`
             maxVotes
             icon
             status
+            entries {
+                entry,
+                id,
+                userId
+            }
             members {
-                name,
+                name
                 id
             }
         }
@@ -59,7 +64,6 @@ const Room = () => {
     const sanitizedRoomId = useMemo(() => sanitizeRoomId(roomId || ''), [roomId])
     const [isLoading, setIsLoading] = useState(true)
     const { dispatch, state } = useContext(context)
-    // const [members, setMembers] = useState<Record<string, string> | null>(null)
     const navigate = useNavigate()
 
     const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
@@ -70,11 +74,15 @@ const Room = () => {
 
         dispatch({
             type: 'ENTER_ROOM',
-            data: joinRoom
+            data: joinRoom // Shouldnt be all data
         })
         dispatch({
             type: 'ADD_USERS',
             data: initialMembers
+        })
+        dispatch({
+            type: 'ADD_ENTRIES',
+            data: joinRoom.entries
         })
 
         setIsLoading(false)

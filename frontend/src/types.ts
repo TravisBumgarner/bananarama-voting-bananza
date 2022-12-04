@@ -3,41 +3,43 @@ type TParticipant = {
     name: string
 }
 
-type TRoom = {
-    id: string,
-    ownerId: TParticipant['id'],
-    icon: 'banana',
-    maxVotes: number,
-    members: TParticipant[]
-    status: 'signup' | 'voting' | 'conclusion'
+type TEntry = {
+    id: string
+    userId: string
+    roomId: string
+    entry: string
 }
 
-type TEntry = {
-    userId: string,
-    roomId: string,
-    entry: string,
+type TRoom = {
+    id: string
+    ownerId: TParticipant['id']
+    icon: 'banana'
+    maxVotes: number
+    members: TParticipant[]
+    status: 'signup' | 'voting' | 'conclusion'
+    entries: TEntry[]
 }
 
 type TMemberChange = {
-    userId: string,
-    userName: string,
-    roomId: string,
+    userId: string
+    userName: string
+    roomId: string
     status: 'join' | 'leave'
 }
 
 type TAddEntry = {
-    userId: string,
-    roomId: string,
-    entry: string,
+    userId: string
+    roomId: string
+    entry: string
 }
 
 type TRoomUpdate = {
-    roomId: string,
+    roomId: string
     status: TRoom['status']
 }
 
 type TUser = {
-    id: string,
+    id: string
     name: string
 }
 
@@ -48,5 +50,5 @@ export {
     TRoomUpdate,
     TAddEntry,
     TEntry,
-    TUser
+    TUser,
 }

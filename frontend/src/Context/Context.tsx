@@ -69,9 +69,9 @@ type UpdateRoom = {
     data: Partial<TRoom>
 }
 
-type AddEntry = {
-    type: 'ADD_ENTRY',
-    data: TEntry
+type AddEntries = {
+    type: 'ADD_ENTRIES',
+    data: TEntry[]
 }
 
 type Action =
@@ -81,7 +81,7 @@ type Action =
     | Join
     | EnterRoom
     | UpdateRoom
-    | AddEntry
+    | AddEntries
     | AddUsers
 
 const context = createContext(
@@ -114,8 +114,8 @@ const reducer = (state: State, action: Action): State => {
         case 'UPDATE_ROOM': {
             return { ...state, room: { ...state.room!, ...action.data } }
         }
-        case 'ADD_ENTRY': {
-            return { ...state, entries: [...state.entries, action.data] }
+        case 'ADD_ENTRIES': {
+            return { ...state, entries: [...state.entries, ...action.data] }
         }
         case 'ADD_USERS': {
             return { ...state, users: { ...state.users, ...action.data } }
