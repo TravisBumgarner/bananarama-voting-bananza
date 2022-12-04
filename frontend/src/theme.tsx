@@ -5,27 +5,32 @@ const colorFactory = (color: string) => ({
     base: color,
     darkest: darken(0.25, color),
     darken: darken(0.10, color),
-    lighten: lighten(0.1, color),
+    lighten: lighten(0.10, color),
     lightest: lighten(0.25, color),
 })
 
-const PRIMARY = colorFactory('#282828')
-const BACKGROUND = colorFactory('#f2f8da')
-const WARNING = colorFactory('#9c183a')
-const HIGHLIGHTER = colorFactory('#e8e5ba')
+const BRIGHT1 = colorFactory('#35ff1a') // should be greenish for positive actions
+const BRIGHT2 = colorFactory('#ff1e1e') // should be redish for negative actions
+const BRIGHT3 = colorFactory('#d9ff00')
+const BRIGHT4 = colorFactory('#00fbff')
+const DISABLED = colorFactory('#808080')
+
+const DARK1 = colorFactory('#282828')
 
 const colors = {
-    PRIMARY,
-    BACKGROUND,
-    WARNING,
-    HIGHLIGHTER
+    BRIGHT1,
+    BRIGHT2,
+    BRIGHT3,
+    BRIGHT4,
+    DARK1,
+    DISABLED
 }
 
 const GlobalStyle = createGlobalStyle`
     html {
         font-size: 16px;
         font-weight: 400;
-        background-color: ${colors.BACKGROUND.base};
+        background-color: ${colors.DARK1.base};
         font-family: 'Nunito', sans-serif;
     }
 

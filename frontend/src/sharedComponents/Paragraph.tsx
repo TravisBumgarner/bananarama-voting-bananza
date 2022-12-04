@@ -7,7 +7,7 @@ type ParagraphProps = {
 }
 
 const Paragraph = styled.p`
-    ${({ color }: ParagraphProps) => `color: ${color || colors.PRIMARY.base};`}
+    ${({ color }: ParagraphProps) => `color: ${color || colors.BRIGHT3.base};`}
     line-height: 1.5
 `
 

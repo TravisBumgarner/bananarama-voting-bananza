@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 import { Link } from 'react-router-dom'
 import { Heading } from 'sharedComponents'
-import { Navigation } from './components'
 
 const HeaderWrapper = styled.div`
     display:flex;
@@ -19,16 +18,11 @@ const HeaderWrapper = styled.div`
 const Header = () => {
     return (
         <HeaderWrapper>
-            <div>
-                <Link style={{ textDecoration: 'none' }} to="/">
-                    <Heading.H1>
-                        Bananarama Voting Bananza
-                    </Heading.H1>
-                </Link>
-            </div>
-            <div>
-                <Navigation />
-            </div>
+            <Link style={{ textDecoration: 'none' }} to="/">
+                <Heading.H1>
+                    Bananarama Voting Bananza
+                </Heading.H1>
+            </Link>
         </HeaderWrapper>
     )
 }

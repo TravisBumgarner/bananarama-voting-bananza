@@ -10,7 +10,7 @@ const LoadingWrapper = styled.div`
 `
 
 const LoadingText = styled.p`
-    width: 312px;
+    width: 200px;
     font-size: 2rem;
 `
 

@@ -2,7 +2,7 @@ import { gql, useMutation, } from '@apollo/client'
 import { useContext, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { Heading, Button, LabelAndInput } from 'sharedComponents'
+import { Heading, Button, Label, Paragraph } from 'sharedComponents'
 import { context } from 'context'
 
 const CREATE_ROOM_MUTATION = gql`
@@ -40,9 +40,9 @@ const Lobby = () => {
             <Button onClick={createRoom} fullWidth type="button" variation="primary">
                 Create Room
             </Button>
-            <p style={{ textAlign: 'center' }}>OR</p>
+            <Paragraph style={{ textAlign: 'center' }}>OR</Paragraph>
             <div>
-                <LabelAndInput
+                <Label
                     name="joinroom"
                     value={roomId}
                     label="Enter an Existing Room Name"

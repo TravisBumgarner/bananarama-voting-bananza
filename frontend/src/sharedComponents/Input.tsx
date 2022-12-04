@@ -8,14 +8,14 @@ const Input = styled.input`
     padding: 0.5rem 1rem;
     background-color: transparent;
     font-weight: 700;
-    color: ${colors.PRIMARY.base};
-    border-color: ${colors.PRIMARY.base};
+    color: ${colors.BRIGHT3.base};
+    border-color: ${colors.BRIGHT3.base};
     width: 100%;
     box-sizing: border-box;
     border-radius: 1rem;
 `
 
-const LabelAndInputWrapper = styled.div`
+const LabelWrapper = styled.div`
     margin: 0.5rem 0;
     ${Input}{
         display: block;
@@ -24,7 +24,7 @@ const LabelAndInputWrapper = styled.div`
     }
 `
 
-type LabelAndInputProps = {
+type LabelProps = {
     name: string
     label?: string
     value: string
@@ -32,10 +32,10 @@ type LabelAndInputProps = {
     disabled?: boolean
 }
 
-const LabelAndInput = ({
+const Label = ({
     value, name, label, handleChange, disabled
-}: LabelAndInputProps) => (
-    <LabelAndInputWrapper>
+}: LabelProps) => (
+    <LabelWrapper>
         <Input
             placeholder={label}
             autoComplete="on"
@@ -44,7 +44,7 @@ const LabelAndInput = ({
             value={value}
             disabled={disabled}
         />
-    </LabelAndInputWrapper>
+    </LabelWrapper>
 )
 
-export default LabelAndInput
+export default Label

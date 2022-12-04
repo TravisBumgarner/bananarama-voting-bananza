@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import ReactModal from 'react-modal'
 
 import { colors } from 'theme'
-import { Heading, Icon } from '.'
+import { Heading } from '.'
 
 type ModalProps = {
     children: JSX.Element | JSX.Element[]
@@ -17,13 +17,13 @@ const HeaderWrapper = styled.div`
     justify-content: space-between;
     svg {
         cursor: pointer;
-        fill: ${colors.PRIMARY.base};
+        fill: ${colors.BRIGHT1.base};
         position: relative;
         right: -13px;
         top: -14px;
 
     &:hover {
-        fill: ${colors.PRIMARY.darken};
+        fill: ${colors.BRIGHT1.darken};
         }
     }
     `
@@ -43,21 +43,21 @@ const Modal = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: colors.PRIMARY.base
+                backgroundColor: colors.DARK1.base
             },
             content: {
-                borderColor: colors.PRIMARY.base,
-                backgroundColor: colors.BACKGROUND.base,
+                borderColor: colors.BRIGHT1.base,
+                backgroundColor: colors.BRIGHT3.darkest,
                 position: 'static',
                 maxWidth: '80vw',
-                minWidth: '500px'
+                minWidth: '500px',
+                borderRadius: '1rem'
             },
         }}
     >
         <ModalWrapper>
             <HeaderWrapper>
                 <Heading.H1>{contentLabel}</Heading.H1>
-                {/* <Icon name="close" color={colors.PRIMARY.base} onClick={closeModal} /> */}
             </HeaderWrapper>
             {children}
         </ModalWrapper>

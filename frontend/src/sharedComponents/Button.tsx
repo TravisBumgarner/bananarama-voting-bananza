@@ -18,7 +18,7 @@ const Button = styled.button`
     background-color: transparent;
     font-weight: 700;
     border-radius: 1rem;
-    margin: 0.5rem 0;,
+    margin: 0.5rem 0;
 
     &:hover {
     cursor: pointer;
@@ -29,13 +29,10 @@ const Button = styled.button`
     ${({ variation, disabled }: ButtonProps) => {
         if (disabled) {
             return `
-                color: ${colors.PRIMARY.base};
-                border-color: ${colors.PRIMARY.base};
+                color: ${colors.DISABLED.base};
+                border-color: ${colors.DISABLED.base};
 
                 &:hover {
-                    background-color: ${colors.PRIMARY.lighten};
-                    color: ${colors.PRIMARY.darken};
-                    border-color: ${colors.PRIMARY.darken};
                     cursor: not-allowed;
                 }
             `
@@ -43,24 +40,24 @@ const Button = styled.button`
 
         if (variation === 'primary') {
             return `
-                color: ${colors.PRIMARY.base};
-                border-color: ${colors.PRIMARY.base};
+                color: ${colors.BRIGHT1.base};
+                border-color: ${colors.BRIGHT1.base};
 
                 &:hover {
-                    color: ${colors.PRIMARY.darken};
-                    border-color: ${colors.PRIMARY.darken};
-                    background-color: ${colors.PRIMARY.lighten};
+                    color: ${colors.BRIGHT1.darken};
+                    border-color: ${colors.BRIGHT1.darken};
+                    background-color: ${colors.BRIGHT1.lightest};
                 }
             `
         } if (variation === 'warning') {
             return `
-                color: ${colors.WARNING.base};
-                border-color: ${colors.WARNING.base};
+                color: ${colors.BRIGHT2.base};
+                border-color: ${colors.BRIGHT2.base};
 
                 &:hover {
-                    background-color: ${colors.WARNING.lighten};
-                    color: ${colors.WARNING.darken};
-                    border-color: ${colors.WARNING.darken};
+                    background-color: ${colors.BRIGHT2.lighten};
+                    color: ${colors.BRIGHT2.darken};
+                    border-color: ${colors.BRIGHT2.darken};
                 }
             `
         }

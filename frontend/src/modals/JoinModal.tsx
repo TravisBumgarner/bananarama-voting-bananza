@@ -1,7 +1,7 @@
 import { FormEvent, useContext, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Button, LabelAndInput } from 'sharedComponents'
+import { Button, Label } from 'sharedComponents'
 import { context } from 'context'
 import { getLocalStorage, setLocalStorage } from 'utilities'
 
@@ -34,7 +34,7 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
         <div>
             <div>
                 <form onSubmit={handleSubmit}>
-                    <LabelAndInput
+                    <Label
                         label="What is your name?"
                         name="Name"
                         value={name}
