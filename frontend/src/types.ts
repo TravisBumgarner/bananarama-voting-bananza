@@ -11,13 +11,15 @@ type TRoom = {
     members: TParticipant[]
 }
 
-enum EErrorMessages {
-    MemberAlreadyExists = 'MemberAlreadyExists',
-    RoomDoesNotExist = 'RoomDoesNotExist'
+type TMemberChange = {
+    memberId: string,
+    memberName: string,
+    roomId: string,
+    status: 'join' | 'leave'
 }
 
 export {
     TParticipant,
     TRoom,
-    EErrorMessages
+    TMemberChange
 }

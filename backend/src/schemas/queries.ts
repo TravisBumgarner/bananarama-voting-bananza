@@ -15,8 +15,9 @@ const room = {
     },
     resolve: async (_, args: RoomArgs) => {
         const result = inMemoryDatastore.getRoom(args.id)
+        if (!result.success) { throw new Error(result.error) }
 
-        return result
+        return result.data
     },
 }
 

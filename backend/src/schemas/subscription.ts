@@ -1,20 +1,23 @@
-import { GraphQLObjectType, GraphQLString } from 'graphql'
+import { GraphQLObjectType } from 'graphql'
 import { RedisPubSub } from 'graphql-redis-subscriptions'
-import { MessageType } from '../redis/types'
+
+import { MemberChangeType } from './types'
 
 const pubsub = new RedisPubSub({ connection: 'redis' })
+
+const memberChange = {
+    type: MemberChangeType,
+    subscribe: () => pubsub.asyncIterator('MEMBER_CHANGE_EVENT'),
+    resolve: (payload) => {
+        return payload
+    }
+}
 
 const RootQueryType = new GraphQLObjectType({
     name: 'Subscription',
     description: 'Root Subscription',
     fields: {
-        greetings: {
-            type: GraphQLString,
-            subscribe: () => pubsub.asyncIterator(MessageType.Greeting),
-            resolve: (payload) => {
-                return 'nasdjlasd'
-            }
-        }
+        memberChange
     },
 })
 

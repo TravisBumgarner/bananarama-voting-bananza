@@ -27,6 +27,18 @@ const RoomType = new GraphQLObjectType({
     }),
 })
 
+const MemberChangeType = new GraphQLObjectType({
+    name: 'MemberChange',
+    description: 'This represents a MemberChange',
+    fields: () => ({
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+        memberId: { type: new GraphQLNonNull(GraphQLString) },
+        memberName: { type: new GraphQLNonNull(GraphQLString) },
+        status: { type: new GraphQLNonNull(GraphQLString) },
+    }),
+})
+
 export {
-    RoomType
+    RoomType,
+    MemberChangeType
 }

@@ -7,6 +7,7 @@ import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 import { WebSocketServer } from 'ws' // yarn add ws
 
+import errorLookup from './errorLookup'
 import schema from './schemas'
 
 const app = express()
@@ -35,6 +36,14 @@ app.get('/ok', async (req: express.Request, res: express.Response) => {
 app.use('/graphql', graphqlHTTP(() => ({
     schema,
     graphiql: process.env.NODE_ENV !== 'production',
+    customFormatErrorFn: (err) => {
+        if (err.message in errorLookup) return errorLookup[err.message]
+
+        return {
+            statusCode: 500,
+            message: 'Something went wrong'
+        }
+    }
 })))
 
 app.use(Sentry.Handlers.errorHandler())

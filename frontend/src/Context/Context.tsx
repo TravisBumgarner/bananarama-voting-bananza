@@ -8,13 +8,19 @@ type State = {
         timeToLiveMS: number | undefined
     } | null
     hasErrored: boolean
-    name: string
+    user: {
+        name: string,
+        id: string
+    }
 }
 
 const EMPTY_STATE: State = {
     message: null,
     hasErrored: false,
-    name: 'bob'
+    user: {
+        name: '',
+        id: ''
+    }
 }
 
 type HasErrored = {
@@ -37,6 +43,7 @@ type Join = {
     type: 'JOIN'
     data: {
         name: string
+        id: string
     }
 }
 
@@ -68,7 +75,7 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, message: null }
         }
         case 'JOIN': {
-            return { ...state, name: action.data.name }
+            return { ...state, user: { name: action.data.name, id: action.data.id } }
         }
         default: {
             logger(`Swallowing action: ${JSON.stringify(action)}`)

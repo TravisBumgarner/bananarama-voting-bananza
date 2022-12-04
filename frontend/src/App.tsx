@@ -1,17 +1,7 @@
-import { useCallback, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import styled from 'styled-components'
-import {
-    ApolloClient,
-    HttpLink,
-    InMemoryCache,
-    ApolloProvider,
-    useQuery,
-    gql,
-    useSubscription,
-    useMutation,
-    split
-} from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider, split } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
@@ -50,21 +40,9 @@ const apolloClient = new ApolloClient({
     link: splitLink
 })
 
-const GREETING_SUBSCRIPTION = gql`
-  subscription Greeting {
-    greetings
-  }
-`
-
 const App = () => {
     const { state } = useContext(context)
     const [showJoinModal, setShowJoinModal] = useState<boolean>(true)
-
-    useSubscription(GREETING_SUBSCRIPTION, {
-        onData: (data) => {
-            console.log('subscription', data)
-        },
-    })
 
     return (
         <>

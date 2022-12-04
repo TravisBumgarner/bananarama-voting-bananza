@@ -12,8 +12,8 @@ type TRoom = {
 }
 
 enum EErrorMessages {
+    RoomDoesNotExist = 'RoomDoesNotExist',
     MemberAlreadyExists = 'MemberAlreadyExists',
-    RoomDoesNotExist = 'RoomDoesNotExist'
 }
 
 export {

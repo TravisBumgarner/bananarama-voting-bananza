@@ -1,4 +1,5 @@
 import { FormEvent, useContext, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 import { Button, LabelAndInput } from 'sharedComponents'
 import { context } from 'context'
@@ -9,14 +10,23 @@ type JoinModalProps = {
 }
 
 const JoinModal = ({ closeModal }: JoinModalProps) => {
-    const [name, setName] = useState<string>(getLocalStorage('name'))
+    const [name, setName] = useState<string>(getLocalStorage('user').name || '')
     const { dispatch } = useContext(context)
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        setLocalStorage('name', name)
-        dispatch({ type: 'JOIN', data: { name } })
+        let id: string
+        if (name === getLocalStorage('user').name) {
+            // If the user hasn't changed their name, grab the ID from storage.
+            // Otherwise, generate a new one.
+            id = getLocalStorage('user').id
+        } else {
+            id = uuidv4()
+        }
+
+        setLocalStorage('user', { name, id })
+        dispatch({ type: 'JOIN', data: { name, id } })
         closeModal()
     }
 
@@ -31,7 +41,14 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
                         handleChange={(data) => setName(data)}
                     />
 
-                    <Button fullWidth key="submit" type="submit" variation="primary">Submit</Button>
+                    <Button
+                        disabled={name.length === 0}
+                        fullWidth
+                        key="submit"
+                        type="submit"
+                        variation="primary"
+                    >Submit
+                    </Button>
                 </form>
             </div>
         </div>

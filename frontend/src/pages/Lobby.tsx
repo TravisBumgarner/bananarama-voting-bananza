@@ -1,10 +1,9 @@
-import { ApolloError, gql, useLazyQuery, useMutation, } from '@apollo/client'
+import { gql, useMutation, } from '@apollo/client'
 import { useContext, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { Heading, Button, LabelAndInput, Loading } from 'sharedComponents'
+import { Heading, Button, LabelAndInput } from 'sharedComponents'
 import { context } from 'context'
-import { logger } from 'utilities'
 
 const CREATE_ROOM_MUTATION = gql`
     mutation CreateRoom($ownerId: String! $ownerName: String!) {
@@ -19,9 +18,9 @@ const Lobby = () => {
     const navigate = useNavigate()
     const { dispatch, state } = useContext(context)
     const [roomId, setRoomId] = useState<string>('unlucky-monkey-65')
-
+    console.log(state.user)
     const createRoom = useCallback(async () => {
-        const response = await createRoomMutation({ variables: { ownerId: 'foo', ownerName: state.name } })
+        const response = await createRoomMutation({ variables: { ownerId: state.user.id, ownerName: state.user.name } })
         if (response.data?.createRoom.id) {
             navigate(response.data?.createRoom.id)
         } else {

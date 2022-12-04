@@ -1,1 +1,2 @@
-- [ ] Create Room and have others join
+- [x] Create Room and have others join
+    - [x] Redirect home if room doesn't exist

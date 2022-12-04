@@ -21,11 +21,13 @@ const createRoom = {
         ownerName: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args: CreateRoomArgs) => {
-        const id = inMemoryDatastore.createRoom({ id: args.ownerId, name: args.ownerName })
-        console.log(inMemoryDatastore.getRoom(id))
-        return {
-            id,
+        const result = inMemoryDatastore.createRoom({ id: args.ownerId, name: args.ownerName })
+        if (result.success) {
+            return ({
+                id: result.data
+            })
         }
+        throw new Error(result.error)
     },
 }
 
@@ -44,13 +46,23 @@ const joinRoom = {
         memberName: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args: JoinRoomArgs) => {
-        const result = inMemoryDatastore.addMember(args.roomId, { name: args.memberName, id: args.memberId })
-        if (result.success || result.error === EErrorMessages.MemberAlreadyExists) {
-            const room = inMemoryDatastore.getRoom(args.roomId)
-            return room
+        const addMemberResult = inMemoryDatastore.addMember(args.roomId, { name: args.memberName, id: args.memberId })
+        if (addMemberResult.success || addMemberResult.error === EErrorMessages.MemberAlreadyExists) {
+            if (addMemberResult.success) {
+                await pubsub.publish('MEMBER_CHANGE_EVENT', {
+                    roomId: args.roomId,
+                    memberId: args.memberId,
+                    memberName: args.memberName,
+                    status: 'join'
+                })
+            }
+            const getRoomResult = inMemoryDatastore.getRoom(args.roomId)
+            if (getRoomResult.success) {
+                return getRoomResult.data
+            }
+            throw new Error(getRoomResult.error)
         }
-
-        return result
+        throw new Error(addMemberResult.error)
     },
 }
 
