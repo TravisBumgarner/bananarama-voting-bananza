@@ -6,6 +6,7 @@ import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 
 import { context } from 'context'
 import { colors } from 'theme'
+import styled from 'styled-components'
 import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
 import { Conclusion, Participants, Signup, Voting } from './components'
 
@@ -57,6 +58,14 @@ const ROOM_UPDATE_SUBSCRIPTION = gql`
        status
     }
   }
+`
+
+const Wrapper = styled.div`
+    display: flex;
+
+    div:last-child{
+        width: 100%;
+    }
 `
 
 const Room = () => {
@@ -220,10 +229,10 @@ const Room = () => {
                 <Button variation="pear" onClick={copyRoomToClipboard}>Share <Icon color={colors.pear.base} name="content_copy" /></Button>
             </div>
             {Controls}
-            <div style={{ display: 'flex' }}>
+            <Wrapper>
                 <Participants />
                 {Content}
-            </div>
+            </Wrapper>
         </div>
     )
 }

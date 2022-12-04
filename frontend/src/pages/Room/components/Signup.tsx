@@ -75,7 +75,7 @@ const Signup = () => {
     return (
         <div>
             <Button variation="pear" onClick={() => setShowAddEntryModal(true)}>Add Entry <Icon color={colors.pear.base} name="add" /></Button>
-            <h1>Entries</h1>
+            <Heading.H2>Entries</Heading.H2>
             <EntriesWrapper>
                 {state.entries.map((entry) => <Entry entry={entry} key={entry.id} />)}
             </EntriesWrapper>
