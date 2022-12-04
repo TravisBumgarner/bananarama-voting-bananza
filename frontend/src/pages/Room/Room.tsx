@@ -7,6 +7,7 @@ import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TRoom, TMemberChange, TRoomUpdate } from '../types'
+import { Conclusion, Signup, Voting } from './components'
 
 const JOIN_ROOM_MUTATION = gql`
     mutation JoinRoom($roomId: String!, $memberId: String!, $memberName: String!) {
@@ -152,9 +153,26 @@ const Room = () => {
         if (details.status === 'voting') return <Button variation="pear" onClick={() => handleStatusChange('conclusion')}>Announce Results</Button>
     }, [details, state.user])
 
+    const Content = useMemo(() => {
+        if (!details) return
+
+        switch (details.status) {
+            case 'signup': {
+                return <Signup />
+            }
+            case 'voting': {
+                return <Voting />
+            }
+            case 'conclusion': {
+                return <Conclusion />
+            }
+        }
+    }, [details])
+
     if (isLoading) return <Loading />
 
     if (!details || !members) return <p>no details</p>
+
     return (
         <div>
             <Heading.H1>
@@ -174,6 +192,7 @@ const Room = () => {
                 {Object.keys(details).map((id: keyof typeof details) => <List.ListItem key={id}>{id}: {JSON.stringify(details[id])}</List.ListItem>)}
             </List.UnorderedList>
             {Controls}
+            {Content}
         </div>
     )
 }
