@@ -3,6 +3,5 @@
 - [x] Let organizer change room state
     - [x] Add subscription for others to get updated
     - [x] Update UI for non room owners
-    - [ ] cleanup data.data payload
 - [ ] Refactor pubsub to be more centralized
 - [ ] Only send subscriptions for a roomId to that roomId
