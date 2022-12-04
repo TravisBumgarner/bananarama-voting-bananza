@@ -4,7 +4,7 @@ import { RedisPubSub } from 'graphql-redis-subscriptions'
 import { MessageType } from '../redis/types'
 import { EErrorMessages, TRoom } from '../types'
 import inMemoryDatastore from '../inMemoryDatastore'
-import { RoomStatusEnum, RoomType } from './types'
+import { RoomStatusEnum, RoomType, EntryType } from './types'
 
 const pubsub = new RedisPubSub({ connection: 'redis' })
 
@@ -69,8 +69,8 @@ const updateRoom = {
 
 type JoinRoomArgs = {
     roomId: string
-    memberId: string
-    memberName: string
+    userId: string
+    userName: string
 }
 
 const joinRoom = {
@@ -78,17 +78,17 @@ const joinRoom = {
     description: 'Join a Room',
     args: {
         roomId: { type: new GraphQLNonNull(GraphQLString) },
-        memberId: { type: new GraphQLNonNull(GraphQLString) },
-        memberName: { type: new GraphQLNonNull(GraphQLString) },
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        userName: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args: JoinRoomArgs) => {
-        const addMemberResult = inMemoryDatastore.addMember(args.roomId, { name: args.memberName, id: args.memberId })
+        const addMemberResult = inMemoryDatastore.addMember(args.roomId, { name: args.userName, id: args.userId })
         if (addMemberResult.success || addMemberResult.error === EErrorMessages.MemberAlreadyExists) {
             if (addMemberResult.success) {
                 await pubsub.publish(MessageType.MEMBER_CHANGE_EVENT, {
                     roomId: args.roomId,
-                    memberId: args.memberId,
-                    memberName: args.memberName,
+                    userId: args.userId,
+                    userName: args.userName,
                     status: 'join'
                 })
             }
@@ -102,13 +102,38 @@ const joinRoom = {
     },
 }
 
+type AddEntryArgs = {
+    roomId: string
+    userId: string
+    entry: string
+}
+
+const addEntry = {
+    type: EntryType,
+    description: 'Create an Entry',
+    args: {
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        entry: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    resolve: async (_, args: AddEntryArgs) => {
+        const addEntryResult = inMemoryDatastore.addEntry(args.roomId, args.userId, args.entry)
+        if (addEntryResult.success) {
+            await pubsub.publish(MessageType.ADD_ENTRY, { ...addEntryResult.data, roomId: args.roomId })
+            return addEntryResult.data
+        }
+        throw new Error(addEntryResult.error)
+    },
+}
+
 const RootMutationType = new GraphQLObjectType({
     name: 'Mutation',
     description: 'Root Mutation',
     fields: () => ({
         joinRoom,
         createRoom,
-        updateRoom
+        updateRoom,
+        addEntry
     }),
 })
 

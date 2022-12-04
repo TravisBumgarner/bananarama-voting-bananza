@@ -3,7 +3,7 @@ import { useContext, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Heading, Button, Input, Paragraph } from 'sharedComponents'
+import { Heading, Button, Input } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 

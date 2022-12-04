@@ -1,4 +1,5 @@
 import { useReducer, createContext } from 'react'
+import { TRoom, TEntry } from 'types'
 
 import { logger } from 'utilities'
 
@@ -12,6 +13,8 @@ type State = {
         name: string,
         id: string
     }
+    room: TRoom | null,
+    entries: TEntry[]
 }
 
 const EMPTY_STATE: State = {
@@ -20,7 +23,9 @@ const EMPTY_STATE: State = {
     user: {
         name: 'Bob',
         id: 'bob'
-    }
+    },
+    room: null,
+    entries: []
 }
 
 type HasErrored = {
@@ -47,11 +52,29 @@ type Join = {
     }
 }
 
+type EnterRoom = {
+    type: 'ENTER_ROOM'
+    data: TRoom
+}
+
+type UpdateRoom = {
+    type: 'UPDATE_ROOM'
+    data: Partial<TRoom>
+}
+
+type AddEntry = {
+    type: 'ADD_ENTRY',
+    data: TEntry
+}
+
 type Action =
     | AddMessage
     | DeleteMessage
     | HasErrored
     | Join
+    | EnterRoom
+    | UpdateRoom
+    | AddEntry
 
 const context = createContext(
     {
@@ -75,8 +98,16 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, message: null }
         }
         case 'JOIN': {
-            console.log('context', action)
             return { ...state, user: { name: action.data.name, id: action.data.id } }
+        }
+        case 'ENTER_ROOM': {
+            return { ...state, room: action.data }
+        }
+        case 'UPDATE_ROOM': {
+            return { ...state, room: { ...state.room!, ...action.data } }
+        }
+        case 'ADD_ENTRY': {
+            return { ...state, entries: [...state.entries, action.data] }
         }
         default: {
             logger(`Swallowing action: ${JSON.stringify(action)}`)

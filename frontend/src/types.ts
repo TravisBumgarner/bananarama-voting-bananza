@@ -12,11 +12,23 @@ type TRoom = {
     status: 'signup' | 'voting' | 'conclusion'
 }
 
+type TEntry = {
+    userId: string,
+    roomId: string,
+    entry: string,
+}
+
 type TMemberChange = {
-    memberId: string,
-    memberName: string,
+    userId: string,
+    userName: string,
     roomId: string,
     status: 'join' | 'leave'
+}
+
+type TAddEntry = {
+    userId: string,
+    roomId: string,
+    entry: string,
 }
 
 type TRoomUpdate = {
@@ -28,5 +40,7 @@ export {
     TParticipant,
     TRoom,
     TMemberChange,
-    TRoomUpdate
+    TRoomUpdate,
+    TAddEntry,
+    TEntry
 }

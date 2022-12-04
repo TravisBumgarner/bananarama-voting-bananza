@@ -1,17 +1,17 @@
 import { Button, Heading, Loading, Icon, List } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
-import { Exactly, sanitizeRoomId } from 'utilities'
+import { Exactly, logger, sanitizeRoomId } from 'utilities'
 import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 
 import { context } from 'context'
 import { colors } from 'theme'
-import { TRoom, TMemberChange, TRoomUpdate } from '../types'
+import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
 import { Conclusion, Signup, Voting } from './components'
 
 const JOIN_ROOM_MUTATION = gql`
-    mutation JoinRoom($roomId: String!, $memberId: String!, $memberName: String!) {
-        joinRoom(roomId: $roomId, memberId: $memberId, memberName: $memberName){
+    mutation JoinRoom($roomId: String!, $userId: String!, $userName: String!) {
+        joinRoom(roomId: $roomId, userId: $userId, userName: $userName){
             id
             ownerId
             maxVotes
@@ -37,10 +37,10 @@ const UPDATE_ROOM_MUTATION = gql`
 const MEMBER_CHANGE_SUBSCRIPTION = gql`
   subscription MemberChange {
     memberChange {
-        memberId
+        userId
         roomId
         status
-        memberName
+        userName
     }
   }
 `
@@ -59,7 +59,7 @@ const Room = () => {
     const sanitizedRoomId = useMemo(() => sanitizeRoomId(roomId || ''), [roomId])
     const [isLoading, setIsLoading] = useState(true)
     const { dispatch, state } = useContext(context)
-    const [details, setDetails] = useState<Omit<TRoom, 'members'> | null>(null)
+    // const [details, setDetails] = useState<Omit<TRoom, 'members'> | null>(null)
     const [members, setMembers] = useState<Record<string, string> | null>(null)
     const navigate = useNavigate()
 
@@ -69,7 +69,11 @@ const Room = () => {
             return accum
         }, {} as Record<string, string>)
 
-        setDetails({ ...joinRoom })
+        dispatch({
+            type: 'ENTER_ROOM',
+            data: joinRoom
+        })
+
         setMembers(initialMembers)
 
         setIsLoading(false)
@@ -85,10 +89,13 @@ const Room = () => {
     })
 
     const onUpdateRoomSuccess = useCallback((data: { updateRoom: Exactly<TRoom, 'status'> }) => {
-        if (!details) return // This shouldn't fire before the room's details have been populated
-        setDetails({ ...details, status: data.updateRoom.status })
+        if (!state.room) return // This shouldn't fire before the room's details have been populated
+        dispatch({
+            type: 'UPDATE_ROOM',
+            data: { status: data.updateRoom.status }
+        })
         setIsLoading(false)
-    }, [details])
+    }, [state.room])
     const onUpdateRoomError = useCallback((error: ApolloError) => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
         setIsLoading(false)
@@ -99,24 +106,42 @@ const Room = () => {
     })
 
     useSubscription<{ memberChange: TMemberChange }>(MEMBER_CHANGE_SUBSCRIPTION, {
+        onError: (error) => {
+            logger(error)
+            dispatch({
+                type: 'ADD_MESSAGE',
+                data: {
+                    message: 'Failed to do the thing.'
+                }
+            })
+        },
         onData: ({ data }) => {
-            if (!details || !data.data) return // This shouldn't fire before the room's details have been populated
+            if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
 
-            const { memberId, status, memberName } = data.data.memberChange
+            const { userId, status, userName } = data.data.memberChange
             if (status === 'join') {
-                setMembers({ ...members, [memberId]: memberName })
+                setMembers({ ...members, [userId]: userName })
             }
         },
     })
 
     useSubscription<{ roomUpdate: TRoomUpdate }>(ROOM_UPDATE_SUBSCRIPTION, {
+        onError: (error) => {
+            logger(error)
+            dispatch({
+                type: 'ADD_MESSAGE',
+                data: {
+                    message: 'Failed to update room.'
+                }
+            })
+        },
         onData: ({ data }) => {
-            if (!details || !data.data) return // This shouldn't fire before the room's details have been populated
+            if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
 
             const { status, roomId: roomIdToUpdate } = data.data.roomUpdate
             // For now, all events for all rooms are broadcast everywhere.
-            if (roomIdToUpdate === details.id) {
-                setDetails({ ...details, status })
+            if (roomIdToUpdate === state.room.id) {
+                dispatch({ type: 'UPDATE_ROOM', data: { status } })
             }
         },
     })
@@ -129,34 +154,34 @@ const Room = () => {
 
         joinRoomMutation({
             variables: {
-                memberName: state.user.name,
-                memberId: state.user.id,
+                userName: state.user.name,
+                userId: state.user.id,
                 roomId
             }
         })
     }, [sanitizeRoomId, state.user.id])
 
     const handleStatusChange = useCallback((status: TRoom['status']) => {
-        if (!details) return
+        if (!state.room) return
 
-        updateRoomMutation({ variables: { status, userId: state.user.id, roomId: details.id } })
-    }, [details])
+        updateRoomMutation({ variables: { status, userId: state.user.id, roomId: state.room.id } })
+    }, [state.room])
 
     const copyRoomToClipboard = useCallback(() => {
         navigator.clipboard.writeText(window.location.href)
     }, [window.location.href])
 
     const Controls = useMemo(() => {
-        if (!details || details.ownerId !== state.user.id || details.status === 'conclusion') return null
+        if (!state.room || state.room.ownerId !== state.user.id || state.room.status === 'conclusion') return null
 
-        if (details.status === 'signup') return <Button variation="pear" onClick={() => handleStatusChange('voting')}>Start Voting</Button>
-        if (details.status === 'voting') return <Button variation="pear" onClick={() => handleStatusChange('conclusion')}>Announce Results</Button>
-    }, [details, state.user])
+        if (state.room.status === 'signup') return <Button variation="pear" onClick={() => handleStatusChange('voting')}>Start Voting</Button>
+        if (state.room.status === 'voting') return <Button variation="pear" onClick={() => handleStatusChange('conclusion')}>Announce Results</Button>
+    }, [state.room, state.user])
 
     const Content = useMemo(() => {
-        if (!details) return
+        if (!state.room) return
 
-        switch (details.status) {
+        switch (state.room.status) {
             case 'signup': {
                 return <Signup />
             }
@@ -167,11 +192,11 @@ const Room = () => {
                 return <Conclusion />
             }
         }
-    }, [details])
+    }, [state.room])
 
     if (isLoading) return <Loading />
 
-    if (!details || !members) return <p>no details</p>
+    if (!state.room || !members) return <p>no details</p>
 
     return (
         <div>
@@ -185,11 +210,6 @@ const Room = () => {
             <Heading.H3>Participants</Heading.H3>
             <List.UnorderedList>
                 {Object.keys(members).map((id) => <List.ListItem key={id}>{members[id]}</List.ListItem>)}
-            </List.UnorderedList>
-
-            <Heading.H3>Room Details</Heading.H3>
-            <List.UnorderedList>
-                {Object.keys(details).map((id: keyof typeof details) => <List.ListItem key={id}>{id}: {JSON.stringify(details[id])}</List.ListItem>)}
             </List.UnorderedList>
             {Controls}
             {Content}

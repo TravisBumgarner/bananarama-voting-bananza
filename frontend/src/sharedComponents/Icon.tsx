@@ -3,7 +3,7 @@ import styled from 'styled-components'
 // For More: https://fonts.google.com/icons
 
 type IconProps = {
-    name: 'mic' | 'delete' | 'close' | 'content_copy'
+    name: 'close' | 'content_copy' | 'add'
     color: string
     onClick?: () => void
 }
