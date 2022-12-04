@@ -40,7 +40,7 @@ const RoomType = new GraphQLObjectType({
 
 const MemberChangeType = new GraphQLObjectType({
     name: 'MemberChange',
-    description: 'This represents a MemberChange',
+    description: 'This represents a Member Change',
     fields: () => ({
         roomId: { type: new GraphQLNonNull(GraphQLString) },
         memberId: { type: new GraphQLNonNull(GraphQLString) },
@@ -49,8 +49,18 @@ const MemberChangeType = new GraphQLObjectType({
     }),
 })
 
+const RoomUpdateType = new GraphQLObjectType({
+    name: 'RoomUpdate',
+    description: 'This represents a Room Update',
+    fields: () => ({
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+        status: { type: new GraphQLNonNull(RoomStatusEnum) },
+    }),
+})
+
 export {
     RoomType,
     MemberChangeType,
-    RoomStatusEnum
+    RoomStatusEnum,
+    RoomUpdateType
 }

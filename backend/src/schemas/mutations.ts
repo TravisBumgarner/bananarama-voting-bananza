@@ -1,6 +1,7 @@
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString, } from 'graphql'
 import { RedisPubSub } from 'graphql-redis-subscriptions'
 
+import { MessageType } from '../redis/types'
 import { EErrorMessages, TRoom } from '../types'
 import inMemoryDatastore from '../inMemoryDatastore'
 import { RoomStatusEnum, RoomType } from './types'
@@ -53,7 +54,14 @@ const updateRoom = {
 
         const updateRoomResult = inMemoryDatastore.updateRoom({ id: args.roomId, status: args.status })
 
-        if (updateRoomResult.success) return updateRoomResult.data
+        if (updateRoomResult.success) {
+            await pubsub.publish(MessageType.ROOM_UPDATE_EVENT, {
+                roomId: args.roomId,
+                status: args.status
+            })
+
+            return updateRoomResult.data
+        }
 
         throw new Error(updateRoomResult.error)
     },
@@ -77,7 +85,7 @@ const joinRoom = {
         const addMemberResult = inMemoryDatastore.addMember(args.roomId, { name: args.memberName, id: args.memberId })
         if (addMemberResult.success || addMemberResult.error === EErrorMessages.MemberAlreadyExists) {
             if (addMemberResult.success) {
-                await pubsub.publish('MEMBER_CHANGE_EVENT', {
+                await pubsub.publish(MessageType.MEMBER_CHANGE_EVENT, {
                     roomId: args.roomId,
                     memberId: args.memberId,
                     memberName: args.memberName,

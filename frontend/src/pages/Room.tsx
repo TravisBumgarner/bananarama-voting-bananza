@@ -6,7 +6,7 @@ import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 
 import { context } from 'context'
 import { colors } from 'theme'
-import { TRoom, TMemberChange } from '../types'
+import { TRoom, TMemberChange, TRoomUpdate } from '../types'
 
 const JOIN_ROOM_MUTATION = gql`
     mutation JoinRoom($roomId: String!, $memberId: String!, $memberName: String!) {
@@ -40,6 +40,15 @@ const MEMBER_CHANGE_SUBSCRIPTION = gql`
         roomId
         status
         memberName
+    }
+  }
+`
+
+const ROOM_UPDATE_SUBSCRIPTION = gql`
+  subscription RoomUpdate {
+    roomUpdate {
+       roomId,
+       status
     }
   }
 `
@@ -99,6 +108,18 @@ const Room = () => {
         },
     })
 
+    useSubscription<{ roomUpdate: TRoomUpdate }>(ROOM_UPDATE_SUBSCRIPTION, {
+        onData: ({ data }) => {
+            if (!details || !data.data) return // This shouldn't fire before the room's details have been populated
+
+            const { status, roomId: roomIdToUpdate } = data.data.roomUpdate
+            // For now, all events for all rooms are broadcast everywhere.
+            if (roomIdToUpdate === details.id) {
+                setDetails({ ...details, status })
+            }
+        },
+    })
+
     useEffect(() => {
         if (state.user.name.length === 0) {
             // Don't join room until user has entered their name.
@@ -124,10 +145,16 @@ const Room = () => {
         navigator.clipboard.writeText(window.location.href)
     }, [window.location.href])
 
+    const Controls = useMemo(() => {
+        if (!details || details.ownerId !== state.user.id || details.status === 'conclusion') return null
+
+        if (details.status === 'signup') return <Button variation="pear" onClick={() => handleStatusChange('voting')}>Start Voting</Button>
+        if (details.status === 'voting') return <Button variation="pear" onClick={() => handleStatusChange('conclusion')}>Announce Results</Button>
+    }, [details, state.user])
+
     if (isLoading) return <Loading />
 
     if (!details || !members) return <p>no details</p>
-
     return (
         <div>
             <Heading.H1>
@@ -146,8 +173,7 @@ const Room = () => {
             <List.UnorderedList>
                 {Object.keys(details).map((id: keyof typeof details) => <List.ListItem key={id}>{id}: {JSON.stringify(details[id])}</List.ListItem>)}
             </List.UnorderedList>
-            {details.status === 'signup' && <Button variation="pear" onClick={() => handleStatusChange('voting')}>Start Voting</Button>}
-            {details.status === 'voting' && <Button variation="pear" onClick={() => handleStatusChange('conclusion')}>Announce Results</Button>}
+            {Controls}
         </div>
     )
 }

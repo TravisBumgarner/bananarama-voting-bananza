@@ -19,8 +19,14 @@ type TMemberChange = {
     status: 'join' | 'leave'
 }
 
+type TRoomUpdate = {
+    roomId: string,
+    status: TRoom['status']
+}
+
 export {
     TParticipant,
     TRoom,
-    TMemberChange
+    TMemberChange,
+    TRoomUpdate
 }
