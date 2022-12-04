@@ -9,11 +9,13 @@ type TRoom = {
     icon: 'banana',
     maxVotes: number,
     members: TParticipant[]
+    status: 'signup' | 'voting' | 'conclusion'
 }
 
 enum EErrorMessages {
     RoomDoesNotExist = 'RoomDoesNotExist',
     MemberAlreadyExists = 'MemberAlreadyExists',
+    MemberIsNotRoomOwner = 'MemberIsNotRoomOwner'
 }
 
 export {

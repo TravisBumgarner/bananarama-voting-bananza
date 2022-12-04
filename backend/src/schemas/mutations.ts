@@ -1,10 +1,9 @@
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString, } from 'graphql'
 import { RedisPubSub } from 'graphql-redis-subscriptions'
 
-import { EErrorMessages } from '../types'
+import { EErrorMessages, TRoom } from '../types'
 import inMemoryDatastore from '../inMemoryDatastore'
-import { RoomType } from './types'
-import { MessageType } from '../redis/types'
+import { RoomStatusEnum, RoomType } from './types'
 
 const pubsub = new RedisPubSub({ connection: 'redis' })
 
@@ -23,11 +22,40 @@ const createRoom = {
     resolve: async (_, args: CreateRoomArgs) => {
         const result = inMemoryDatastore.createRoom({ id: args.ownerId, name: args.ownerName })
         if (result.success) {
-            return ({
-                id: result.data
-            })
+            return (result.data)
         }
         throw new Error(result.error)
+    },
+}
+
+type UpdateRoomArgs = {
+    userId: string
+    roomId: string
+    status: TRoom['status']
+}
+
+// Currently only designed around updating status.
+const updateRoom = {
+    type: RoomType,
+    description: 'Update a Room',
+    args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+        status: { type: new GraphQLNonNull(RoomStatusEnum) },
+
+    },
+    resolve: async (_, args: UpdateRoomArgs) => {
+        const currentRoomResult = inMemoryDatastore.getRoom(args.roomId)
+        if (!currentRoomResult.success) throw new Error(currentRoomResult.error)
+
+        const userIsNotOwner = currentRoomResult.success && currentRoomResult.data?.ownerId !== args.userId
+        if (userIsNotOwner) throw new Error(EErrorMessages.MemberIsNotRoomOwner)
+
+        const updateRoomResult = inMemoryDatastore.updateRoom({ id: args.roomId, status: args.status })
+
+        if (updateRoomResult.success) return updateRoomResult.data
+
+        throw new Error(updateRoomResult.error)
     },
 }
 
@@ -72,6 +100,7 @@ const RootMutationType = new GraphQLObjectType({
     fields: () => ({
         joinRoom,
         createRoom,
+        updateRoom
     }),
 })
 

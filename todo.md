@@ -1,2 +1,5 @@
 - [x] Create Room and have others join
     - [x] Redirect home if room doesn't exist
+- [x] Let organizer change room state
+    - [ ] Add subscription for others to get updated
+    - [ ] Update UI for non room owners

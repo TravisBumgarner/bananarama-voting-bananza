@@ -1,7 +1,7 @@
 import { Button, Heading, Loading, Icon, List } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
-import { sanitizeRoomId } from 'utilities'
+import { Exactly, sanitizeRoomId } from 'utilities'
 import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 
 import { context } from 'context'
@@ -15,12 +15,22 @@ const JOIN_ROOM_MUTATION = gql`
             ownerId
             maxVotes
             icon
+            status
             members {
                 name,
                 id
             }
         }
     }
+`
+
+const UPDATE_ROOM_MUTATION = gql`
+    mutation UpdateRoom($userId: String!, $roomId: String!, $status: RoomStatusEnum!) {
+        updateRoom(userId: $userId, roomId: $roomId, status: $status) {
+            id,
+            status
+        }
+    }    
 `
 
 const MEMBER_CHANGE_SUBSCRIPTION = gql`
@@ -43,8 +53,7 @@ const Room = () => {
     const [members, setMembers] = useState<Record<string, string> | null>(null)
     const navigate = useNavigate()
 
-    const onGetRoomDetailsSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
-        console.log(joinRoom)
+    const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
         const initialMembers = joinRoom.members.reduce((accum, current) => {
             accum[current.id] = current.name //eslint-disable-line
             return accum
@@ -55,14 +64,28 @@ const Room = () => {
 
         setIsLoading(false)
     }, [])
-    const onGetRoomDetailsError = useCallback((error: ApolloError) => {
+    const onJoinRoomFailure = useCallback((error: ApolloError) => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
         setIsLoading(false)
         navigate('/')
     }, [])
     const [joinRoomMutation] = useMutation<any>(JOIN_ROOM_MUTATION, {
-        onCompleted: onGetRoomDetailsSuccess,
-        onError: onGetRoomDetailsError
+        onCompleted: onJoinRoomSuccess,
+        onError: onJoinRoomFailure
+    })
+
+    const onUpdateRoomSuccess = useCallback((data: { updateRoom: Exactly<TRoom, 'status'> }) => {
+        if (!details) return // This shouldn't fire before the room's details have been populated
+        setDetails({ ...details, status: data.updateRoom.status })
+        setIsLoading(false)
+    }, [details])
+    const onUpdateRoomError = useCallback((error: ApolloError) => {
+        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
+        setIsLoading(false)
+    }, [])
+    const [updateRoomMutation] = useMutation<any>(UPDATE_ROOM_MUTATION, {
+        onCompleted: onUpdateRoomSuccess,
+        onError: onUpdateRoomError
     })
 
     useSubscription<{ memberChange: TMemberChange }>(MEMBER_CHANGE_SUBSCRIPTION, {
@@ -91,15 +114,20 @@ const Room = () => {
         })
     }, [sanitizeRoomId, state.user.id])
 
-    const copyRoomToClipboard = () => {
+    const handleStatusChange = useCallback((status: TRoom['status']) => {
+        if (!details) return
+
+        updateRoomMutation({ variables: { status, userId: state.user.id, roomId: details.id } })
+    }, [details])
+
+    const copyRoomToClipboard = useCallback(() => {
         navigator.clipboard.writeText(window.location.href)
-    }
+    }, [window.location.href])
 
     if (isLoading) return <Loading />
 
     if (!details || !members) return <p>no details</p>
 
-    console.log(members)
     return (
         <div>
             <Heading.H1>
@@ -107,12 +135,19 @@ const Room = () => {
             </Heading.H1>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                 <Heading.H2>Room Name: {sanitizedRoomId}</Heading.H2>
-                <Button variation="primary" onClick={copyRoomToClipboard}>Share <Icon color={colors.pear.base} name="content_copy" /></Button>
+                <Button variation="pear" onClick={copyRoomToClipboard}>Share <Icon color={colors.pear.base} name="content_copy" /></Button>
             </div>
             <Heading.H3>Participants</Heading.H3>
             <List.UnorderedList>
                 {Object.keys(members).map((id) => <List.ListItem key={id}>{members[id]}</List.ListItem>)}
             </List.UnorderedList>
+
+            <Heading.H3>Room Details</Heading.H3>
+            <List.UnorderedList>
+                {Object.keys(details).map((id: keyof typeof details) => <List.ListItem key={id}>{id}: {JSON.stringify(details[id])}</List.ListItem>)}
+            </List.UnorderedList>
+            {details.status === 'signup' && <Button variation="pear" onClick={() => handleStatusChange('voting')}>Start Voting</Button>}
+            {details.status === 'voting' && <Button variation="pear" onClick={() => handleStatusChange('conclusion')}>Announce Results</Button>}
         </div>
     )
 }

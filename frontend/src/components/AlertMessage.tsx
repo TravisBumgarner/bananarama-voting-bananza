@@ -60,7 +60,7 @@ const AlertMessage = () => {
         <AlertMessagePositioner>
             <AlertMessageWrapper timeToLiveMS={state.message.timeToLiveMS}>
                 <Paragraph style={{ color: colors.pear.base }}>{state.message.body}</Paragraph>
-                <Button onClick={handleSubmit} variation="primary">Ok!</Button>
+                <Button onClick={handleSubmit} variation="pear">Ok!</Button>
             </AlertMessageWrapper>
         </AlertMessagePositioner>
     )

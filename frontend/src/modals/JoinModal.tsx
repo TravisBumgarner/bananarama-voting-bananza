@@ -42,11 +42,11 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
                     />
 
                     <Button
-                        marble={name.length === 0}
+                        disabled={name.length === 0}
                         fullWidth
                         key="submit"
                         type="submit"
-                        variation="primary"
+                        variation="pear"
                     >Bananas!
                     </Button>
                 </form>

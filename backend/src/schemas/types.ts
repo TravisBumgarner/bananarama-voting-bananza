@@ -4,7 +4,17 @@ import {
     GraphQLNonNull,
     GraphQLInt,
     GraphQLList,
+    GraphQLEnumType,
 } from 'graphql'
+
+const RoomStatusEnum = new GraphQLEnumType({
+    name: 'RoomStatusEnum',
+    values: {
+        signup: { value: 'signup' },
+        voting: { value: 'voting' },
+        conclusion: { value: 'conclusion' }
+    }
+})
 
 const ParticipantType = new GraphQLObjectType({
     name: 'Participant',
@@ -23,7 +33,8 @@ const RoomType = new GraphQLObjectType({
         ownerId: { type: new GraphQLNonNull(GraphQLString) },
         maxVotes: { type: new GraphQLNonNull(GraphQLInt) },
         icon: { type: new GraphQLNonNull(GraphQLString) },
-        members: { type: new GraphQLList(ParticipantType) }
+        members: { type: new GraphQLList(ParticipantType) },
+        status: { type: RoomStatusEnum }
     }),
 })
 
@@ -40,5 +51,6 @@ const MemberChangeType = new GraphQLObjectType({
 
 export {
     RoomType,
-    MemberChangeType
+    MemberChangeType,
+    RoomStatusEnum
 }

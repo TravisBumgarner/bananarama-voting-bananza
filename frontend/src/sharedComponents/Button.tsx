@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { colors } from 'theme'
 
 type ButtonProps = {
-    variation: 'primary' | 'warning' | 'marble'
-    marble?: boolean
+    variation: 'pear' | 'banana' | 'marble'
+    disabled?: boolean
     fullWidth?: boolean
     alignRight?: boolean
 
@@ -26,8 +26,8 @@ const Button = styled.button`
 
     ${({ fullWidth }: ButtonProps) => (fullWidth ? 'width: 100%;' : '')}
 
-    ${({ variation, marble }: ButtonProps) => {
-        if (marble) {
+    ${({ variation, disabled }: ButtonProps) => {
+        if (disabled) {
             return `
                 color: ${colors.marble.base};
                 border-color: ${colors.marble.base};
@@ -38,7 +38,7 @@ const Button = styled.button`
             `
         }
 
-        if (variation === 'primary') {
+        if (variation === 'pear') {
             return `
                 color: ${colors.pear.base};
                 border-color: ${colors.pear.base};
@@ -49,15 +49,15 @@ const Button = styled.button`
                     background-color: ${colors.pear.lightest};
                 }
             `
-        } if (variation === 'warning') {
+        } if (variation === 'banana') {
             return `
-                color: ${colors.apple.base};
-                border-color: ${colors.apple.base};
+                color: ${colors.banana.base};
+                border-color: ${colors.banana.base};
 
                 &:hover {
-                    background-color: ${colors.apple.lighten};
-                    color: ${colors.apple.darken};
-                    border-color: ${colors.apple.darken};
+                    background-color: ${colors.banana.lighten};
+                    color: ${colors.banana.darken};
+                    border-color: ${colors.banana.darken};
                 }
             `
         }

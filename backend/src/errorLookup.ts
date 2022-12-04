@@ -8,6 +8,10 @@ const errorLookup: Record<EErrorMessages, { message: string, statusCode: number 
     [EErrorMessages.RoomDoesNotExist]: {
         message: 'That room does not exist',
         statusCode: 403
+    },
+    [EErrorMessages.MemberIsNotRoomOwner]: {
+        message: 'The member is not the room owner',
+        statusCode: 403
     }
 }
 

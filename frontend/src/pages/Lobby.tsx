@@ -58,7 +58,7 @@ const Lobby = () => {
             <Heading.H1>
                 Bananarama Voting Bananza
             </Heading.H1>
-            <Button onClick={createRoom} fullWidth type="button" variation="primary">
+            <Button onClick={createRoom} fullWidth type="button" variation="pear">
                 Create Room
             </Button>
             <FabulousOrWrapper>
@@ -73,7 +73,7 @@ const Lobby = () => {
                     label="Enter an Existing Room Name"
                     handleChange={(value: string) => setRoomId(value)}
                 />
-                <Button fullWidth onClick={joinRoom} type="button" variation="primary">
+                <Button fullWidth onClick={joinRoom} type="button" variation="pear">
                     Join Room
                 </Button>
             </div>

@@ -9,6 +9,7 @@ type TRoom = {
     icon: 'banana',
     maxVotes: number,
     members: TParticipant[]
+    status: 'signup' | 'voting' | 'conclusion'
 }
 
 type TMemberChange = {

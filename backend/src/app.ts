@@ -5,8 +5,9 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
-import { WebSocketServer } from 'ws' // yarn add ws
+import { WebSocketServer } from 'ws'
 
+import { logger } from './utilities'
 import errorLookup from './errorLookup'
 import schema from './schemas'
 
@@ -38,7 +39,7 @@ app.use('/graphql', graphqlHTTP(() => ({
     graphiql: process.env.NODE_ENV !== 'production',
     customFormatErrorFn: (err) => {
         if (err.message in errorLookup) return errorLookup[err.message]
-
+        logger(err.message)
         return {
             statusCode: 500,
             message: 'Something went wrong'
@@ -66,7 +67,7 @@ const startup = async () => {
     })
 
     const server = app.listen(4000, () => {
-        console.log('starting on 4000')
+        console.log('starting on 4000') // eslint-disable-line
     })
     const wsServer = new WebSocketServer({
         server,

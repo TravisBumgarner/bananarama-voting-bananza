@@ -23,20 +23,28 @@ class InMemoryDatastore {
         this.rooms = {}
     }
 
-    createRoom(owner: TParticipant): Response<string> {
+    createRoom(owner: TParticipant): Response<TRoom> {
         const roomId = hri.random()
         this.rooms[roomId] = {
             id: roomId,
             ownerId: owner.id,
             maxVotes: 2,
             icon: 'banana',
-            members: [owner]
+            members: [owner],
+            status: 'signup'
         }
-        console.log('created room', this.rooms[roomId])
         return {
             success: true,
-            data: roomId
+            data: this.rooms[roomId]
         }
+    }
+
+    updateRoom(room: Partial<TRoom>): Response<TRoom> {
+        if (room.id && room.id in this.rooms) {
+            this.rooms[room.id] = { ...this.rooms[room.id], ...room }
+            return ({ success: true, data: this.rooms[room.id] })
+        }
+        return ({ success: false, error: EErrorMessages.RoomDoesNotExist })
     }
 
     getRoom(id: string): Response<TRoom> {

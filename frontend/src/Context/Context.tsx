@@ -18,8 +18,8 @@ const EMPTY_STATE: State = {
     message: null,
     hasErrored: false,
     user: {
-        name: '',
-        id: ''
+        name: 'Bob',
+        id: 'bob'
     }
 }
 
