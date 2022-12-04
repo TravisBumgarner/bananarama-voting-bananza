@@ -9,11 +9,12 @@ const colorFactory = (color: string) => ({
     lightest: lighten(0.25, color),
 })
 
-const BRIGHT1 = colorFactory('#35ff1a') // should be greenish for positive actions
-const BRIGHT2 = colorFactory('#ff1e1e') // should be redish for negative actions
-const BRIGHT3 = colorFactory('#d9ff00')
-const BRIGHT4 = colorFactory('#00fbff')
-const DISABLED = colorFactory('#808080')
+const BRIGHT1 = colorFactory('#88AB75') // should be greenish for positive actions
+const BRIGHT2 = colorFactory('#DE8F6E') // should be redish for negative actions
+const BRIGHT3 = colorFactory('#DBD56E')
+const BRIGHT4 = colorFactory('#2D93AD')
+const BRIGHT5 = colorFactory('#a8afb1')
+const DISABLED = colorFactory('#3F3F44')
 
 const DARK1 = colorFactory('#282828')
 
@@ -22,6 +23,7 @@ const colors = {
     BRIGHT2,
     BRIGHT3,
     BRIGHT4,
+    BRIGHT5,
     DARK1,
     DISABLED
 }

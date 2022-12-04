@@ -4,7 +4,7 @@ import { colors } from 'theme'
 
 const Input = styled.input`
     font-size: 1rem;
-    border: 2px solid;
+    border: 4px solid;
     padding: 0.5rem 1rem;
     background-color: transparent;
     font-weight: 700;
@@ -13,6 +13,10 @@ const Input = styled.input`
     width: 100%;
     box-sizing: border-box;
     border-radius: 1rem;
+
+    ::placeholder {
+        color: ${colors.BRIGHT5.base};
+  }
 `
 
 const LabelWrapper = styled.div`

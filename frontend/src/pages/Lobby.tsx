@@ -1,9 +1,31 @@
 import { gql, useMutation, } from '@apollo/client'
 import { useContext, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { Heading, Button, Label, Paragraph } from 'sharedComponents'
 import { context } from 'context'
+import { colors } from 'theme'
+
+const FabulousOrWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;;
+
+    div {
+        border: 1px solid ${colors.BRIGHT1.base};
+        width:100%;
+        margin: 0 1rem;
+    }
+
+    p {
+        text-align: center;
+        font-size: 2rem;
+        color: ${colors.BRIGHT1.base};
+        margin: 0.5rem 0;
+    }
+`
 
 const CREATE_ROOM_MUTATION = gql`
     mutation CreateRoom($ownerId: String! $ownerName: String!) {
@@ -40,7 +62,11 @@ const Lobby = () => {
             <Button onClick={createRoom} fullWidth type="button" variation="primary">
                 Create Room
             </Button>
-            <Paragraph style={{ textAlign: 'center' }}>OR</Paragraph>
+            <FabulousOrWrapper>
+                <div />
+                <p>OR</p>
+                <div />
+            </FabulousOrWrapper>
             <div>
                 <Label
                     name="joinroom"

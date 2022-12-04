@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import ReactModal from 'react-modal'
 
 import { colors } from 'theme'
+import { borderWidth } from 'polished'
 import { Heading } from '.'
 
 type ModalProps = {
@@ -47,11 +48,12 @@ const Modal = ({
             },
             content: {
                 borderColor: colors.BRIGHT1.base,
-                backgroundColor: colors.BRIGHT3.darkest,
+                backgroundColor: colors.DARK1.base,
                 position: 'static',
                 maxWidth: '80vw',
                 minWidth: '500px',
-                borderRadius: '1rem'
+                borderRadius: '1rem',
+                borderWidth: '4px'
             },
         }}
     >

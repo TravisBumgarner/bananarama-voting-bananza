@@ -13,7 +13,7 @@ type ButtonProps = {
 const Button = styled.button`
     text-transform: uppercase;
     font-size: 1rem;
-    border: 2px solid;
+    border: 4px solid;
     padding: 0.5rem 1rem;
     background-color: transparent;
     font-weight: 700;
