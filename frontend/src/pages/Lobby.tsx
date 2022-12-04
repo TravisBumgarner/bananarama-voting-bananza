@@ -17,7 +17,7 @@ const Lobby = () => {
     const [createRoomMutation] = useMutation<{ createRoom: { id: string } }>(CREATE_ROOM_MUTATION)
     const navigate = useNavigate()
     const { dispatch, state } = useContext(context)
-    const [roomId, setRoomId] = useState<string>('unlucky-monkey-65')
+    const [roomId, setRoomId] = useState('')
     console.log(state.user)
     const createRoom = useCallback(async () => {
         const response = await createRoomMutation({ variables: { ownerId: state.user.id, ownerName: state.user.name } })
@@ -45,6 +45,7 @@ const Lobby = () => {
                 <LabelAndInput
                     name="joinroom"
                     value={roomId}
+                    label="Enter an Existing Room Name"
                     handleChange={(value) => setRoomId(value)}
                 />
                 <Button fullWidth onClick={joinRoom} type="button" variation="primary">

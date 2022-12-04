@@ -26,7 +26,7 @@ const GlobalStyle = createGlobalStyle`
         font-size: 16px;
         font-weight: 400;
         background-color: ${colors.BACKGROUND.base};
-        font-family: 'Special Elite', cursive;
+        font-family: 'Nunito', sans-serif;
     }
 
     body {

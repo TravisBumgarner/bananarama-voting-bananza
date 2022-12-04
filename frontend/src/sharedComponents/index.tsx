@@ -7,7 +7,7 @@ import ExternalLink from './ExternalLink'
 import Button from './Button'
 import Paragraph from './Paragraph'
 import Modal from './Modal'
-import LabelAndInput, { Label } from './LabelAndInput'
+import LabelAndInput from './LabelAndInput'
 import DropdownMenu from './DropdownMenu'
 import Divider from './Divider'
 import ButtonWrapper from './ButtonWrapper'
@@ -30,5 +30,4 @@ export {
     ButtonWrapper,
     Icon,
     Checkbox,
-    Label
 }

@@ -53,7 +53,7 @@ const App = () => {
             <Modal
                 showModal={showJoinModal}
                 closeModal={() => setShowJoinModal(false)}
-                contentLabel="Welcome!"
+                contentLabel="Identify Yourself!"
             >
                 <JoinModal closeModal={() => setShowJoinModal(false)} />
             </Modal>
