@@ -9,12 +9,12 @@
 Remaining for MVP
 
 - [x] Be able to add Entries during 'signup'
-    - [ ] Basic style for Participants
-    - [ ] Basic style for entries
+    - [x] Basic style for Participants
+    - [x] Basic style for entries
 - [ ] Be able to vote on entries in the voting phase
 - [ ] Be able to display results to everyone
-    - [ ] Make a copy results button
+    - [ ] Make a "copy results" button
 - [x] Standaridze user / member / paritcipant -> user
 - [ ] Refactor state to not have members, etc. nested under room. 
 - [ ] Add leave room cleanup event
-- [ ] Merge dispatches in Room
+- [ ] Merge dispatches in Room.tsx
