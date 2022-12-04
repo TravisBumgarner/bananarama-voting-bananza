@@ -1,4 +1,4 @@
-import { Button, Heading, Loading, Icon, List } from 'sharedComponents'
+import { Button, Heading, Loading, Icon } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
 import { Exactly, logger, sanitizeRoomId } from 'utilities'
@@ -7,7 +7,7 @@ import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
-import { Conclusion, Signup, Voting } from './components'
+import { Conclusion, Participants, Signup, Voting } from './components'
 
 const JOIN_ROOM_MUTATION = gql`
     mutation JoinRoom($roomId: String!, $userId: String!, $userName: String!) {
@@ -59,8 +59,7 @@ const Room = () => {
     const sanitizedRoomId = useMemo(() => sanitizeRoomId(roomId || ''), [roomId])
     const [isLoading, setIsLoading] = useState(true)
     const { dispatch, state } = useContext(context)
-    // const [details, setDetails] = useState<Omit<TRoom, 'members'> | null>(null)
-    const [members, setMembers] = useState<Record<string, string> | null>(null)
+    // const [members, setMembers] = useState<Record<string, string> | null>(null)
     const navigate = useNavigate()
 
     const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
@@ -73,8 +72,10 @@ const Room = () => {
             type: 'ENTER_ROOM',
             data: joinRoom
         })
-
-        setMembers(initialMembers)
+        dispatch({
+            type: 'ADD_USERS',
+            data: initialMembers
+        })
 
         setIsLoading(false)
     }, [])
@@ -120,7 +121,10 @@ const Room = () => {
 
             const { userId, status, userName } = data.data.memberChange
             if (status === 'join') {
-                setMembers({ ...members, [userId]: userName })
+                dispatch({
+                    type: 'ADD_USERS',
+                    data: { [userId]: userName }
+                })
             }
         },
     })
@@ -196,7 +200,7 @@ const Room = () => {
 
     if (isLoading) return <Loading />
 
-    if (!state.room || !members) return <p>no details</p>
+    if (!state.room || !state.users) return <p>no details</p>
 
     return (
         <div>
@@ -207,12 +211,11 @@ const Room = () => {
                 <Heading.H2>Room Name: {sanitizedRoomId}</Heading.H2>
                 <Button variation="pear" onClick={copyRoomToClipboard}>Share <Icon color={colors.pear.base} name="content_copy" /></Button>
             </div>
-            <Heading.H3>Participants</Heading.H3>
-            <List.UnorderedList>
-                {Object.keys(members).map((id) => <List.ListItem key={id}>{members[id]}</List.ListItem>)}
-            </List.UnorderedList>
             {Controls}
-            {Content}
+            <div style={{ display: 'flex' }}>
+                <Participants />
+                {Content}
+            </div>
         </div>
     )
 }

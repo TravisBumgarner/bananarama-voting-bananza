@@ -16,3 +16,5 @@ Remaining for MVP
     - [ ] Make a copy results button
 - [x] Standaridze user / member / paritcipant -> user
 - [ ] Refactor state to not have members, etc. nested under room. 
+- [ ] Add leave room cleanup event
+- [ ] Merge dispatches in Room

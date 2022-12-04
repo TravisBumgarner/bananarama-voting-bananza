@@ -42,7 +42,7 @@ const apolloClient = new ApolloClient({
 
 const App = () => {
     const { state } = useContext(context)
-    const [showJoinModal, setShowJoinModal] = useState<boolean>(true)
+    const [showJoinModal, setShowJoinModal] = useState<boolean>(false)
     return (
         <>
             <AppWrapper>

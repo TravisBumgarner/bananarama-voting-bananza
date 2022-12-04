@@ -36,11 +36,17 @@ type TRoomUpdate = {
     status: TRoom['status']
 }
 
+type TUser = {
+    id: string,
+    name: string
+}
+
 export {
     TParticipant,
     TRoom,
     TMemberChange,
     TRoomUpdate,
     TAddEntry,
-    TEntry
+    TEntry,
+    TUser
 }

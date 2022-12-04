@@ -49,7 +49,7 @@ const Signup = () => {
     })
 
     return (
-        <>
+        <div>
             <Button variation="pear" onClick={() => setShowAddEntryModal(true)}>Add Entry <Icon color={colors.pear.base} name="add" /></Button>
             <h1>Entries</h1>
             <ul>
@@ -62,7 +62,7 @@ const Signup = () => {
             >
                 <AddEntryModal closeModal={() => setShowAddEntryModal(false)} />
             </Modal>
-        </>
+        </div>
     )
 }
 

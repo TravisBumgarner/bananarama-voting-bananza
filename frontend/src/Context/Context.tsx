@@ -14,6 +14,7 @@ type State = {
         id: string
     }
     room: TRoom | null,
+    users: Record<string, string>
     entries: TEntry[]
 }
 
@@ -24,6 +25,7 @@ const EMPTY_STATE: State = {
         name: 'Bob',
         id: 'bob'
     },
+    users: {},
     room: null,
     entries: []
 }
@@ -38,6 +40,11 @@ type AddMessage = {
         message: string
         timeToLiveMS?: number
     }
+}
+
+type AddUsers = {
+    type: 'ADD_USERS'
+    data: Record<string, string>
 }
 
 type DeleteMessage = {
@@ -75,6 +82,7 @@ type Action =
     | EnterRoom
     | UpdateRoom
     | AddEntry
+    | AddUsers
 
 const context = createContext(
     {
@@ -108,6 +116,9 @@ const reducer = (state: State, action: Action): State => {
         }
         case 'ADD_ENTRY': {
             return { ...state, entries: [...state.entries, action.data] }
+        }
+        case 'ADD_USERS': {
+            return { ...state, users: { ...state.users, ...action.data } }
         }
         default: {
             logger(`Swallowing action: ${JSON.stringify(action)}`)

@@ -1,6 +1,5 @@
 import Loading from './Loading'
 import * as Heading from './Heading'
-import * as List from './List'
 import Button from './Button'
 import Paragraph from './Paragraph'
 import Modal from './Modal'
@@ -13,7 +12,6 @@ export {
     Heading,
     Button,
     Paragraph,
-    List,
     Modal,
     Input,
     Icon,
