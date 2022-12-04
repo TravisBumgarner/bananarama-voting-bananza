@@ -18,13 +18,13 @@ const HeaderWrapper = styled.div`
     justify-content: space-between;
     svg {
         cursor: pointer;
-        fill: ${colors.BRIGHT1.base};
+        fill: ${colors.pear.base};
         position: relative;
         right: -13px;
         top: -14px;
 
     &:hover {
-        fill: ${colors.BRIGHT1.darken};
+        fill: ${colors.pear.darken};
         }
     }
     `
@@ -44,11 +44,11 @@ const Modal = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: colors.DARK1.base
+                backgroundColor: colors.coffee.darken
             },
             content: {
-                borderColor: colors.BRIGHT1.base,
-                backgroundColor: colors.DARK1.base,
+                borderColor: colors.pear.base,
+                backgroundColor: colors.coffee.base,
                 position: 'static',
                 maxWidth: '80vw',
                 minWidth: '500px',

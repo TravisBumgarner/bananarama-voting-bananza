@@ -75,6 +75,7 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, message: null }
         }
         case 'JOIN': {
+            console.log('context', action)
             return { ...state, user: { name: action.data.name, id: action.data.id } }
         }
         default: {

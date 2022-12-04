@@ -1,10 +1,11 @@
-import { Heading, Loading } from 'sharedComponents'
+import { Button, Heading, Loading, Icon, List } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
 import { sanitizeRoomId } from 'utilities'
 import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 
 import { context } from 'context'
+import { colors } from 'theme'
 import { TRoom, TMemberChange } from '../types'
 
 const JOIN_ROOM_MUTATION = gql`
@@ -43,6 +44,7 @@ const Room = () => {
     const navigate = useNavigate()
 
     const onGetRoomDetailsSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
+        console.log(joinRoom)
         const initialMembers = joinRoom.members.reduce((accum, current) => {
             accum[current.id] = current.name //eslint-disable-line
             return accum
@@ -89,19 +91,28 @@ const Room = () => {
         })
     }, [sanitizeRoomId, state.user.id])
 
+    const copyRoomToClipboard = () => {
+        navigator.clipboard.writeText(window.location.href)
+    }
+
     if (isLoading) return <Loading />
 
     if (!details || !members) return <p>no details</p>
+
+    console.log(members)
     return (
         <div>
             <Heading.H1>
                 Bananarama Voting Bananza
             </Heading.H1>
-            <p>{sanitizedRoomId}</p>
-            <p>Members</p>
-            <ul>
-                {Object.keys(members).map((id) => <li key={id}>{members[id]}</li>)}
-            </ul>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Heading.H2>Room Name: {sanitizedRoomId}</Heading.H2>
+                <Button variation="primary" onClick={copyRoomToClipboard}>Share <Icon color={colors.pear.base} name="content_copy" /></Button>
+            </div>
+            <Heading.H3>Participants</Heading.H3>
+            <List.UnorderedList>
+                {Object.keys(members).map((id) => <List.ListItem key={id}>{members[id]}</List.ListItem>)}
+            </List.UnorderedList>
         </div>
     )
 }

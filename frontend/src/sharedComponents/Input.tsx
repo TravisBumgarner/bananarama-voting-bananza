@@ -8,14 +8,14 @@ const Input = styled.input`
     padding: 0.5rem 1rem;
     background-color: transparent;
     font-weight: 700;
-    color: ${colors.BRIGHT3.base};
-    border-color: ${colors.BRIGHT3.base};
+    color: ${colors.banana.base};
+    border-color: ${colors.banana.base};
     width: 100%;
     box-sizing: border-box;
     border-radius: 1rem;
 
     ::placeholder {
-        color: ${colors.BRIGHT5.base};
+        color: ${colors.marble.base};
   }
 `
 
@@ -33,11 +33,11 @@ type LabelProps = {
     label?: string
     value: string
     handleChange: (value: string) => void
-    disabled?: boolean
+    marble?: boolean
 }
 
 const Label = ({
-    value, name, label, handleChange, disabled
+    value, name, label, handleChange, marble
 }: LabelProps) => (
     <LabelWrapper>
         <Input
@@ -46,7 +46,6 @@ const Label = ({
             name={name}
             onChange={(event) => handleChange(event.target.value)}
             value={value}
-            disabled={disabled}
         />
     </LabelWrapper>
 )

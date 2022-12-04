@@ -25,7 +25,7 @@ const AlertMessageWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 2px solid ${colors.BRIGHT1.base};
+    border: 2px solid ${colors.pear.base};
     background-color: white;
     @keyframes fade {
         0%,100% { opacity: 0 }
@@ -59,7 +59,7 @@ const AlertMessage = () => {
     return (
         <AlertMessagePositioner>
             <AlertMessageWrapper timeToLiveMS={state.message.timeToLiveMS}>
-                <Paragraph style={{ color: colors.BRIGHT1.base }}>{state.message.body}</Paragraph>
+                <Paragraph style={{ color: colors.pear.base }}>{state.message.body}</Paragraph>
                 <Button onClick={handleSubmit} variation="primary">Ok!</Button>
             </AlertMessageWrapper>
         </AlertMessagePositioner>

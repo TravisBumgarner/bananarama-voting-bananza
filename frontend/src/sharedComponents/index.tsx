@@ -4,8 +4,9 @@ import * as List from './List'
 import Button from './Button'
 import Paragraph from './Paragraph'
 import Modal from './Modal'
-import Label from './Input'
+import Input from './Input'
 import Icon from './Icon'
+import StyledNavLink from './StyledNavLink'
 
 export {
     Loading,
@@ -14,6 +15,7 @@ export {
     Paragraph,
     List,
     Modal,
-    Label,
+    Input,
     Icon,
+    StyledNavLink
 }

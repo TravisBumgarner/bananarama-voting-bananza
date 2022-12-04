@@ -3,7 +3,7 @@ import { useContext, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Heading, Button, Label, Paragraph } from 'sharedComponents'
+import { Heading, Button, Input, Paragraph } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 
@@ -14,7 +14,7 @@ const FabulousOrWrapper = styled.div`
     justify-content: center;;
 
     div {
-        border: 1px solid ${colors.BRIGHT1.base};
+        border: 1px solid ${colors.pear.base};
         width:100%;
         margin: 0 1rem;
     }
@@ -22,7 +22,7 @@ const FabulousOrWrapper = styled.div`
     p {
         text-align: center;
         font-size: 2rem;
-        color: ${colors.BRIGHT1.base};
+        color: ${colors.pear.base};
         margin: 0.5rem 0;
     }
 `
@@ -40,7 +40,6 @@ const Lobby = () => {
     const navigate = useNavigate()
     const { dispatch, state } = useContext(context)
     const [roomId, setRoomId] = useState('')
-    console.log(state.user)
     const createRoom = useCallback(async () => {
         const response = await createRoomMutation({ variables: { ownerId: state.user.id, ownerName: state.user.name } })
         if (response.data?.createRoom.id) {
@@ -48,7 +47,7 @@ const Lobby = () => {
         } else {
             dispatch({ type: 'ADD_MESSAGE', data: { message: 'Failed to create room :(' } })
         }
-    }, [])
+    }, [state.user])
 
     const joinRoom = useCallback(async () => {
         navigate(roomId)
@@ -68,11 +67,11 @@ const Lobby = () => {
                 <div />
             </FabulousOrWrapper>
             <div>
-                <Label
+                <Input
                     name="joinroom"
                     value={roomId}
                     label="Enter an Existing Room Name"
-                    handleChange={(value) => setRoomId(value)}
+                    handleChange={(value: string) => setRoomId(value)}
                 />
                 <Button fullWidth onClick={joinRoom} type="button" variation="primary">
                     Join Room

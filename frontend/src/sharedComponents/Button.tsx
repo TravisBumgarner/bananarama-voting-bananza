@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { colors } from 'theme'
 
 type ButtonProps = {
-    variation: 'primary' | 'warning' | 'disabled'
-    disabled?: boolean
+    variation: 'primary' | 'warning' | 'marble'
+    marble?: boolean
     fullWidth?: boolean
     alignRight?: boolean
 
@@ -26,11 +26,11 @@ const Button = styled.button`
 
     ${({ fullWidth }: ButtonProps) => (fullWidth ? 'width: 100%;' : '')}
 
-    ${({ variation, disabled }: ButtonProps) => {
-        if (disabled) {
+    ${({ variation, marble }: ButtonProps) => {
+        if (marble) {
             return `
-                color: ${colors.DISABLED.base};
-                border-color: ${colors.DISABLED.base};
+                color: ${colors.marble.base};
+                border-color: ${colors.marble.base};
 
                 &:hover {
                     cursor: not-allowed;
@@ -40,24 +40,24 @@ const Button = styled.button`
 
         if (variation === 'primary') {
             return `
-                color: ${colors.BRIGHT1.base};
-                border-color: ${colors.BRIGHT1.base};
+                color: ${colors.pear.base};
+                border-color: ${colors.pear.base};
 
                 &:hover {
-                    color: ${colors.BRIGHT1.darken};
-                    border-color: ${colors.BRIGHT1.darken};
-                    background-color: ${colors.BRIGHT1.lightest};
+                    color: ${colors.pear.darken};
+                    border-color: ${colors.pear.darken};
+                    background-color: ${colors.pear.lightest};
                 }
             `
         } if (variation === 'warning') {
             return `
-                color: ${colors.BRIGHT2.base};
-                border-color: ${colors.BRIGHT2.base};
+                color: ${colors.apple.base};
+                border-color: ${colors.apple.base};
 
                 &:hover {
-                    background-color: ${colors.BRIGHT2.lighten};
-                    color: ${colors.BRIGHT2.darken};
-                    border-color: ${colors.BRIGHT2.darken};
+                    background-color: ${colors.apple.lighten};
+                    color: ${colors.apple.darken};
+                    border-color: ${colors.apple.darken};
                 }
             `
         }

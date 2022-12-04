@@ -1,7 +1,7 @@
 import { FormEvent, useContext, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Button, Label } from 'sharedComponents'
+import { Button, Input } from 'sharedComponents'
 import { context } from 'context'
 import { getLocalStorage, setLocalStorage } from 'utilities'
 
@@ -34,7 +34,7 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
         <div>
             <div>
                 <form onSubmit={handleSubmit}>
-                    <Label
+                    <Input
                         label="What is your name?"
                         name="Name"
                         value={name}
@@ -42,7 +42,7 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
                     />
 
                     <Button
-                        disabled={name.length === 0}
+                        marble={name.length === 0}
                         fullWidth
                         key="submit"
                         type="submit"

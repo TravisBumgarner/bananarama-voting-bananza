@@ -32,6 +32,7 @@ class InMemoryDatastore {
             icon: 'banana',
             members: [owner]
         }
+        console.log('created room', this.rooms[roomId])
         return {
             success: true,
             data: roomId

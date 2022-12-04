@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { colors } from 'theme'
 
 const OrderedList = styled.ol`
-    color: ${colors.BRIGHT1.base};
+    color: ${colors.pear.base};
 `
 
 const UnorderedList = styled.ul`
-    color: ${colors.BRIGHT1.base};
+    color: ${colors.pear.base};
 `
 
 const ListItem = styled.li`
