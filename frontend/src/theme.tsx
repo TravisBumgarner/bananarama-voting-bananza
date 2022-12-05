@@ -15,6 +15,14 @@ const banana = colorFactory('#DBD56E')
 const blueberry = colorFactory('#2D93AD')
 const marble = colorFactory('#a8afb1')
 
+/*
+const pear = colorFactory('#3dad00') // should be greenish for positive actions
+const apple = colorFactory('#d74405') // should be redish for negative actions
+const banana = colorFactory('#dcd103')
+const blueberry = colorFactory('#0080a0')
+const marble = colorFactory('#a8afb1')
+*/
+
 const coffee = colorFactory('#282828')
 
 const colors = {

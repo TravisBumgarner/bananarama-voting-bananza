@@ -18,3 +18,4 @@ Remaining for MVP
 - [ ] Refactor state to not have members, etc. nested under room. 
 - [ ] Add leave room cleanup event
 - [ ] Merge dispatches in Room.tsx
+- [ ] Create Sentry Project
