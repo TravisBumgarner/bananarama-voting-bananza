@@ -1,24 +1,31 @@
-import { gql, useSubscription } from '@apollo/client'
-import { useContext, useState } from 'react'
+import { ApolloError, gql, useMutation, useSubscription } from '@apollo/client'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Icon, Modal, Paragraph } from 'sharedComponents'
+import { Button, Heading, Paragraph } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
-import { TEntry } from 'types'
+import { TEntry, TVote } from 'types'
 import { logger } from 'utilities'
-import { AddEntryModal } from '../../../modals'
 
-// const ADD_ENTRY_SUBSCRIPTION = gql`
-//   subscription AddEntry {
-//     addEntry {
-//         roomId
-//         userId
-//         entry,
-//         id
-//     }
-//   }
-// `
+const ADD_VOTE_SUBSCRIPTION = gql`
+  subscription AddVote {
+    addVote {
+        roomId
+        userId
+        entryId
+        id
+    }
+  }
+`
+
+const ADD_VOTE_MUTATION = gql`
+    mutation AddVote($roomId: String!, $userId: String!, $entryId: String!) {
+        addVote(roomId: $roomId, userId: $userId, entryId: $entryId) {
+            id
+        }
+    }    
+`
 
 const EntriesWrapper = styled.ul`
     list-style: none;
@@ -32,52 +39,94 @@ const EntryWrapper = styled.li`
     margin: 0;
     padding: 0;
 `
+type EntryProps = {
+    entry: TEntry
+    isCastingVote: boolean
+    setIsCastingVote: React.Dispatch<React.SetStateAction<boolean>>
+    canVote: boolean
+}
+const Entry = ({ entry, isCastingVote, setIsCastingVote, canVote }: EntryProps) => {
+    const { state, dispatch } = useContext(context)
 
-const Entry = ({ entry }: { entry: TEntry }) => {
-    const { state } = useContext(context)
+    const onAddVoteSuccess = useCallback(() => {
+        setIsCastingVote(false)
+    }, [])
+
+    const onAddVoteFailure = useCallback((error: ApolloError) => {
+        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
+        setIsCastingVote(false)
+    }, [])
+    const [addVoteMutation] = useMutation<any>(ADD_VOTE_MUTATION, {
+        onCompleted: onAddVoteSuccess,
+        onError: onAddVoteFailure
+    })
+
+    const handleSubmit = useCallback(async () => {
+        if (!state.room) return
+        setIsCastingVote(true)
+        await addVoteMutation({
+            variables: {
+                userId: state.user.id,
+                roomId: state.room.id,
+                entryId: entry.id
+            }
+        })
+    }, [])
+
     return (
         <EntryWrapper>
             <Heading.H3> {entry.entry}</Heading.H3>
             <Paragraph>{state.users[entry.userId]}</Paragraph>
-            <Button variation="pear" onClick={() => console.log('voted')}>Vote 🍌</Button>
+            <Button disabled={isCastingVote || !canVote} variation="pear" onClick={handleSubmit}>Vote 🍌</Button>
         </EntryWrapper>
     )
 }
 
 const Voting = () => {
     const { state, dispatch } = useContext(context)
+    const [isCastingVote, setIsCastingVote] = useState(false)
 
-    // useSubscription<{ addEntry: TEntry }>(ADD_ENTRY_SUBSCRIPTION, {
-    //     onError: (error) => {
-    //         logger(error)
-    //         dispatch({
-    //             type: 'ADD_MESSAGE',
-    //             data: {
-    //                 message: 'Failed to add entry.'
-    //             }
-    //         })
-    //     },
-    //     onData: ({ data }) => {
-    //         if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
+    useSubscription<{ addVote: TVote }>(ADD_VOTE_SUBSCRIPTION, {
+        onError: (error) => {
+            logger(error)
+            dispatch({
+                type: 'ADD_MESSAGE',
+                data: {
+                    message: 'Failed to cast vote.'
+                }
+            })
+        },
+        onData: ({ data }) => {
+            if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
 
-    //         const { userId, roomId, entry, id } = data.data.addEntry
-    //         if (roomId === state.room.id) {
-    //             dispatch({
-    //                 type: 'ADD_ENTRIES',
-    //                 data: [{
-    //                     userId, roomId, entry, id
-    //                 }]
-    //             })
-    //         }
-    //     },
-    // })
+            const { userId, entryId, roomId, id } = data.data.addVote
+            if (roomId === state.room.id) {
+                dispatch({
+                    type: 'ADD_VOTES',
+                    data: [{ userId, roomId, entryId, id }]
+                })
+            }
+        },
+    })
 
+    const votesCast = useMemo(() => {
+        return state.votes.filter(({ userId }) => userId === state.user.id).length
+    }, [state.votes])
     return (
         <div>
             <Heading.H2>Voting</Heading.H2>
-            <Paragraph>You can vote {state.room?.maxVotes} more times.</Paragraph>
+            <Paragraph>You can vote {state.room!.maxVotes - votesCast} more times.</Paragraph>
+            <Paragraph>Votes Cast {state.votes.length} of {state.room!.maxVotes * state.room!.members.length} total votes</Paragraph>
             <EntriesWrapper>
-                {state.entries.map((entry) => <Entry entry={entry} key={entry.id} />)}
+                {state.entries.map((entry) => (
+                    <Entry
+                        isCastingVote={isCastingVote}
+                        setIsCastingVote={setIsCastingVote}
+                        entry={entry}
+                        key={entry.id}
+                        canVote={state.room!.maxVotes > votesCast}
+                    />
+                ))}
             </EntriesWrapper>
         </div>
     )

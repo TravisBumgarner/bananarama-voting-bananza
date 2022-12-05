@@ -4,7 +4,7 @@ import { RedisPubSub } from 'graphql-redis-subscriptions'
 import { MessageType } from '../redis/types'
 import { EErrorMessages, TRoom } from '../types'
 import inMemoryDatastore from '../inMemoryDatastore'
-import { RoomStatusEnum, RoomType, EntryType } from './types'
+import { RoomStatusEnum, RoomType, EntryType, VoteType } from './types'
 
 const pubsub = new RedisPubSub({ connection: 'redis' })
 
@@ -126,6 +126,30 @@ const addEntry = {
     },
 }
 
+type AddVoteArgs = {
+    roomId: string
+    userId: string
+    entryId: string
+}
+
+const addVote = {
+    type: VoteType,
+    description: 'Create a Vote',
+    args: {
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        entryId: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    resolve: async (_, args: AddVoteArgs) => {
+        const addVoteResult = inMemoryDatastore.addVote(args.roomId, args.userId, args.entryId)
+        if (addVoteResult.success) {
+            await pubsub.publish(MessageType.ADD_VOTE, { ...addVoteResult.data, roomId: args.roomId })
+            return addVoteResult.data
+        }
+        throw new Error(addVoteResult.error)
+    },
+}
+
 const RootMutationType = new GraphQLObjectType({
     name: 'Mutation',
     description: 'Root Mutation',
@@ -133,7 +157,8 @@ const RootMutationType = new GraphQLObjectType({
         joinRoom,
         createRoom,
         updateRoom,
-        addEntry
+        addEntry,
+        addVote
     }),
 })
 

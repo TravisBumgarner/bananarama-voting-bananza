@@ -9,6 +9,12 @@ type TEntry = {
     entry: string
 }
 
+type TVote = {
+    id: string,
+    userId: string,
+    entryId: string
+}
+
 type TRoom = {
     id: string,
     ownerId: TParticipant['id'],
@@ -16,7 +22,9 @@ type TRoom = {
     maxVotes: number,
     members: TParticipant[]
     status: 'signup' | 'voting' | 'conclusion'
-    entries: TEntry[]
+    entries: TEntry[],
+    votes: TVote[]
+
 }
 
 enum EErrorMessages {
@@ -29,5 +37,6 @@ export {
     TParticipant,
     TRoom,
     EErrorMessages,
-    TEntry
+    TEntry,
+    TVote
 }

@@ -2,7 +2,7 @@ import { GraphQLObjectType } from 'graphql'
 import { RedisPubSub } from 'graphql-redis-subscriptions'
 import { MessageType } from '../redis/types'
 
-import { MemberChangeType, RoomUpdateType, AddEntryType } from './types'
+import { MemberChangeType, RoomUpdateType, AddEntryType, AddVoteType } from './types'
 
 const pubsub = new RedisPubSub({ connection: 'redis' })
 
@@ -22,6 +22,14 @@ const addEntry = {
     }
 }
 
+const addVote = {
+    type: AddVoteType,
+    subscribe: () => pubsub.asyncIterator(MessageType.ADD_VOTE),
+    resolve: (payload) => {
+        return payload
+    }
+}
+
 const roomUpdate = {
     type: RoomUpdateType,
     subscribe: () => pubsub.asyncIterator(MessageType.ROOM_UPDATE_EVENT),
@@ -36,7 +44,8 @@ const RootQueryType = new GraphQLObjectType({
     fields: {
         memberChange,
         roomUpdate,
-        addEntry
+        addEntry,
+        addVote
     },
 })
 

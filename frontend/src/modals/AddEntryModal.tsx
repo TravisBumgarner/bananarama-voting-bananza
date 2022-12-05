@@ -32,7 +32,6 @@ const AddEntry = ({ closeModal }: AddEntryProps) => {
     const onAddEntrySuccess = useCallback(() => {
         closeModal()
     }, [])
-
     const onAddEntryFailure = useCallback((error: ApolloError) => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
     }, [])

@@ -43,6 +43,13 @@ type TUser = {
     name: string
 }
 
+type TVote = {
+    id: string,
+    userId: string,
+    entryId: string,
+    roomId: string
+}
+
 export {
     TParticipant,
     TRoom,
@@ -51,4 +58,5 @@ export {
     TAddEntry,
     TEntry,
     TUser,
+    TVote
 }

@@ -36,6 +36,17 @@ const AddEntryType = new GraphQLObjectType({
     }),
 })
 
+const AddVoteType = new GraphQLObjectType({
+    name: 'AddVote',
+    description: 'This represents an entry added',
+    fields: () => ({
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+        entryId: { type: new GraphQLNonNull(GraphQLString) },
+    }),
+})
+
 const EntryType = new GraphQLObjectType({
     name: 'Entry',
     description: 'This represents an Entry',
@@ -43,6 +54,17 @@ const EntryType = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLString) },
         entry: { type: new GraphQLNonNull(GraphQLString) },
         userId: { type: new GraphQLNonNull(GraphQLString) },
+    }),
+})
+
+const VoteType = new GraphQLObjectType({
+    name: 'Vote',
+    description: 'This represents a Vote',
+    fields: () => ({
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        entryId: { type: new GraphQLNonNull(GraphQLString) },
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
     }),
 })
 
@@ -57,6 +79,7 @@ const RoomType = new GraphQLObjectType({
         members: { type: new GraphQLList(ParticipantType) },
         status: { type: RoomStatusEnum },
         entries: { type: new GraphQLList(EntryType) },
+        votes: { type: new GraphQLList(VoteType) },
     }),
 })
 
@@ -86,5 +109,7 @@ export {
     RoomStatusEnum,
     RoomUpdateType,
     EntryType,
-    AddEntryType
+    AddEntryType,
+    VoteType,
+    AddVoteType
 }

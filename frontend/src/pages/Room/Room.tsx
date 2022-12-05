@@ -27,6 +27,11 @@ const JOIN_ROOM_MUTATION = gql`
                 name
                 id
             }
+            votes {
+                userId
+                entryId
+                id
+            }
         }
     }
 `
@@ -92,6 +97,10 @@ const Room = () => {
         dispatch({
             type: 'ADD_ENTRIES',
             data: joinRoom.entries
+        })
+        dispatch({
+            type: 'ADD_VOTES',
+            data: joinRoom.votes
         })
 
         setIsLoading(false)
