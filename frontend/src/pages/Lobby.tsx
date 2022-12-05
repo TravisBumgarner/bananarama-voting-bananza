@@ -55,9 +55,6 @@ const Lobby = () => {
 
     return (
         <div>
-            <Heading.H1>
-                Bananarama Voting Bananza
-            </Heading.H1>
             <Button onClick={createRoom} fullWidth type="button" variation="pear">
                 Create Room
             </Button>

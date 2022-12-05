@@ -10,6 +10,13 @@ type TEntry = {
     entry: string
 }
 
+type TVote = {
+    id: string,
+    userId: string,
+    entryId: string,
+    roomId: string
+}
+
 type TRoom = {
     id: string
     ownerId: TParticipant['id']
@@ -18,6 +25,7 @@ type TRoom = {
     members: TParticipant[]
     status: 'signup' | 'voting' | 'conclusion'
     entries: TEntry[]
+    votes: TVote[]
 }
 
 type TMemberChange = {
@@ -41,13 +49,6 @@ type TRoomUpdate = {
 type TUser = {
     id: string
     name: string
-}
-
-type TVote = {
-    id: string,
-    userId: string,
-    entryId: string,
-    roomId: string
 }
 
 export {

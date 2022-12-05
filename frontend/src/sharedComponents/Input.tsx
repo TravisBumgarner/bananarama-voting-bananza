@@ -13,6 +13,7 @@ const Input = styled.input`
     width: 100%;
     box-sizing: border-box;
     border-radius: 1rem;
+    text-align: center;
 
     ::placeholder {
         color: ${colors.marble.base};

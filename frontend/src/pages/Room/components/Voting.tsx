@@ -36,7 +36,7 @@ const EntriesWrapper = styled.ul`
 const EntryWrapper = styled.li`
     border: 4px solid ${colors.apple.base};
     border-radius: 1rem;
-    margin: 0;
+    margin: 1rem 0;
     padding: 0;
 `
 type EntryProps = {

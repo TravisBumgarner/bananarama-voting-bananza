@@ -10,6 +10,11 @@ import styled from 'styled-components'
 import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
 import { Conclusion, Participants, Signup, Voting } from './components'
 
+const Sidebar = styled.div`
+    min-width: 300px;
+    margin-right: 2rem;
+`
+
 const JOIN_ROOM_MUTATION = gql`
     mutation JoinRoom($roomId: String!, $userId: String!, $userName: String!) {
         joinRoom(roomId: $roomId, userId: $userId, userName: $userName){
@@ -75,7 +80,6 @@ const Wrapper = styled.div`
 
 const Room = () => {
     const { roomId } = useParams()
-    const sanitizedRoomId = useMemo(() => sanitizeRoomId(roomId || ''), [roomId])
     const [isLoading, setIsLoading] = useState(true)
     const { dispatch, state } = useContext(context)
     const navigate = useNavigate()
@@ -204,8 +208,8 @@ const Room = () => {
     const Controls = useMemo(() => {
         if (!state.room || state.room.ownerId !== state.user.id || state.room.status === 'conclusion') return null
 
-        if (state.room.status === 'signup') return <Button variation="pear" onClick={() => handleStatusChange('voting')}>Start Voting</Button>
-        if (state.room.status === 'voting') return <Button variation="pear" onClick={() => handleStatusChange('conclusion')}>Announce Results</Button>
+        if (state.room.status === 'signup') return <Button fullWidth variation="pear" onClick={() => handleStatusChange('voting')}>Start Voting</Button>
+        if (state.room.status === 'voting') return <Button fullWidth variation="pear" onClick={() => handleStatusChange('conclusion')}>Announce Results</Button>
     }, [state.room, state.user])
 
     const Content = useMemo(() => {
@@ -230,16 +234,14 @@ const Room = () => {
 
     return (
         <div>
-            <Heading.H1>
-                Bananarama Voting Bananza
-            </Heading.H1>
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                <Heading.H2>Room Name: {sanitizedRoomId}</Heading.H2>
-                <Button variation="pear" onClick={copyRoomToClipboard}>Share <Icon color={colors.pear.base} name="content_copy" /></Button>
+            <div style={{ position: 'fixed', right: '1rem', bottom: '1rem' }}>
+                <Button variation="pear" onClick={copyRoomToClipboard}>Share Room <Icon color={colors.pear.base} name="content_copy" /></Button>
             </div>
-            {Controls}
             <Wrapper>
-                <Participants />
+                <Sidebar>
+                    {Controls}
+                    <Participants />
+                </Sidebar>
                 {Content}
             </Wrapper>
         </div>

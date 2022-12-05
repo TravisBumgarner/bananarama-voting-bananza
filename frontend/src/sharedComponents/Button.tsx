@@ -11,7 +11,6 @@ type ButtonProps = {
 }
 
 const Button = styled.button`
-    text-transform: uppercase;
     font-size: 1rem;
     border: 4px solid;
     padding: 0.5rem 1rem;
@@ -30,7 +29,13 @@ const Button = styled.button`
     cursor: pointer;
     }
 
-    ${({ fullWidth }: ButtonProps) => (fullWidth ? 'width: 100%;' : '')}
+    ${({ fullWidth }: ButtonProps) => (fullWidth
+        ? `
+            width: 100%; 
+            justify-content: center; 
+            display: flex;
+        `
+        : '')}
 
     ${({ variation, disabled }: ButtonProps) => {
         if (disabled) {

@@ -24,13 +24,15 @@ const EntriesWrapper = styled.ul`
     list-style: none;
     margin: 0;
     padding: 0;
+    max-height:60vh;
+    overflow-y: scroll;
 `
 
 const EntryWrapper = styled.li`
     border: 4px solid ${colors.apple.base};
     border-radius: 1rem;
-    margin: 0;
-    padding: 0;
+    margin: 1rem 0;
+    padding: 1rem;
 `
 
 const Entry = ({ entry }: { entry: TEntry }) => {
@@ -74,8 +76,8 @@ const Signup = () => {
 
     return (
         <div>
-            <Button variation="pear" onClick={() => setShowAddEntryModal(true)}>Add Entry <Icon color={colors.pear.base} name="add" /></Button>
             <Heading.H2>Entries</Heading.H2>
+            <Button fullWidth variation="pear" onClick={() => setShowAddEntryModal(true)}>Add Entry <Icon color={colors.pear.base} name="add" /></Button>
             <EntriesWrapper>
                 {state.entries.map((entry) => <Entry entry={entry} key={entry.id} />)}
             </EntriesWrapper>

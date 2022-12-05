@@ -8,16 +8,14 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 
 import { GlobalStyle } from 'theme'
 import { context, Context } from 'context'
-import { AlertMessage, Router } from './components'
+import { AlertMessage, Header, Router } from './components'
 import { JoinModal } from './modals'
 import Modal from './sharedComponents/Modal'
 
 const AppWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
+    width: 80%;
+    min-width: 80vw;
+    min-height: 80vh;
 `
 
 const wsLink = new GraphQLWsLink(createClient({ url: 'ws://localhost:4000/graphql', }))
@@ -42,17 +40,18 @@ const apolloClient = new ApolloClient({
 
 const App = () => {
     const { state } = useContext(context)
-    const [showJoinModal, setShowJoinModal] = useState<boolean>(false)
+    const [showJoinModal, setShowJoinModal] = useState<boolean>(true)
     return (
         <>
             <AppWrapper>
+                <Header />
                 {state.message ? <AlertMessage /> : null}
                 <Router />
             </AppWrapper>
             <Modal
                 showModal={showJoinModal}
                 closeModal={() => setShowJoinModal(false)}
-                contentLabel="Identify Yourself!"
+                contentLabel="Who goes there!?"
             >
                 <JoinModal closeModal={() => setShowJoinModal(false)} />
             </Modal>

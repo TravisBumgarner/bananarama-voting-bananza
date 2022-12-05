@@ -47,7 +47,7 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
                         key="submit"
                         type="submit"
                         variation="pear"
-                    >Bananas!
+                    >Let the Voting Commence!
                     </Button>
                 </form>
             </div>

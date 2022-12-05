@@ -42,8 +42,12 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Nunito', sans-serif;
     }
 
-    body {
-        margin: 0;
+    body > div#root {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
     }
 `
 
