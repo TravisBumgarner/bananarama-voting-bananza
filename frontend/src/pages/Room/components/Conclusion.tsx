@@ -35,7 +35,7 @@ const Entry = ({ entry, votes }: EntryProps) => {
 }
 
 const Conclusion = () => {
-    const { state, dispatch } = useContext(context)
+    const { state } = useContext(context)
 
     const votesByEntryId = useMemo(() => {
         return state.votes.reduce(
@@ -51,7 +51,6 @@ const Conclusion = () => {
     return (
         <div>
             <Heading.H2>Conclusion</Heading.H2>
-            <Paragraph>Votes: {JSON.stringify(votesByEntryId)}</Paragraph>
             <EntriesWrapper>
                 {state.entries.map((entry) => (
                     <Entry
