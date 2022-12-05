@@ -19,3 +19,5 @@ Remaining for MVP
 - [ ] Add leave room cleanup event
 - [ ] Merge dispatches in Room.tsx
 - [ ] Create Sentry Project
+- [ ] Fix bug with duplicate voting entries
+- [ ] Send it to the cloudw

@@ -36,7 +36,7 @@ const Entry = ({ entry, votes }: EntryProps) => {
 
 const Conclusion = () => {
     const { state } = useContext(context)
-
+    console.log(state.entries)
     const votesByEntryId = useMemo(() => {
         return state.votes.reduce(
             (accum, { entryId }) => {
