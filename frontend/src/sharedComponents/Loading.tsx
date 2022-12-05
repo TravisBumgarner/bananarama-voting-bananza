@@ -14,7 +14,7 @@ const LoadingText = styled.p`
     font-size: 2rem;
 `
 
-const FULL_MESSAGE = '🍌🍌🍌🍌🍌🍌'
+const FULL_MESSAGE = '🍌🍌🍌🍌🍌'
 
 const Loading = () => {
     const [displayLength, setDisplayLength] = useState<number>(FULL_MESSAGE.length)
