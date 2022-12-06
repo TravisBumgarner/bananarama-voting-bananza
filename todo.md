@@ -18,6 +18,11 @@ Remaining for MVP
 - [ ] Refactor state to not have members, etc. nested under room. 
 - [ ] Add leave room cleanup event
 - [ ] Merge dispatches in Room.tsx
-- [ ] Create Sentry Project
+- [x] Create Sentry Project
 - [ ] Fix bug with duplicate voting entries
 - [ ] Send it to the cloudw
+
+
+Beyond MVP Stuff
+
+- [ ] Silly voting animations

@@ -11,7 +11,7 @@ const ROOT = 'root'
 Modal.setAppElement(`#${ROOT}`)
 
 Sentry.init({
-    dsn: 'https://3259730bff4e4c5fb5b37820c4c4a697@o196886.ingest.sentry.io/6238284',
+    dsn: 'https://120fe175b62d46f0aeded72e2cd86cf0@o4504279410671616.ingest.sentry.io/4504279411851265',
     integrations: [new BrowserTracing()],
 
     // Set tracesSampleRate to 1.0 to capture 100%

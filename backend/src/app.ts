@@ -53,7 +53,7 @@ app.use((err, req: express.Request, res: express.Response) => {
 })
 
 Sentry.init({
-    dsn: 'https://c381a2e3d0dc403b9ed5fa31ee701265@o196886.ingest.sentry.io/4504143134785536',
+    dsn: 'https://f0f907615c134aff90c1a7d1ea17eb34@o4504279410671616.ingest.sentry.io/4504279411851264',
     integrations: [
         new Sentry.Integrations.Http({ tracing: true }),
         new Tracing.Integrations.Express({ app }),
