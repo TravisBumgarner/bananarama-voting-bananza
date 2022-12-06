@@ -12,7 +12,7 @@ type State = {
     user: {
         name: string,
         id: string
-    }
+    } | null
     room: TRoom | null,
     users: Record<string, string>
     entries: TEntry[]
@@ -22,10 +22,7 @@ type State = {
 const EMPTY_STATE: State = {
     message: null,
     hasErrored: false,
-    user: {
-        name: 'Bob',
-        id: 'bob'
-    },
+    user: null,
     users: {},
     room: null,
     entries: [],
@@ -81,6 +78,10 @@ type AddVotes = {
     data: TVote[]
 }
 
+type ResetState = {
+    type: 'RESET_ROOM_STATE',
+}
+
 type Action =
     | AddMessage
     | DeleteMessage
@@ -91,6 +92,7 @@ type Action =
     | AddEntries
     | AddUsers
     | AddVotes
+    | ResetState
 
 const context = createContext(
     {
@@ -103,7 +105,11 @@ const context = createContext(
 )
 
 const reducer = (state: State, action: Action): State => {
+    console.log(action)
     switch (action.type) {
+        case 'RESET_ROOM_STATE': {
+            return { ...EMPTY_STATE, user: state.user }
+        }
         case 'HAS_ERRORED': {
             return { ...state, hasErrored: true }
         }

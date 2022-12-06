@@ -17,7 +17,7 @@ const Button = styled.button`
     background-color: transparent;
     font-weight: 700;
     border-radius: 1rem;
-    margin: 0.5rem 0;
+    margin: 1rem 0;
 
     display: flex;
     align-items: center;

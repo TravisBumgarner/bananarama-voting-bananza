@@ -2,7 +2,7 @@ import { ApolloError, gql, useMutation, useSubscription } from '@apollo/client'
 import { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Paragraph } from 'sharedComponents'
+import { Button, Heading, PageHeadingWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TEntry, TVote } from 'types'
@@ -29,15 +29,26 @@ const ADD_VOTE_MUTATION = gql`
 
 const EntriesWrapper = styled.ul`
     list-style: none;
-    margin: 0;
+    margin: 1rem 0;
     padding: 0;
 `
 
 const EntryWrapper = styled.li`
-    border: 4px solid ${colors.apple.base};
-    border-radius: 1rem;
-    margin: 1rem 0;
-    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > h3 {
+        border: 4px solid ${colors.blueberry.base};
+        border-radius: 1rem;
+        margin: 0.25rem 0.25rem 0.25rem 0;
+        padding: 0.5rem;
+        flex-grow: 1;
+    }
+
+    > button {
+        margin: 0.5rem 0 0.5rem 1rem;
+    }
 `
 type EntryProps = {
     entry: TEntry
@@ -66,7 +77,7 @@ const Entry = ({ entry, isCastingVote, setIsCastingVote, canVote }: EntryProps) 
         setIsCastingVote(true)
         await addVoteMutation({
             variables: {
-                userId: state.user.id,
+                userId: state.user!.id,
                 roomId: state.room.id,
                 entryId: entry.id
             }
@@ -75,8 +86,7 @@ const Entry = ({ entry, isCastingVote, setIsCastingVote, canVote }: EntryProps) 
 
     return (
         <EntryWrapper>
-            <Heading.H3> {entry.entry}</Heading.H3>
-            <Paragraph>{state.users[entry.userId]}</Paragraph>
+            <Heading.H3> &quot;{entry.entry}&quot; - {state.users[entry.userId]}</Heading.H3>
             <Button disabled={isCastingVote || !canVote} variation="pear" onClick={handleSubmit}>Vote 🍌</Button>
         </EntryWrapper>
     )
@@ -110,13 +120,14 @@ const Voting = () => {
     })
 
     const votesCast = useMemo(() => {
-        return state.votes.filter(({ userId }) => userId === state.user.id).length
+        return state.votes.filter(({ userId }) => userId === state.user!.id).length
     }, [state.votes])
+
     return (
         <div>
-            <Heading.H2>Voting</Heading.H2>
-            <Paragraph>You can vote {state.room!.maxVotes - votesCast} more times.</Paragraph>
-            <Paragraph>Votes Cast {state.votes.length} of {state.room!.maxVotes * state.room!.members.length} total votes</Paragraph>
+            <PageHeadingWrapper>
+                <Heading.H2>Voting</Heading.H2>
+            </PageHeadingWrapper>
             <EntriesWrapper>
                 {state.entries.map((entry) => (
                     <Entry

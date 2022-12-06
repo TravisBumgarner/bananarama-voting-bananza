@@ -15,10 +15,7 @@ const PLUGIN_VARS = {
 }
 
 const getEnvVariables = () => {
-    if (!process.env.NODE_ENV) {
-        throw new Error('NODE_ENV is not defined.')
-    }
-    return PLUGIN_VARS[process.env.NODE_ENV]
+    return PLUGIN_VARS[process.env.NODE_ENV || 'production']
 }
 
 const envVariables = getEnvVariables()

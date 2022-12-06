@@ -45,7 +45,7 @@ const AddEntry = ({ closeModal }: AddEntryProps) => {
         addEntryMutation({
             variables: {
                 entry,
-                userId: state.user.id,
+                userId: state.user!.id,
                 roomId: state.room!.id
             }
         })

@@ -17,7 +17,7 @@ const H2 = styled.h2`
 `
 
 const H3 = styled.h3`
-    color: ${colors.apple.base};
+    color: ${colors.banana.base};
     margin: 0.25rem 0;
     text-align: center;
 `

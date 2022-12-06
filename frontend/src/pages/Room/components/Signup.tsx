@@ -2,7 +2,7 @@ import { gql, useSubscription } from '@apollo/client'
 import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Icon, Modal, Paragraph } from 'sharedComponents'
+import { Button, Heading, Icon, Modal, PageHeadingWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TEntry } from 'types'
@@ -29,7 +29,7 @@ const EntriesWrapper = styled.ul`
 `
 
 const EntryWrapper = styled.li`
-    border: 4px solid ${colors.apple.base};
+    border: 4px solid ${colors.blueberry.base};
     border-radius: 1rem;
     margin: 1rem 0;
     padding: 1rem;
@@ -39,8 +39,7 @@ const Entry = ({ entry }: { entry: TEntry }) => {
     const { state } = useContext(context)
     return (
         <EntryWrapper>
-            <Heading.H3> {entry.entry}</Heading.H3>
-            <Paragraph>{state.users[entry.userId]}</Paragraph>
+            <Heading.H3> &quot;{entry.entry}&quot; - {state.users[entry.userId]}</Heading.H3>
         </EntryWrapper>
     )
 }
@@ -76,8 +75,15 @@ const Signup = () => {
 
     return (
         <div>
-            <Heading.H2>Entries</Heading.H2>
-            <Button fullWidth variation="pear" onClick={() => setShowAddEntryModal(true)}>Add Entry <Icon color={colors.pear.base} name="add" /></Button>
+            <Button
+                fullWidth
+                variation="pear"
+                onClick={() => setShowAddEntryModal(true)}
+            >Add Entry <Icon color={colors.pear.base} name="add" />
+            </Button>
+            <PageHeadingWrapper>
+                <Heading.H2>Entries</Heading.H2>
+            </PageHeadingWrapper>
             <EntriesWrapper>
                 {state.entries.map((entry) => <Entry entry={entry} key={entry.id} />)}
             </EntriesWrapper>

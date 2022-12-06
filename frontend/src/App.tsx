@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import { BrowserRouter, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider, split } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
@@ -39,8 +39,14 @@ const apolloClient = new ApolloClient({
 })
 
 const App = () => {
-    const { state } = useContext(context)
+    const { state, dispatch } = useContext(context)
+    const location = useLocation()
     const [showJoinModal, setShowJoinModal] = useState<boolean>(true)
+
+    useEffect(() => {
+        dispatch({ type: 'RESET_ROOM_STATE' })
+    }, [location])
+
     return (
         <>
             <AppWrapper>

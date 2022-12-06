@@ -4,3 +4,4 @@ node_modules/
 .env.*
 docker-volumes/
 yarn-error.log
+build/

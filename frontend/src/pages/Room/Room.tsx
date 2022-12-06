@@ -1,14 +1,13 @@
-import { Button, Heading, Loading, Icon } from 'sharedComponents'
+import { Button, Loading } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
 import { Exactly, logger, sanitizeRoomId } from 'utilities'
 import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 
 import { context } from 'context'
-import { colors } from 'theme'
 import styled from 'styled-components'
 import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
-import { Conclusion, Participants, Signup, Voting } from './components'
+import { Conclusion, Participants, Signup, Voting, VotingDetails } from './components'
 
 const Sidebar = styled.div`
     min-width: 300px;
@@ -182,7 +181,7 @@ const Room = () => {
     })
 
     useEffect(() => {
-        if (state.user.name.length === 0) {
+        if (!state.user || state.user.name.length === 0) {
             // Don't join room until user has entered their name.
             return
         }
@@ -194,23 +193,37 @@ const Room = () => {
                 roomId
             }
         })
-    }, [sanitizeRoomId, state.user.id])
+    }, [sanitizeRoomId, state.user])
 
     const handleStatusChange = useCallback((status: TRoom['status']) => {
         if (!state.room) return
 
-        updateRoomMutation({ variables: { status, userId: state.user.id, roomId: state.room.id } })
+        updateRoomMutation({ variables: { status, userId: state.user!.id, roomId: state.room.id } })
     }, [state.room])
 
-    const copyRoomToClipboard = useCallback(() => {
-        navigator.clipboard.writeText(window.location.href)
-    }, [window.location.href])
-
     const Controls = useMemo(() => {
-        if (!state.room || state.room.ownerId !== state.user.id || state.room.status === 'conclusion') return null
+        if (!state.room || !state.user || state.room.ownerId !== state.user.id || state.room.status === 'conclusion') return null
 
-        if (state.room.status === 'signup') return <Button fullWidth variation="pear" onClick={() => handleStatusChange('voting')}>Start Voting</Button>
-        if (state.room.status === 'voting') return <Button fullWidth variation="pear" onClick={() => handleStatusChange('conclusion')}>Announce Results</Button>
+        if (state.room.status === 'signup') {
+            return (
+                <Button
+                    fullWidth
+                    variation="pear"
+                    onClick={() => handleStatusChange('voting')}
+                >Start Voting
+                </Button>
+            )
+        }
+        if (state.room.status === 'voting') {
+            return (
+                <Button
+                    fullWidth
+                    variation="pear"
+                    onClick={() => handleStatusChange('conclusion')}
+                >Announce Results
+                </Button>
+            )
+        }
     }, [state.room, state.user])
 
     const Content = useMemo(() => {
@@ -234,18 +247,14 @@ const Room = () => {
     if (!state.room || !state.users) return <p>no details</p>
 
     return (
-        <div>
-            <div style={{ position: 'fixed', right: '1rem', bottom: '1rem' }}>
-                <Button variation="pear" onClick={copyRoomToClipboard}>Share Room <Icon color={colors.pear.base} name="content_copy" /></Button>
-            </div>
-            <Wrapper>
-                <Sidebar>
-                    {Controls}
-                    <Participants />
-                </Sidebar>
-                {Content}
-            </Wrapper>
-        </div>
+        <Wrapper>
+            <Sidebar>
+                {Controls}
+                {state.room.status === 'voting' && <VotingDetails />}
+                <Participants />
+            </Sidebar>
+            {Content}
+        </Wrapper>
     )
 }
 export default Room

@@ -47,12 +47,11 @@
     },
     "scripts": {
         "sd:fe": "export NODE_ENV=local && webpack serve --mode=development --config=webpack.js",
-        "build": "rm -rf ./build && mkdir ./build && webpack --mode=production --config=webpack.js",
-        "sp:fe": "serve -l tcp://0.0.0.0:8080 -s build/",
+        "bundle-ui": " rm -rf ./public; mkdir ./public; webpack --mode=production --config=webpack.js",
         "test-unit": "jest --config=jest.unit.js",
         "precommit": "yarn run test-unit",
-        "deploy:production": "export NODE_ENV=production && firebase use placeaday-fd46a && yarn run build && firebase deploy",
         "lint:run": "npx eslint --ext .ts,.tsx ./src/",
-        "lint:fix": "npx eslint --ext .ts,.tsx ./src/ --fix"
+        "lint:fix": "npx eslint --ext .ts,.tsx ./src/ --fix",
+        "deploy": "gcloud config set project root-270023 && gcloud builds submit --tag gcr.io/root-270023/bananarama-fe && gcloud run deploy bananarama-fe --image gcr.io/root-270023/bananarama-fe --platform managed --region us-east1"
     }
 }
