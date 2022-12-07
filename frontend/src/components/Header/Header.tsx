@@ -45,9 +45,8 @@ const Header = () => {
                     >Share Room <Icon color={colors.pear.base} name="content_copy" />
                     </Button>
                 )
+            }
         </Wrapper>
-    }
-        
     )
 }
 
