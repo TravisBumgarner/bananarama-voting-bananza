@@ -3,7 +3,7 @@ import { useContext, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Heading, Button, Input } from 'sharedComponents'
+import { Heading, Button, Input, Icon } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 
@@ -56,7 +56,7 @@ const Lobby = () => {
     return (
         <div>
             <Button onClick={createRoom} fullWidth type="button" variation="pear">
-                Create Room
+                Create Room <Icon color={colors.pear.base} name="door_front" />
             </Button>
             <FabulousOrWrapper>
                 <div />
@@ -71,7 +71,7 @@ const Lobby = () => {
                     handleChange={(value: string) => setRoomId(value)}
                 />
                 <Button fullWidth onClick={joinRoom} type="button" variation="pear">
-                    Join Room
+                    Join Room <Icon color={colors.pear.base} name="door_open" />
                 </Button>
             </div>
         </div>
