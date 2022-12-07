@@ -23,6 +23,7 @@ const JOIN_ROOM_MUTATION = gql`
     mutation JoinRoom($roomId: String!, $userId: String!, $userName: String!) {
         joinRoom(roomId: $roomId, userId: $userId, userName: $userName){
             id
+            margin: 0 0 1rem 0;      ownerId
             maxVotes
             icon
             status
