@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Heading, PageHeadingWrapper, Paragraph } from 'sharedComponents'
+import { Heading, VotingPhaseWrapper, Paragraph } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TEntry } from 'types'
@@ -15,8 +15,8 @@ const EntriesWrapper = styled.ul`
 const EntryWrapper = styled.li`
     border: 4px solid ${colors.blueberry.base};
     border-radius: 1rem;
-    margin: 1rem 0;
     padding: 0;
+    margin: 0 0 1rem 0;
 `
 type EntryProps = {
     entry: TEntry
@@ -34,7 +34,6 @@ const Entry = ({ entry, votes }: EntryProps) => {
 
 const Conclusion = () => {
     const { state } = useContext(context)
-    console.log(state.entries)
     const votesByEntryId = useMemo(() => {
         return state.votes.reduce(
             (accum, { entryId }) => {
@@ -48,21 +47,22 @@ const Conclusion = () => {
 
     return (
         <div>
-            <PageHeadingWrapper>
+            <VotingPhaseWrapper>
                 <Heading.H2>Conclusion</Heading.H2>
-            </PageHeadingWrapper>
-            <EntriesWrapper>
-                {state
-                    .entries
-                    .sort((a, b) => votesByEntryId[a.id] - votesByEntryId[b.id])
-                    .map((entry) => (
-                        <Entry
-                            entry={entry}
-                            key={entry.id}
-                            votes={votesByEntryId[entry.id]}
-                        />
-                    ))}
-            </EntriesWrapper>
+
+                <EntriesWrapper>
+                    {state
+                        .entries
+                        .sort((a, b) => votesByEntryId[a.id] - votesByEntryId[b.id])
+                        .map((entry) => (
+                            <Entry
+                                entry={entry}
+                                key={entry.id}
+                                votes={votesByEntryId[entry.id]}
+                            />
+                        ))}
+                </EntriesWrapper>
+            </VotingPhaseWrapper>
         </div>
     )
 }
