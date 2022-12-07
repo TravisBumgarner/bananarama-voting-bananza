@@ -3,6 +3,7 @@ Before Friday
 - [x] Remove redis
 - [ ] Make a "copy results" button
 - [ ] Clean Up UI
+- [ ] Every button should have an icon
 
 Remaining for MVP
 

@@ -13,9 +13,9 @@ import { JoinModal } from './modals'
 import Modal from './sharedComponents/Modal'
 
 const AppWrapper = styled.div`
-    width: 80%;
     min-width: 80vw;
-    /* min-height: 80vh; */
+    margin: 1rem;
+    box-sizing: border-box;
 `
 
 const wsLink = new GraphQLWsLink(createClient({ url: 'ws://localhost:4000/graphql', }))
