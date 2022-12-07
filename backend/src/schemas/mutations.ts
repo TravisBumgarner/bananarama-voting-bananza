@@ -1,12 +1,9 @@
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString, } from 'graphql'
-import { RedisPubSub } from 'graphql-redis-subscriptions'
 
-import { MessageType } from '../redis/types'
+import pubsub, { EPubSubMessage } from '../pubsub'
 import { EErrorMessages, TRoom } from '../types'
 import inMemoryDatastore from '../inMemoryDatastore'
 import { RoomStatusEnum, RoomType, EntryType, VoteType } from './types'
-
-const pubsub = new RedisPubSub({ connection: 'redis' })
 
 type CreateRoomArgs = {
     ownerId: string
@@ -55,7 +52,7 @@ const updateRoom = {
         const updateRoomResult = inMemoryDatastore.updateRoom({ id: args.roomId, status: args.status })
 
         if (updateRoomResult.success) {
-            await pubsub.publish(MessageType.ROOM_UPDATE_EVENT, {
+            await pubsub.publish(EPubSubMessage.ROOM_UPDATE_EVENT, {
                 roomId: args.roomId,
                 status: args.status
             })
@@ -85,7 +82,7 @@ const joinRoom = {
         const addMemberResult = inMemoryDatastore.addMember(args.roomId, { name: args.userName, id: args.userId })
         if (addMemberResult.success || addMemberResult.error === EErrorMessages.MemberAlreadyExists) {
             if (addMemberResult.success) {
-                await pubsub.publish(MessageType.MEMBER_CHANGE_EVENT, {
+                await pubsub.publish(EPubSubMessage.MEMBER_CHANGE_EVENT, {
                     roomId: args.roomId,
                     userId: args.userId,
                     userName: args.userName,
@@ -119,7 +116,7 @@ const addEntry = {
     resolve: async (_, args: AddEntryArgs) => {
         const addEntryResult = inMemoryDatastore.addEntry(args.roomId, args.userId, args.entry)
         if (addEntryResult.success) {
-            await pubsub.publish(MessageType.ADD_ENTRY, { ...addEntryResult.data, roomId: args.roomId })
+            await pubsub.publish(EPubSubMessage.ADD_ENTRY, { ...addEntryResult.data, roomId: args.roomId })
             return addEntryResult.data
         }
         throw new Error(addEntryResult.error)
@@ -143,7 +140,7 @@ const addVote = {
     resolve: async (_, args: AddVoteArgs) => {
         const addVoteResult = inMemoryDatastore.addVote(args.roomId, args.userId, args.entryId)
         if (addVoteResult.success) {
-            await pubsub.publish(MessageType.ADD_VOTE, { ...addVoteResult.data, roomId: args.roomId })
+            await pubsub.publish(EPubSubMessage.ADD_VOTE, { ...addVoteResult.data, roomId: args.roomId })
             return addVoteResult.data
         }
         throw new Error(addVoteResult.error)

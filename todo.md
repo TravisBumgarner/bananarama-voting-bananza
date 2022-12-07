@@ -1,5 +1,6 @@
 Before Friday
 
+- [x] Remove redis
 - [ ] Make a "copy results" button
 - [ ] Clean Up UI
 
