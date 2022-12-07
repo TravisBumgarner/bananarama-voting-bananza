@@ -1,4 +1,4 @@
-import { Button, Loading } from 'sharedComponents'
+import { Button, Icon, Loading } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
 import { Exactly, logger, sanitizeRoomId } from 'utilities'
@@ -6,19 +6,23 @@ import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 
 import { context } from 'context'
 import styled from 'styled-components'
+import { colors } from 'theme'
 import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
 import { Conclusion, Participants, Signup, Voting, VotingDetails } from './components'
 
 const Sidebar = styled.div`
-    min-width: 300px;
-    margin-right: 2rem;
+    min-width: 200px;
+    margin-right: 1rem;
+
+    button {
+        margin-top: 0;
+    }
 `
 
 const JOIN_ROOM_MUTATION = gql`
     mutation JoinRoom($roomId: String!, $userId: String!, $userName: String!) {
         joinRoom(roomId: $roomId, userId: $userId, userName: $userName){
             id
-            ownerId
             maxVotes
             icon
             status
@@ -210,7 +214,7 @@ const Room = () => {
                     fullWidth
                     variation="pear"
                     onClick={() => handleStatusChange('voting')}
-                >Start Voting
+                >Start Voting <Icon color={colors.pear.base} name="how_to_vote" />
                 </Button>
             )
         }
@@ -220,7 +224,7 @@ const Room = () => {
                     fullWidth
                     variation="pear"
                     onClick={() => handleStatusChange('conclusion')}
-                >Announce Results
+                >Announce Results <Icon color={colors.pear.base} name="campaign" />
                 </Button>
             )
         }
