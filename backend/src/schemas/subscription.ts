@@ -1,14 +1,11 @@
 import { GraphQLObjectType } from 'graphql'
-import { RedisPubSub } from 'graphql-redis-subscriptions'
-import { MessageType } from '../redis/types'
+import pubsub, { EPubSubMessage } from '../pubsub'
 
 import { MemberChangeType, RoomUpdateType, AddEntryType, AddVoteType } from './types'
 
-const pubsub = new RedisPubSub({ connection: 'redis' })
-
 const memberChange = {
     type: MemberChangeType,
-    subscribe: () => pubsub.asyncIterator(MessageType.MEMBER_CHANGE_EVENT),
+    subscribe: () => pubsub.asyncIterator(EPubSubMessage.MEMBER_CHANGE_EVENT),
     resolve: (payload) => {
         return payload
     }
@@ -16,7 +13,7 @@ const memberChange = {
 
 const addEntry = {
     type: AddEntryType,
-    subscribe: () => pubsub.asyncIterator(MessageType.ADD_ENTRY),
+    subscribe: () => pubsub.asyncIterator(EPubSubMessage.ADD_ENTRY),
     resolve: (payload) => {
         return payload
     }
@@ -24,7 +21,7 @@ const addEntry = {
 
 const addVote = {
     type: AddVoteType,
-    subscribe: () => pubsub.asyncIterator(MessageType.ADD_VOTE),
+    subscribe: () => pubsub.asyncIterator(EPubSubMessage.ADD_VOTE),
     resolve: (payload) => {
         return payload
     }
@@ -32,7 +29,7 @@ const addVote = {
 
 const roomUpdate = {
     type: RoomUpdateType,
-    subscribe: () => pubsub.asyncIterator(MessageType.ROOM_UPDATE_EVENT),
+    subscribe: () => pubsub.asyncIterator(EPubSubMessage.ROOM_UPDATE_EVENT),
     resolve: (payload) => {
         return payload
     }
