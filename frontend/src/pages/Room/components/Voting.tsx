@@ -2,7 +2,7 @@ import { ApolloError, gql, useMutation, useSubscription } from '@apollo/client'
 import { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, PageHeadingWrapper } from 'sharedComponents'
+import { Button, Heading, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TEntry, TVote } from 'types'
@@ -125,20 +125,20 @@ const Voting = () => {
 
     return (
         <div>
-            <PageHeadingWrapper>
+            <RoomWrapper>
                 <Heading.H2>Voting</Heading.H2>
-            </PageHeadingWrapper>
-            <EntriesWrapper>
-                {state.entries.map((entry) => (
-                    <Entry
-                        isCastingVote={isCastingVote}
-                        setIsCastingVote={setIsCastingVote}
-                        entry={entry}
-                        key={entry.id}
-                        canVote={state.room!.maxVotes > votesCast}
-                    />
-                ))}
-            </EntriesWrapper>
+                <EntriesWrapper>
+                    {state.entries.map((entry) => (
+                        <Entry
+                            isCastingVote={isCastingVote}
+                            setIsCastingVote={setIsCastingVote}
+                            entry={entry}
+                            key={entry.id}
+                            canVote={state.room!.maxVotes > votesCast}
+                        />
+                    ))}
+                </EntriesWrapper>
+            </RoomWrapper>
         </div>
     )
 }

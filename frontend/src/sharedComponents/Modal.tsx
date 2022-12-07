@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import ReactModal from 'react-modal'
 
 import { colors } from 'theme'
-import { borderWidth } from 'polished'
 import { Heading } from '.'
 
 type ModalProps = {
@@ -47,7 +46,7 @@ const Modal = ({
                 backgroundColor: colors.coffee.darken
             },
             content: {
-                borderColor: colors.pear.base,
+                borderColor: colors.blueberry.base,
                 backgroundColor: colors.coffee.base,
                 position: 'static',
                 maxWidth: '80vw',

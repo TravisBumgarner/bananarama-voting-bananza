@@ -2,7 +2,7 @@ import { gql, useSubscription } from '@apollo/client'
 import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Icon, Modal, VotingPhaseWrapper } from 'sharedComponents'
+import { Button, Heading, Icon, Modal, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TEntry } from 'types'
@@ -33,6 +33,7 @@ const EntryWrapper = styled.li`
     border-radius: 1rem;
     margin: 0 0 1rem 0;
     padding: 1rem;
+    box-sizing: border-box;
 `
 
 const Entry = ({ entry }: { entry: TEntry }) => {
@@ -75,7 +76,7 @@ const Signup = () => {
 
     return (
         <div>
-            <VotingPhaseWrapper>
+            <RoomWrapper>
                 <Heading.H2>Entries</Heading.H2>
                 <Button
                     fullWidth
@@ -86,7 +87,7 @@ const Signup = () => {
                 <EntriesWrapper>
                     {state.entries.map((entry) => <Entry entry={entry} key={entry.id} />)}
                 </EntriesWrapper>
-            </VotingPhaseWrapper>
+            </RoomWrapper>
             <Modal
                 showModal={showAddEntryModal}
                 closeModal={() => setShowAddEntryModal(false)}

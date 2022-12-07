@@ -6,7 +6,7 @@ import Modal from './Modal'
 import Input from './Input'
 import Icon from './Icon'
 import StyledNavLink from './StyledNavLink'
-import PageHeadingWrapper from './PageHeadingWrapper'
+import RoomWrapper from './RoomWrapper'
 
 export {
     Loading,
@@ -17,5 +17,5 @@ export {
     Input,
     Icon,
     StyledNavLink,
-    PageHeadingWrapper
+    RoomWrapper
 }

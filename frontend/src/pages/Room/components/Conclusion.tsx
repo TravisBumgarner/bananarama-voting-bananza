@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Heading, VotingPhaseWrapper, Paragraph } from 'sharedComponents'
+import { Heading, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TEntry } from 'types'
@@ -10,6 +10,7 @@ const EntriesWrapper = styled.ul`
     list-style: none;
     margin: 0;
     padding: 0;
+    box-sizing: border-box
 `
 
 const EntryWrapper = styled.li`
@@ -47,7 +48,7 @@ const Conclusion = () => {
 
     return (
         <div>
-            <VotingPhaseWrapper>
+            <RoomWrapper>
                 <Heading.H2>Conclusion</Heading.H2>
 
                 <EntriesWrapper>
@@ -62,7 +63,7 @@ const Conclusion = () => {
                             />
                         ))}
                 </EntriesWrapper>
-            </VotingPhaseWrapper>
+            </RoomWrapper>
         </div>
     )
 }
