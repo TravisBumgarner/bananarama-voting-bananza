@@ -19,7 +19,7 @@ const List = styled.ul`
 
 const ParticipantsWrapper = styled.div`
     border-radius: 1rem;
-    border: 4px solid ${colors.banana.base};
+    border: 4px solid ${colors.blueberry.base};
     padding: 2rem;
     box-sizing: border-box;
 `

@@ -89,7 +89,6 @@ const Room = () => {
     const navigate = useNavigate()
 
     const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
-        console.log('do I get called twice')
         const initialMembers = joinRoom.members.reduce((accum, current) => {
             accum[current.id] = current.name //eslint-disable-line
             return accum

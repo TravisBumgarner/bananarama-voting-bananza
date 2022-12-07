@@ -7,5 +7,5 @@ RUN npm run bundle-ui
 FROM mhart/alpine-node
 RUN npm install -g serve
 WORKDIR /app
-COPY --from=builder /app/public .
+COPY --from=builder /app/build .
 CMD ["serve", "-p", "8080", "-s", "."]
