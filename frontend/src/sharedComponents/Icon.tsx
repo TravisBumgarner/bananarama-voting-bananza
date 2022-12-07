@@ -3,7 +3,17 @@ import styled from 'styled-components'
 // For More: https://fonts.google.com/icons
 
 type IconProps = {
-    name: 'close' | 'content_copy' | 'add'
+    name:
+    | 'close'
+    | 'content_copy'
+    | 'add'
+    | 'done_all'
+    | 'cancel'
+    | 'rocket_launch'
+    | 'how_to_vote'
+    | 'campaign'
+    | 'door_open'
+    | 'door_front'
     color: string
     onClick?: () => void
 }
@@ -23,7 +33,7 @@ const Icon = ({ name, color, onClick }: IconProps) => {
                 </span>
             </Button>
         ) : (
-            <span style={{ color }} className="material-symbols-outlined">
+            <span style={{ color, fontWeight: 900 }} className="material-symbols-outlined">
                 {name}
             </span>
         )

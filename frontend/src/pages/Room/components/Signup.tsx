@@ -2,7 +2,7 @@ import { gql, useSubscription } from '@apollo/client'
 import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Icon, Modal, PageHeadingWrapper } from 'sharedComponents'
+import { Button, Heading, Icon, Modal, VotingPhaseWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TEntry } from 'types'
@@ -31,7 +31,7 @@ const EntriesWrapper = styled.ul`
 const EntryWrapper = styled.li`
     border: 4px solid ${colors.blueberry.base};
     border-radius: 1rem;
-    margin: 1rem 0;
+    margin: 0 0 1rem 0;
     padding: 1rem;
 `
 
@@ -75,18 +75,18 @@ const Signup = () => {
 
     return (
         <div>
-            <Button
-                fullWidth
-                variation="pear"
-                onClick={() => setShowAddEntryModal(true)}
-            >Add Entry <Icon color={colors.pear.base} name="add" />
-            </Button>
-            <PageHeadingWrapper>
+            <VotingPhaseWrapper>
                 <Heading.H2>Entries</Heading.H2>
-            </PageHeadingWrapper>
-            <EntriesWrapper>
-                {state.entries.map((entry) => <Entry entry={entry} key={entry.id} />)}
-            </EntriesWrapper>
+                <Button
+                    fullWidth
+                    variation="pear"
+                    onClick={() => setShowAddEntryModal(true)}
+                >Add Entry <Icon color={colors.pear.base} name="add" />
+                </Button>
+                <EntriesWrapper>
+                    {state.entries.map((entry) => <Entry entry={entry} key={entry.id} />)}
+                </EntriesWrapper>
+            </VotingPhaseWrapper>
             <Modal
                 showModal={showAddEntryModal}
                 closeModal={() => setShowAddEntryModal(false)}

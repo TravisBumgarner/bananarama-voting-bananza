@@ -1,9 +1,10 @@
 import { ApolloError, gql, useMutation } from '@apollo/client'
 import { FormEvent, useCallback, useContext, useState } from 'react'
 
-import { Button, Input } from 'sharedComponents'
+import { Button, Icon, Input } from 'sharedComponents'
 import { context } from 'context'
 import styled from 'styled-components'
+import { colors } from 'theme'
 
 type AddEntryProps = {
     closeModal: () => void
@@ -68,14 +69,14 @@ const AddEntry = ({ closeModal }: AddEntryProps) => {
                             type="button"
                             variation="banana"
                             onClick={() => closeModal()}
-                        >Cancel
+                        >Cancel <Icon color={colors.banana.base} name="cancel" />
                         </Button>
                         <Button
                             disabled={entry.length === 0}
                             key="submit"
                             type="submit"
                             variation="pear"
-                        >Submit Entry!
+                        >Submit Entry! <Icon color={colors.pear.base} name="done_all" />
                         </Button>
                     </ButtonWrapper>
                 </form>

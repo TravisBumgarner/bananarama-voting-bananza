@@ -1,9 +1,10 @@
 import { FormEvent, useContext, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Button, Input } from 'sharedComponents'
+import { Button, Icon, Input } from 'sharedComponents'
 import { context } from 'context'
 import { getLocalStorage, setLocalStorage } from 'utilities'
+import { colors } from 'theme'
 
 type JoinModalProps = {
     closeModal: () => void
@@ -47,7 +48,7 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
                         key="submit"
                         type="submit"
                         variation="pear"
-                    >Let the Voting Commence!
+                    >Let the Voting Commence! <Icon color={colors.pear.base} name="rocket_launch" />
                     </Button>
                 </form>
             </div>

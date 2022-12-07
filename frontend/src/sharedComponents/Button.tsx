@@ -18,6 +18,8 @@ const Button = styled.button`
     font-weight: 700;
     border-radius: 1rem;
     margin: 1rem 0;
+    justify-content: center; 
+    display: flex;
 
     display: flex;
     align-items: center;
@@ -32,8 +34,6 @@ const Button = styled.button`
     ${({ fullWidth }: ButtonProps) => (fullWidth
         ? `
             width: 100%; 
-            justify-content: center; 
-            display: flex;
         `
         : '')}
 

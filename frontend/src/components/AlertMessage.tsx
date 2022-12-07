@@ -1,7 +1,7 @@
 import { useEffect, useContext } from 'react'
 import styled from 'styled-components'
 
-import { Paragraph, Button } from 'sharedComponents'
+import { Paragraph, Button, Icon } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 
@@ -60,7 +60,7 @@ const AlertMessage = () => {
         <AlertMessagePositioner>
             <AlertMessageWrapper timeToLiveMS={state.message.timeToLiveMS}>
                 <Paragraph style={{ color: colors.pear.base }}>{state.message.body}</Paragraph>
-                <Button onClick={handleSubmit} variation="pear">Ok!</Button>
+                <Button onClick={handleSubmit} variation="pear">Ok! <Icon color={colors.pear.base} name="done_all" /></Button>
             </AlertMessageWrapper>
         </AlertMessagePositioner>
     )
