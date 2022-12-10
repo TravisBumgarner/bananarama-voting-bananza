@@ -1,17 +1,17 @@
 import { Button, Icon, Loading } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
-import { Exactly, logger, sanitizeRoomId } from 'utilities'
 import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
-
-import { context } from 'context'
 import styled from 'styled-components'
+
+import { Exactly, logger, sanitizeRoomId } from 'utilities'
+import { context } from 'context'
 import { colors } from 'theme'
 import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
-import { Conclusion, Participants, Signup, Voting, VotingDetails } from './components'
+import { Conclusion, Participants, Signup, Voting } from './components'
 
 const Sidebar = styled.div`
-    min-width: 200px;
+    min-width: 215px;
     margin-right: 1rem;
 
     button {
@@ -90,7 +90,7 @@ const Room = () => {
 
     const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
         const initialMembers = joinRoom.members.reduce((accum, current) => {
-            accum[current.id] = current.name //eslint-disable-line
+            accum[current.id] = current.name
             return accum
         }, {} as Record<string, string>)
 
@@ -254,7 +254,6 @@ const Room = () => {
         <Wrapper>
             <Sidebar>
                 {Controls}
-                {state.room.status === 'voting' && <VotingDetails />}
                 <Participants />
             </Sidebar>
             {Content}

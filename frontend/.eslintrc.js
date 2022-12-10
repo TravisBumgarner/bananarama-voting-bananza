@@ -47,6 +47,7 @@ module.exports = {
         'object-curly-newline': ['off'],
         'arrow-body-style': ['off'],
         'react/jsx-props-no-spreading': ['off'],
-        'react/react-in-jsx-scope': ['off']
+        'react/react-in-jsx-scope': ['off'],
+        'no-param-reassign': ['off']
     },
 }

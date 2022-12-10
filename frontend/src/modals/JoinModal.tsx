@@ -48,7 +48,7 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
                         key="submit"
                         type="submit"
                         variation="pear"
-                    >Let the Voting Commence! <Icon color={colors.pear.base} name="rocket_launch" />
+                    >Let the Voting Commence! <Icon color={name.length === 0 ? colors.marble.base : colors.pear.base} name="rocket_launch" />
                     </Button>
                 </form>
             </div>

@@ -16,6 +16,14 @@ const app = express()
 app.use(Sentry.Handlers.requestHandler())
 app.use(Sentry.Handlers.tracingHandler())
 
+const CORS_DEV = [
+    'localhost:3000',
+]
+
+const COORS_PROD = [
+    'https://bananarama-fe-3qcnyp2pna-ue.a.run.app'
+]
+
 // For Cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
@@ -23,9 +31,10 @@ app.use((req, res, next) => {
     next()
 })
 app.use(cors({
-    origin: [
-        'localhost:3000'
-    ]
+    origin: process.env.NODE_ENV === 'production'
+        ? COORS_PROD
+        : CORS_DEV
+
 }))
 
 app.use(bodyParser.json())

@@ -1,4 +1,4 @@
-import * as ReactDOM from 'react-dom'
+import { render } from 'react-dom'
 import Modal from 'react-modal'
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
@@ -26,4 +26,4 @@ const SentryWrapper = () => (
     </Sentry.ErrorBoundary>
 )
 
-ReactDOM.render(<SentryWrapper />, document.getElementById(ROOT))
+render(<SentryWrapper />, document.getElementById(ROOT))

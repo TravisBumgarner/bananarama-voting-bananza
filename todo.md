@@ -2,8 +2,9 @@ Before Friday
 
 - [x] Remove redis
 - [ ] Make a "copy results" button
-- [ ] Clean Up UI
-- [ ] Every button should have an icon
+- [x] Clean Up UI
+- [x] Every button should have an icon
+- [ ] Joining a room that doesn't exisst
 
 Remaining for MVP
 
@@ -12,8 +13,9 @@ Remaining for MVP
 - [ ] Add leave room cleanup event
 - [ ] Merge dispatches in Room.tsx
 - [ ] Fix bug with duplicate voting entries
-- [ ] Send it to the cloud
-- [ ] Bundle is huge - 3.5 mb. Reduce that.
+- [x] Send it to the cloud
+    - [ ] Figure out how to deploy wss and https
+- [x] Bundle is huge - 3.5 mb. Reduce that.
 
 Beyond MVP Stuff
 

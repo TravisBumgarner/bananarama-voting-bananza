@@ -3,10 +3,11 @@ FROM node:16
 WORKDIR /app
 
 COPY ./package*.json ./
+COPY ./tsconfig.json ./
+COPY ./src ./src
 
 RUN yarn install
-
-COPY . .
+RUN yarn run bundle
 
 EXPOSE 8080
 EXPOSE 4000

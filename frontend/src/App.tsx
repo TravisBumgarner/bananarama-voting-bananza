@@ -18,8 +18,8 @@ const AppWrapper = styled.div`
     box-sizing: border-box;
 `
 
-const wsLink = new GraphQLWsLink(createClient({ url: 'ws://localhost:4000/graphql', }))
-const httpLink = new HttpLink({ uri: 'http://localhost:8080/graphql' })
+const wsLink = new GraphQLWsLink(createClient({ url: __API_WS_ENDPOINT__ }))
+const httpLink = new HttpLink({ uri: __API_HTTP_ENDPOINT__ })
 
 const splitLink = split(
     ({ query }) => {
@@ -46,6 +46,11 @@ const App = () => {
     useEffect(() => {
         dispatch({ type: 'RESET_ROOM_STATE' })
     }, [location])
+
+    useEffect(() => {
+        // retrigger modal if user clicks outside
+        if (!showJoinModal && !state.user) setShowJoinModal(true)
+    }, [showJoinModal, state.user])
 
     return (
         <>
