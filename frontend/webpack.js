@@ -6,12 +6,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const PLUGIN_VARS = {
     local: {
-        __API_WS_ENDPOINT__: "'ws://localhost:4000/graphql'",
+        __API_WS_ENDPOINT__: "'ws://localhost:8080/graphql'",
         __API_HTTP_ENDPOINT__: "'http://localhost:8080/graphql'",
         __LOGGING_LEVEL__: "'local'",
     },
     production: {
-        __API_WS_ENDPOINT__: "'wss://bananarama-be-3qcnyp2pna-ue.a.run.app:4000/graphql'",
+        __API_WS_ENDPOINT__: "'wss://bananarama-be-3qcnyp2pna-ue.a.run.app/graphql'",
         __API_HTTP_ENDPOINT__: "'https://bananarama-be-3qcnyp2pna-ue.a.run.app/graphql'",
         __LOGGING_LEVEL__: "'sentry'",
     }

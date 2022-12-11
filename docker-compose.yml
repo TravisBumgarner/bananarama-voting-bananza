@@ -17,7 +17,6 @@ services:
       - ./backend:/app/backend
     ports:
       - 8080:8080
-      - 4000:4000
     working_dir: /app/backend
     command: [ "yarn", "run", "sd" ]
     environment:

@@ -10,6 +10,5 @@ RUN yarn install
 RUN yarn run bundle
 
 EXPOSE 8080
-EXPOSE 4000
 
 CMD ["yarn", "run", "start"]

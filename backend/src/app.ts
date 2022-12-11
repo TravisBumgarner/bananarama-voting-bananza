@@ -71,13 +71,10 @@ Sentry.init({
 })
 
 const startup = async () => {
-    await app.listen(8080, '0.0.0.0', () => {
+    const server = await app.listen(8080, '0.0.0.0', () => {
         console.log('App listening at http://0.0.0.0:8080') //eslint-disable-line
     })
 
-    const server = app.listen(4000, () => {
-        console.log('starting on 4000') // eslint-disable-line
-    })
     const wsServer = new WebSocketServer({
         server,
         path: '/graphql',
