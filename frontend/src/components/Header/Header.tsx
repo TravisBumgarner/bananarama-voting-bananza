@@ -23,9 +23,10 @@ const Wrapper = styled.div`
 `
 
 const Header = () => {
-    const { state } = useContext(context)
+    const { state, dispatch } = useContext(context)
 
     const copyRoomToClipboard = useCallback(() => {
+        dispatch({ type: 'ADD_MESSAGE', data: { message: 'Room URL copied to clipboard.' } })
         navigator.clipboard.writeText(window.location.href)
     }, [window.location.href])
 

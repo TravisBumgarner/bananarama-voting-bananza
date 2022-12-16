@@ -5,6 +5,8 @@ import { Paragraph, Button, Icon } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 
+const DEFAULT_TTL = 5000
+
 const AlertMessagePositioner = styled.div`
     z-index: 999;
     position: fixed;
@@ -25,8 +27,9 @@ const AlertMessageWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 2px solid ${colors.pear.base};
-    background-color: white;
+    border: 4px solid ${colors.banana.base};
+    border-radius: 1rem;
+    background-color: ${colors.coffee.base};
     @keyframes fade {
         0%,100% { opacity: 0 }
         10%,90% { opacity: 1 }
@@ -49,17 +52,17 @@ const AlertMessage = () => {
     }
 
     useEffect(() => {
-        if (state.message.timeToLiveMS) {
-            setTimeout(() => {
-                dispatch({ type: 'DELETE_MESSAGE' })
-            }, state.message.timeToLiveMS)
-        }
+        setTimeout(() => {
+            dispatch({ type: 'DELETE_MESSAGE' })
+        }, state.message?.timeToLiveMS ? state.message.timeToLiveMS : DEFAULT_TTL)
     }, [])
+
+    if (!state.message) return
 
     return (
         <AlertMessagePositioner>
-            <AlertMessageWrapper timeToLiveMS={state.message.timeToLiveMS}>
-                <Paragraph style={{ color: colors.pear.base }}>{state.message.body}</Paragraph>
+            <AlertMessageWrapper timeToLiveMS={state.message.timeToLiveMS || DEFAULT_TTL}>
+                <Paragraph style={{ color: colors.banana.base }}>{state.message.body}</Paragraph>
                 <Button onClick={handleSubmit} variation="pear">Ok! <Icon color={colors.pear.base} name="done_all" /></Button>
             </AlertMessageWrapper>
         </AlertMessagePositioner>

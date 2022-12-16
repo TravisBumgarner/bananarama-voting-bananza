@@ -3,6 +3,9 @@
     "*.unit.spec.ts"
   ],
   "compilerOptions": {
+    "lib": [
+      "DOM"
+    ],
     "outDir": "./dist/",
     "noImplicitAny": true,
     "module": "es6",

@@ -13,6 +13,7 @@ type JoinModalProps = {
 const JoinModal = ({ closeModal }: JoinModalProps) => {
     const [name, setName] = useState<string>(getLocalStorage('user').name || '')
     const { dispatch } = useContext(context)
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -25,7 +26,7 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
         } else {
             id = uuidv4()
         }
-
+        setIsLoading(true)
         setLocalStorage('user', { name, id })
         dispatch({ type: 'JOIN', data: { name, id } })
         closeModal()
@@ -43,7 +44,7 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
                     />
 
                     <Button
-                        disabled={name.length === 0}
+                        disabled={name.length === 0 || isLoading}
                         fullWidth
                         key="submit"
                         type="submit"

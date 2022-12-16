@@ -46,22 +46,23 @@ const Conclusion = () => {
         )
     }, [])
 
+    const Results = [...state.entries]
+        .sort((a, b) => votesByEntryId[b.id] - votesByEntryId[a.id])
+        .map((entry) => (
+            <Entry
+                entry={entry}
+                key={entry.id}
+                votes={votesByEntryId[entry.id]}
+            />
+        ))
+
     return (
         <div>
             <RoomWrapper>
                 <Heading.H2>Conclusion</Heading.H2>
 
                 <EntriesWrapper>
-                    {state
-                        .entries
-                        .sort((a, b) => votesByEntryId[a.id] - votesByEntryId[b.id])
-                        .map((entry) => (
-                            <Entry
-                                entry={entry}
-                                key={entry.id}
-                                votes={votesByEntryId[entry.id]}
-                            />
-                        ))}
+                    {Results}
                 </EntriesWrapper>
             </RoomWrapper>
         </div>
