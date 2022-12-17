@@ -15,12 +15,13 @@ const ListItem = styled.li`
 const List = styled.ul`
     margin: 0;
     padding: 0;
+    text-align: center;
 `
 
 const ParticipantsWrapper = styled.div`
     border-radius: 1rem;
     border: 4px solid ${colors.blueberry.base};
-    padding: 2rem;
+    padding: 1rem;
     box-sizing: border-box;
 `
 
@@ -28,14 +29,21 @@ const DefaultParticipants = () => {
     const { state } = useContext(context)
     return (
         <List>
-            {Object.keys(state.users).map((id) => {
-                return (
+            {Object
+                .keys(state.users)
+                .sort((a, b) => {
+                    return state.users[b].toLowerCase() < state.users[a].toLowerCase()
+                        ? 1
+                        : -1
+                })
+                .map((id) => {
+                    return (
 
-                    <ListItem key={id}>
-                        {state.users[id]}
-                    </ListItem>
-                )
-            })}
+                        <ListItem key={id}>
+                            {state.users[id]}
+                        </ListItem>
+                    )
+                })}
         </List>
     )
 }
@@ -54,15 +62,22 @@ const VotingParticipants = () => {
 
     return (
         <List>
-            {Object.keys(state.users).map((id) => {
-                const votesRemaining = state.room!.maxVotes - votesCastByUser[id]
-                const icon = votesRemaining > 0 ? '🍌'.repeat(votesRemaining) : '✅'
-                return (
-                    <ListItem key={id}>
-                        {state.users[id]} {icon}
-                    </ListItem>
-                )
-            })}
+            {Object
+                .keys(state.users)
+                .sort((a, b) => {
+                    return state.users[b].toLowerCase() < state.users[a].toLowerCase()
+                        ? 1
+                        : -1
+                })
+                .map((id) => {
+                    const votesRemaining = state.room!.maxVotes - votesCastByUser[id]
+                    const icon = votesRemaining > 0 ? '🍌'.repeat(votesRemaining) : '✅'
+                    return (
+                        <ListItem key={id}>
+                            {state.users[id]} {icon}
+                        </ListItem>
+                    )
+                })}
         </List>
     )
 }
@@ -83,9 +98,13 @@ const Participants = () => {
         }
     }
 
+    const participants = useMemo(() => {
+        return Object.keys(state.users).length
+    }, [state.users])
+
     return (
         <ParticipantsWrapper>
-            <Heading.H2>Participants</Heading.H2>
+            <Heading.H2>{participants} Participant{participants !== 1 && 's'}</Heading.H2>
             {Body}
         </ParticipantsWrapper>
     )
