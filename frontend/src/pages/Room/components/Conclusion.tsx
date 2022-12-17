@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useCallback, useContext, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Heading, RoomWrapper } from 'sharedComponents'
@@ -34,25 +34,36 @@ const Demo = ({ demo, votes }: DemoProps) => {
 }
 
 const Conclusion = () => {
-    const { state } = useContext(context)
-    const votesByDemoID = useMemo(() => {
-        return state.votes.reduce(
-            (accum, { demoId }) => {
-                if (!(demoId in accum)) accum[demoId] = 1 //eslint-disable-line
-                else accum[demoId] += 1 //eslint-disable-line
-                return accum
-            },
-            {} as Record<string, number>
-        )
+    const { state, dispatch } = useContext(context)
+
+    const talliedVotes = useMemo(() => {
+        const data = state.demos.reduce((accum, { id }) => {
+            accum[id] = 0
+            return accum
+        }, {} as Record<string, number>)
+
+        state.votes.forEach(({ demoId }) => data[demoId] += 1) //eslint-disable-line
+
+        return data
+    }, [])
+
+    useEffect(() => {
+        const votesForWinner = Math.max(...Object.values(talliedVotes))
+        const winners: TDemo['id'][] = []
+
+        Object.entries(talliedVotes).forEach(([id, votes]) => {
+            if (votes === votesForWinner) winners.push(id)
+        })
+        dispatch({ type: 'ADD_WINNERS', data: winners })
     }, [])
 
     const Results = [...state.demos]
-        .sort((a, b) => votesByDemoID[b.id] - votesByDemoID[a.id])
+        .sort((a, b) => talliedVotes[b.id] - talliedVotes[a.id])
         .map((demo) => (
             <Demo
                 demo={demo}
                 key={demo.id}
-                votes={votesByDemoID[demo.id]}
+                votes={talliedVotes[demo.id]}
             />
         ))
 
@@ -60,7 +71,6 @@ const Conclusion = () => {
         <div>
             <RoomWrapper>
                 <Heading.H2>Conclusion</Heading.H2>
-
                 <DemosWrapper>
                     {Results}
                 </DemosWrapper>

@@ -222,6 +222,18 @@ const Room = () => {
         updateRoomMutation({ variables })
     }, [state.room, maxVotes])
 
+    const copyResults = () => {
+        const winnersDetails = state.demos.filter(({ id }) => state.winners.includes(id))
+        let message = ''
+
+        if (winnersDetails.length > 1) message += `${winnersDetails.length} way tie!\n`
+        message += `${(new Date().toDateString())}\n`
+        winnersDetails.forEach(({ userId, demo }) => {
+            message += `${state.users[userId]} - ${demo}\n\n`
+        })
+        navigator.clipboard.writeText(message)
+    }
+
     const Controls = useMemo(() => {
         if (!state.room || !state.user || state.room.ownerId !== state.user.id) return null
 
@@ -269,14 +281,24 @@ const Room = () => {
         }
         if (state.room.status === 'conclusion') {
             return (
-                <Button
-                    type="button"
-                    fullWidth
-                    variation="pear"
-                    label="Delete Room"
-                    icon="delete"
-                    onClick={() => console.log('deleting...')}
-                />
+                <>
+                    <Button
+                        type="button"
+                        fullWidth
+                        variation="pear"
+                        label="Delete Room"
+                        icon="delete"
+                        onClick={() => console.log('deleting...')}
+                    />
+                    <Button
+                        type="button"
+                        fullWidth
+                        variation="pear"
+                        label="Copy Results"
+                        icon="content_copy"
+                        onClick={copyResults}
+                    />
+                </>
             )
         }
     }, [state.room, state.user, maxVotes])

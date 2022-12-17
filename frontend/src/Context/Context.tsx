@@ -17,6 +17,7 @@ type State = {
     users: Record<string, string>
     demos: TDemo[]
     votes: TVote[]
+    winners: TDemo['id'][]
 }
 
 const EMPTY_STATE: State = {
@@ -26,7 +27,8 @@ const EMPTY_STATE: State = {
     users: {},
     room: null,
     demos: [],
-    votes: []
+    votes: [],
+    winners: []
 }
 
 type HasErrored = {
@@ -78,6 +80,11 @@ type AddVotes = {
     data: TVote[]
 }
 
+type AddWinners = {
+    type: 'ADD_WINNERS',
+    data: TDemo['id'][]
+}
+
 type ResetState = {
     type: 'RESET_ROOM_STATE',
 }
@@ -91,6 +98,7 @@ type Action =
     | UpdateRoom
     | AddDemos
     | AddUsers
+    | AddWinners
     | AddVotes
     | ResetState
 
@@ -129,6 +137,9 @@ const reducer = (state: State, action: Action): State => {
         }
         case 'ADD_DEMOS': {
             return { ...state, demos: [...state.demos, ...action.data] }
+        }
+        case 'ADD_WINNERS': {
+            return { ...state, winners: [...action.data] }
         }
         case 'ADD_VOTES': {
             return { ...state, votes: [...state.votes, ...action.data] }
