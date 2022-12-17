@@ -1,4 +1,4 @@
-import { Button, Icon, Loading } from 'sharedComponents'
+import { Button, Heading, Loading } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
 import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
@@ -10,9 +10,17 @@ import { colors } from 'theme'
 import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
 import { Conclusion, Participants, Signup, Voting } from './components'
 
+const AdminWrapper = styled.div`
+    border: 4px solid ${colors.blueberry.base};
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem 1rem 0 1rem;
+`
+
 const Sidebar = styled.div`
     min-width: 215px;
     margin-right: 1rem;
+
 
     button {
         margin-top: 0;
@@ -46,8 +54,8 @@ const JOIN_ROOM_MUTATION = gql`
 `
 
 const UPDATE_ROOM_MUTATION = gql`
-    mutation UpdateRoom($userId: String!, $roomId: String!, $status: RoomStatusEnum!) {
-        updateRoom(userId: $userId, roomId: $roomId, status: $status) {
+    mutation UpdateRoom($userId: String!, $roomId: String!, $status: RoomStatusEnum!, $maxVotes: Int) {
+        updateRoom(userId: $userId, roomId: $roomId, status: $status, maxVotes: $maxVotes) {
             id,
             status
         }
@@ -66,10 +74,11 @@ const MEMBER_CHANGE_SUBSCRIPTION = gql`
 `
 
 const ROOM_UPDATE_SUBSCRIPTION = gql`
-  subscription RoomUpdate {
+subscription RoomUpdate {
     roomUpdate {
        roomId,
-       status
+       status,
+       maxVotes
     }
   }
 `
@@ -87,6 +96,7 @@ const Room = () => {
     const [isLoading, setIsLoading] = useState(true)
     const { dispatch, state } = useContext(context)
     const navigate = useNavigate()
+    const [maxVotes, setMaxVotes] = useState(2)
 
     const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
         const initialMembers = joinRoom.members.reduce((accum, current) => {
@@ -176,10 +186,10 @@ const Room = () => {
         onData: ({ data }) => {
             if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
 
-            const { status, roomId: roomIdToUpdate } = data.data.roomUpdate
+            const { status, roomId: roomIdToUpdate, maxVotes: updatedMaxVotes } = data.data.roomUpdate
             // For now, all events for all rooms are broadcast everywhere.
             if (roomIdToUpdate === state.room.id) {
-                dispatch({ type: 'UPDATE_ROOM', data: { status } })
+                dispatch({ type: 'UPDATE_ROOM', data: { status, ...(updatedMaxVotes ? { maxVotes: updatedMaxVotes } : {}) } })
             }
         },
     })
@@ -199,36 +209,77 @@ const Room = () => {
         })
     }, [sanitizeRoomId, state.user])
 
-    const handleStatusChange = useCallback((status: TRoom['status']) => {
+    const handleRoomChange = useCallback((status: TRoom['status']) => {
         if (!state.room) return
 
-        updateRoomMutation({ variables: { status, userId: state.user!.id, roomId: state.room.id } })
-    }, [state.room])
+        const variables = {
+            status,
+            userId: state.user!.id,
+            roomId: state.room.id,
+            ...(status === 'voting' ? { maxVotes } : {})
+        }
+
+        updateRoomMutation({ variables })
+    }, [state.room, maxVotes])
 
     const Controls = useMemo(() => {
-        if (!state.room || !state.user || state.room.ownerId !== state.user.id || state.room.status === 'conclusion') return null
+        if (!state.room || !state.user || state.room.ownerId !== state.user.id) return null
 
         if (state.room.status === 'signup') {
             return (
-                <Button
-                    fullWidth
-                    variation="pear"
-                    onClick={() => handleStatusChange('voting')}
-                >Start Voting <Icon color={colors.pear.base} name="how_to_vote" />
-                </Button>
+                <>
+                    <div>
+                        <Button
+                            variation="pear"
+                            icon="add"
+                            type="button"
+                            onClick={() => setMaxVotes((prev) => prev + 1)}
+                        />
+                        <Button
+                            variation="banana"
+                            type="button"
+                            icon="remove"
+                            disabled={maxVotes === 1}
+                            onClick={() => setMaxVotes((prev) => prev - 1)}
+                        />
+                        {'🍌'.repeat(maxVotes)}
+                    </div>
+                    <Button
+                        fullWidth
+                        type="button"
+                        icon="how_to_vote"
+                        variation="pear"
+                        label="Start Voting"
+                        onClick={() => handleRoomChange('voting')}
+                    />
+                </>
             )
         }
         if (state.room.status === 'voting') {
             return (
                 <Button
+                    type="button"
                     fullWidth
                     variation="pear"
-                    onClick={() => handleStatusChange('conclusion')}
-                >Announce Results <Icon color={colors.pear.base} name="campaign" />
-                </Button>
+                    label="Announce Results"
+                    icon="campaign"
+                    onClick={() => handleRoomChange('conclusion')}
+                />
             )
         }
-    }, [state.room, state.user])
+        if (state.room.status === 'conclusion') {
+            return (
+                <Button
+                    type="button"
+                    fullWidth
+                    variation="pear"
+                    label="Delete Room"
+                    icon="delete"
+                    onClick={() => console.log('deleting...')}
+                />
+            )
+        }
+    }, [state.room, state.user, maxVotes])
 
     const Content = useMemo(() => {
         if (!state.room) return
@@ -253,7 +304,10 @@ const Room = () => {
     return (
         <Wrapper>
             <Sidebar>
-                {Controls}
+                <AdminWrapper>
+                    <Heading.H3>Admin</Heading.H3>
+                    {Controls}
+                </AdminWrapper>
                 <Participants />
             </Sidebar>
             {Content}

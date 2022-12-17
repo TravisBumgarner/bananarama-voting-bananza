@@ -44,6 +44,7 @@ type TAddDemo = {
 type TRoomUpdate = {
     roomId: string
     status: TRoom['status']
+    maxVotes?: number
 }
 
 type TUser = {

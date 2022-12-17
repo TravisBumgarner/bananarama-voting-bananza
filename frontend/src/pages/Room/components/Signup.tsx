@@ -2,7 +2,7 @@ import { gql, useSubscription } from '@apollo/client'
 import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Icon, Modal, RoomWrapper } from 'sharedComponents'
+import { Button, Heading, Modal, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TDemo } from 'types'
@@ -81,9 +81,10 @@ const Signup = () => {
                 <Button
                     fullWidth
                     variation="pear"
+                    label="Add Demo"
+                    icon="add"
                     onClick={() => setShowAddDemoModal(true)}
-                >Add Demo<Icon color={colors.pear.base} name="add" />
-                </Button>
+                />
                 <DemosWrapper>
                     {state.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
                 </DemosWrapper>

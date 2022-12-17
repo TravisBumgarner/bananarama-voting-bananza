@@ -1,4 +1,4 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLString, } from 'graphql'
+import { GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString, } from 'graphql'
 
 import pubsub, { EPubSubMessage } from '../pubsub'
 import { EErrorMessages, TRoom } from '../types'
@@ -30,6 +30,7 @@ type UpdateRoomArgs = {
     userId: string
     roomId: string
     status: TRoom['status']
+    maxVotes?: number
 }
 
 // Currently only designed around updating status.
@@ -39,6 +40,7 @@ const updateRoom = {
     args: {
         userId: { type: new GraphQLNonNull(GraphQLString) },
         roomId: { type: new GraphQLNonNull(GraphQLString) },
+        maxVotes: { type: GraphQLInt },
         status: { type: new GraphQLNonNull(RoomStatusEnum) },
 
     },
@@ -48,13 +50,17 @@ const updateRoom = {
 
         const userIsNotOwner = currentRoomResult.success && currentRoomResult.data?.ownerId !== args.userId
         if (userIsNotOwner) throw new Error(EErrorMessages.MemberIsNotRoomOwner)
-
-        const updateRoomResult = inMemoryDatastore.updateRoom({ id: args.roomId, status: args.status })
+        const updateRoomResult = inMemoryDatastore.updateRoom({
+            id: args.roomId,
+            status: args.status,
+            ...(args.maxVotes ? { maxVotes: args.maxVotes } : {})
+        })
 
         if (updateRoomResult.success) {
             await pubsub.publish(EPubSubMessage.ROOM_UPDATE_EVENT, {
                 roomId: args.roomId,
-                status: args.status
+                status: args.status,
+                ...(args.maxVotes ? { maxVotes: args.maxVotes } : {})
             })
 
             return updateRoomResult.data

@@ -1,10 +1,9 @@
 import { ApolloError, gql, useMutation } from '@apollo/client'
 import { FormEvent, useCallback, useContext, useState } from 'react'
 
-import { Button, Icon, Input } from 'sharedComponents'
+import { Button, Input } from 'sharedComponents'
 import { context } from 'context'
 import styled from 'styled-components'
-import { colors } from 'theme'
 
 type AddDemoProps = {
     closeModal: () => void
@@ -14,7 +13,7 @@ const ADD_DEMO_MUTATION = gql`
     mutation AddDemo($roomId: String!, $userId: String!, $demo: String!) {
         addDemo(roomId: $roomId, userId: $userId, demo: $demo) {
             id
-        }
+    }
     }    
 `
 
@@ -65,19 +64,21 @@ const AddDemo = ({ closeModal }: AddDemoProps) => {
                     />
                     <ButtonWrapper>
                         <Button
-                            key="cancel"
                             type="button"
+                            key="cancel"
                             variation="banana"
+                            label="Cancel"
+                            icon="cancel"
                             onClick={() => closeModal()}
-                        >Cancel <Icon color={colors.banana.base} name="cancel" />
-                        </Button>
+                        />
                         <Button
                             disabled={demo.length === 0}
                             key="submit"
                             type="submit"
                             variation="pear"
-                        >Submit Demo! <Icon color={colors.pear.base} name="done_all" />
-                        </Button>
+                            icon="done_all"
+                            label="Submit Demo!"
+                        />
                     </ButtonWrapper>
                 </form>
             </div>

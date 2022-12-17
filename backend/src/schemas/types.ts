@@ -100,6 +100,7 @@ const RoomUpdateType = new GraphQLObjectType({
     fields: () => ({
         roomId: { type: new GraphQLNonNull(GraphQLString) },
         status: { type: new GraphQLNonNull(RoomStatusEnum) },
+        maxVotes: { type: GraphQLInt },
     }),
 })
 

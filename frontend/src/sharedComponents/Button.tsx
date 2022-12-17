@@ -1,18 +1,21 @@
 import styled from 'styled-components'
 
 import { colors } from 'theme'
+import Icon, { IconProps } from './Icon'
 
 type ButtonProps = {
-    variation: 'pear' | 'banana' | 'marble'
+    label?: string
+    icon?: IconProps['name']
+    variation: 'pear' | 'banana' | 'marble' | 'apple'
     disabled?: boolean
     fullWidth?: boolean
-    alignRight?: boolean
-
+    onClick?: () => void
+    type: 'submit' | 'button'
 }
 
-const Button = styled.button`
+const StyledButton = styled.button`
     font-size: 1rem;
-    border: 4px solid;
+    border: 2px solid;
     padding: 0.5rem 1rem;
     background-color: transparent;
     font-weight: 700;
@@ -21,14 +24,14 @@ const Button = styled.button`
     justify-content: center; 
     display: flex;
 
-    display: flex;
     align-items: center;
-    > span {
-        margin-left: 8px;
-    }
 
     &:hover {
     cursor: pointer;
+    }
+
+    .label, .material-symbols-outlined {
+        margin: 0px 6px;
     }
 
     ${({ fullWidth }: ButtonProps) => (fullWidth
@@ -74,5 +77,14 @@ const Button = styled.button`
         }
     }}
 `
+
+const Button = ({ label, icon, variation, fullWidth, disabled, onClick, type }: ButtonProps) => {
+    return (
+        <StyledButton type={type} onClick={onClick} icon={icon} variation={variation} disabled={disabled} fullWidth={fullWidth}>
+            {label && <span className="label">{label}</span>}
+            {icon && <Icon name={icon} color={disabled ? colors.marble.base : colors[variation].base} />}
+        </StyledButton>
+    )
+}
 
 export default Button

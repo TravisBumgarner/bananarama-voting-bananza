@@ -41,10 +41,12 @@ const Header = () => {
                 state.room?.id
                 && (
                     <Button
+                        type="button"
+                        label="Share Room"
+                        icon="content_copy"
                         variation="pear"
                         onClick={copyRoomToClipboard}
-                    >Share Room <Icon color={colors.pear.base} name="content_copy" />
-                    </Button>
+                    />
                 )
             }
         </Wrapper>
