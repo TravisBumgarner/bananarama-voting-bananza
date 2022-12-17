@@ -6,13 +6,13 @@ import { context } from 'context'
 import styled from 'styled-components'
 import { colors } from 'theme'
 
-type AddEntryProps = {
+type AddDemoProps = {
     closeModal: () => void
 }
 
-const ADD_ENTRY_MUTATION = gql`
-    mutation AddEntry($roomId: String!, $userId: String!, $entry: String!) {
-        addEntry(roomId: $roomId, userId: $userId, entry: $entry) {
+const ADD_DEMO_MUTATION = gql`
+    mutation AddDemo($roomId: String!, $userId: String!, $demo: String!) {
+        addDemo(roomId: $roomId, userId: $userId, demo: $demo) {
             id
         }
     }    
@@ -26,26 +26,26 @@ const ButtonWrapper = styled.div`
     }
 `
 
-const AddEntry = ({ closeModal }: AddEntryProps) => {
-    const [entry, setEntry] = useState<string>('')
+const AddDemo = ({ closeModal }: AddDemoProps) => {
+    const [demo, setDemo] = useState<string>('')
     const { state, dispatch } = useContext(context)
 
-    const onAddEntrySuccess = useCallback(() => {
+    const onAddDemoSuccess = useCallback(() => {
         closeModal()
     }, [])
-    const onAddEntryFailure = useCallback((error: ApolloError) => {
+    const onAddDemoFailure = useCallback((error: ApolloError) => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
     }, [])
-    const [addEntryMutation] = useMutation<any>(ADD_ENTRY_MUTATION, {
-        onCompleted: onAddEntrySuccess,
-        onError: onAddEntryFailure
+    const [addDemoMutation] = useMutation<any>(ADD_DEMO_MUTATION, {
+        onCompleted: onAddDemoSuccess,
+        onError: onAddDemoFailure
     })
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        addEntryMutation({
+        addDemoMutation({
             variables: {
-                entry,
+                demo,
                 userId: state.user!.id,
                 roomId: state.room!.id
             }
@@ -59,9 +59,9 @@ const AddEntry = ({ closeModal }: AddEntryProps) => {
                 <form onSubmit={handleSubmit}>
                     <Input
                         label="What would you like to demo?"
-                        name="entry"
-                        value={entry}
-                        handleChange={(data) => setEntry(data)}
+                        name="demo"
+                        value={demo}
+                        handleChange={(data) => setDemo(data)}
                     />
                     <ButtonWrapper>
                         <Button
@@ -72,11 +72,11 @@ const AddEntry = ({ closeModal }: AddEntryProps) => {
                         >Cancel <Icon color={colors.banana.base} name="cancel" />
                         </Button>
                         <Button
-                            disabled={entry.length === 0}
+                            disabled={demo.length === 0}
                             key="submit"
                             type="submit"
                             variation="pear"
-                        >Submit Entry! <Icon color={colors.pear.base} name="done_all" />
+                        >Submit Demo! <Icon color={colors.pear.base} name="done_all" />
                         </Button>
                     </ButtonWrapper>
                 </form>
@@ -85,4 +85,4 @@ const AddEntry = ({ closeModal }: AddEntryProps) => {
     )
 }
 
-export default AddEntry
+export default AddDemo

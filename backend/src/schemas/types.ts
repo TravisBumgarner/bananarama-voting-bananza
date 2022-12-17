@@ -25,34 +25,34 @@ const ParticipantType = new GraphQLObjectType({
     }),
 })
 
-const AddEntryType = new GraphQLObjectType({
-    name: 'AddEntry',
-    description: 'This represents an entry added',
+const AddDemoType = new GraphQLObjectType({
+    name: 'AddDemo',
+    description: 'This represents a demo added',
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
         userId: { type: new GraphQLNonNull(GraphQLString) },
         roomId: { type: new GraphQLNonNull(GraphQLString) },
-        entry: { type: new GraphQLNonNull(GraphQLString) },
+        demo: { type: new GraphQLNonNull(GraphQLString) },
     }),
 })
 
 const AddVoteType = new GraphQLObjectType({
     name: 'AddVote',
-    description: 'This represents an entry added',
+    description: 'This represents a vote added',
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
         userId: { type: new GraphQLNonNull(GraphQLString) },
         roomId: { type: new GraphQLNonNull(GraphQLString) },
-        entryId: { type: new GraphQLNonNull(GraphQLString) },
+        demoId: { type: new GraphQLNonNull(GraphQLString) },
     }),
 })
 
-const EntryType = new GraphQLObjectType({
-    name: 'Entry',
-    description: 'This represents an Entry',
+const DemoType = new GraphQLObjectType({
+    name: 'Demo',
+    description: 'This represents a Demo',
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
-        entry: { type: new GraphQLNonNull(GraphQLString) },
+        demo: { type: new GraphQLNonNull(GraphQLString) },
         userId: { type: new GraphQLNonNull(GraphQLString) },
     }),
 })
@@ -62,7 +62,7 @@ const VoteType = new GraphQLObjectType({
     description: 'This represents a Vote',
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
-        entryId: { type: new GraphQLNonNull(GraphQLString) },
+        demoId: { type: new GraphQLNonNull(GraphQLString) },
         userId: { type: new GraphQLNonNull(GraphQLString) },
         roomId: { type: new GraphQLNonNull(GraphQLString) },
     }),
@@ -78,7 +78,7 @@ const RoomType = new GraphQLObjectType({
         icon: { type: new GraphQLNonNull(GraphQLString) },
         members: { type: new GraphQLList(ParticipantType) },
         status: { type: RoomStatusEnum },
-        entries: { type: new GraphQLList(EntryType) },
+        demos: { type: new GraphQLList(DemoType) },
         votes: { type: new GraphQLList(VoteType) },
     }),
 })
@@ -108,8 +108,8 @@ export {
     MemberChangeType,
     RoomStatusEnum,
     RoomUpdateType,
-    EntryType,
-    AddEntryType,
+    DemoType,
+    AddDemoType,
     VoteType,
     AddVoteType
 }

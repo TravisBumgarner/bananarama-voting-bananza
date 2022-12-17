@@ -1,7 +1,7 @@
 import JoinModal from './JoinModal'
-import AddEntryModal from './AddEntryModal'
+import AddDemoModal from './AddDemoModal'
 
 export {
     JoinModal,
-    AddEntryModal
+    AddDemoModal
 }

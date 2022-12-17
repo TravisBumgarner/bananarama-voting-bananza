@@ -1,7 +1,7 @@
 import { v4 as uuid4 } from 'uuid'
 import { hri } from 'human-readable-ids'
 
-import { TRoom, TParticipant, EErrorMessages, TEntry, TVote } from '../types'
+import { TRoom, TParticipant, EErrorMessages, TDemo, TVote } from '../types'
 
 type Success<T> = {
     success: true
@@ -33,7 +33,7 @@ class InMemoryDatastore {
             icon: 'banana',
             members: [owner],
             status: 'signup',
-            entries: [],
+            demos: [],
             votes: []
         }
         return {
@@ -90,17 +90,17 @@ class InMemoryDatastore {
         }
     }
 
-    addEntry(roomId: string, userId: string, entry: string): Response<TEntry> {
+    addDemo(roomId: string, userId: string, demo: string): Response<TDemo> {
         if (roomId in this.rooms) {
-            const newEntry = {
+            const newDemo = {
                 id: uuid4(),
-                entry,
+                demo,
                 userId
             }
-            this.rooms[roomId].entries.push(newEntry)
+            this.rooms[roomId].demos.push(newDemo)
             return {
                 success: true,
-                data: newEntry
+                data: newDemo
             }
         }
         return {
@@ -109,11 +109,11 @@ class InMemoryDatastore {
         }
     }
 
-    addVote(roomId: string, userId: string, entryId: string): Response<TVote> {
+    addVote(roomId: string, userId: string, demoId: string): Response<TVote> {
         if (roomId in this.rooms) {
             const newVote = {
                 id: uuid4(),
-                entryId,
+                demoId,
                 userId,
                 roomId
             }

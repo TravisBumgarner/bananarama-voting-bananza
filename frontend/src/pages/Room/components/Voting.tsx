@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { Button, Heading, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
-import { TEntry, TVote } from 'types'
+import { TDemo, TVote } from 'types'
 import { logger } from 'utilities'
 
 const ADD_VOTE_SUBSCRIPTION = gql`
@@ -13,27 +13,27 @@ const ADD_VOTE_SUBSCRIPTION = gql`
     addVote {
         roomId
         userId
-        entryId
+        demoId
         id
     }
   }
 `
 
 const ADD_VOTE_MUTATION = gql`
-    mutation AddVote($roomId: String!, $userId: String!, $entryId: String!) {
-        addVote(roomId: $roomId, userId: $userId, entryId: $entryId) {
+    mutation AddVote($roomId: String!, $userId: String!, $demoId: String!) {
+        addVote(roomId: $roomId, userId: $userId, demoId: $demoId) {
             id
         }
     }    
 `
 
-const EntriesWrapper = styled.ul`
+const DemosWrapper = styled.ul`
     list-style: none;
     margin: 1rem 0;
     padding: 0;
 `
 
-const EntryWrapper = styled.li`
+const DemoWrapper = styled.li`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -50,13 +50,13 @@ const EntryWrapper = styled.li`
         margin: 0.5rem 0 0.5rem 1rem;
     }
 `
-type EntryProps = {
-    entry: TEntry
+type DemoProps = {
+    demo: TDemo
     isCastingVote: boolean
     setIsCastingVote: React.Dispatch<React.SetStateAction<boolean>>
     canVote: boolean
 }
-const Entry = ({ entry, isCastingVote, setIsCastingVote, canVote }: EntryProps) => {
+const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => {
     const { state, dispatch } = useContext(context)
 
     const onAddVoteSuccess = useCallback(() => {
@@ -79,16 +79,16 @@ const Entry = ({ entry, isCastingVote, setIsCastingVote, canVote }: EntryProps) 
             variables: {
                 userId: state.user!.id,
                 roomId: state.room.id,
-                entryId: entry.id
+                demoId: demo.id
             }
         })
     }, [])
 
     return (
-        <EntryWrapper>
-            <Heading.H3> &quot;{entry.entry}&quot; - {state.users[entry.userId]}</Heading.H3>
+        <DemoWrapper>
+            <Heading.H3> &quot;{demo.demo}&quot; - {state.users[demo.userId]}</Heading.H3>
             <Button disabled={isCastingVote || !canVote} variation="pear" onClick={handleSubmit}>Vote 🍌</Button>
-        </EntryWrapper>
+        </DemoWrapper>
     )
 }
 
@@ -109,11 +109,11 @@ const Voting = () => {
         onData: ({ data }) => {
             if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
 
-            const { userId, entryId, roomId, id } = data.data.addVote
+            const { userId, demoId, roomId, id } = data.data.addVote
             if (roomId === state.room.id) {
                 dispatch({
                     type: 'ADD_VOTES',
-                    data: [{ userId, roomId, entryId, id }]
+                    data: [{ userId, roomId, demoId, id }]
                 })
             }
         },
@@ -127,17 +127,17 @@ const Voting = () => {
         <div>
             <RoomWrapper>
                 <Heading.H2>Voting</Heading.H2>
-                <EntriesWrapper>
-                    {state.entries.map((entry) => (
-                        <Entry
+                <DemosWrapper>
+                    {state.demos.map((demo) => (
+                        <Demo
                             isCastingVote={isCastingVote}
                             setIsCastingVote={setIsCastingVote}
-                            entry={entry}
-                            key={entry.id}
+                            demo={demo}
+                            key={demo.id}
                             canVote={state.room!.maxVotes > votesCast}
                         />
                     ))}
-                </EntriesWrapper>
+                </DemosWrapper>
             </RoomWrapper>
         </div>
     )

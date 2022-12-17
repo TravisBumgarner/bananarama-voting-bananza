@@ -3,17 +3,17 @@ type TParticipant = {
     name: string
 }
 
-type TEntry = {
+type TDemo = {
     id: string
     userId: string
     roomId: string
-    entry: string
+    demo: string
 }
 
 type TVote = {
     id: string,
     userId: string,
-    entryId: string,
+    demoId: string,
     roomId: string
 }
 
@@ -24,7 +24,7 @@ type TRoom = {
     maxVotes: number
     members: TParticipant[]
     status: 'signup' | 'voting' | 'conclusion'
-    entries: TEntry[]
+    demos: TDemo[]
     votes: TVote[]
 }
 
@@ -35,10 +35,10 @@ type TMemberChange = {
     status: 'join' | 'leave'
 }
 
-type TAddEntry = {
+type TAddDemo = {
     userId: string
     roomId: string
-    entry: string
+    demo: string
 }
 
 type TRoomUpdate = {
@@ -56,8 +56,8 @@ export {
     TRoom,
     TMemberChange,
     TRoomUpdate,
-    TAddEntry,
-    TEntry,
+    TAddDemo,
+    TDemo,
     TUser,
     TVote
 }

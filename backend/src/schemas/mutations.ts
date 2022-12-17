@@ -3,7 +3,7 @@ import { GraphQLNonNull, GraphQLObjectType, GraphQLString, } from 'graphql'
 import pubsub, { EPubSubMessage } from '../pubsub'
 import { EErrorMessages, TRoom } from '../types'
 import inMemoryDatastore from '../inMemoryDatastore'
-import { RoomStatusEnum, RoomType, EntryType, VoteType } from './types'
+import { RoomStatusEnum, RoomType, DemoType, VoteType } from './types'
 
 type CreateRoomArgs = {
     ownerId: string
@@ -99,34 +99,34 @@ const joinRoom = {
     },
 }
 
-type AddEntryArgs = {
+type AddDemoArgs = {
     roomId: string
     userId: string
-    entry: string
+    demo: string
 }
 
-const addEntry = {
-    type: EntryType,
-    description: 'Create an Entry',
+const addDemo = {
+    type: DemoType,
+    description: 'Create a Demo',
     args: {
         roomId: { type: new GraphQLNonNull(GraphQLString) },
         userId: { type: new GraphQLNonNull(GraphQLString) },
-        entry: { type: new GraphQLNonNull(GraphQLString) },
+        demo: { type: new GraphQLNonNull(GraphQLString) },
     },
-    resolve: async (_, args: AddEntryArgs) => {
-        const addEntryResult = inMemoryDatastore.addEntry(args.roomId, args.userId, args.entry)
-        if (addEntryResult.success) {
-            await pubsub.publish(EPubSubMessage.ADD_ENTRY, { ...addEntryResult.data, roomId: args.roomId })
-            return addEntryResult.data
+    resolve: async (_, args: AddDemoArgs) => {
+        const addDemoResult = inMemoryDatastore.addDemo(args.roomId, args.userId, args.demo)
+        if (addDemoResult.success) {
+            await pubsub.publish(EPubSubMessage.ADD_DEMO, { ...addDemoResult.data, roomId: args.roomId })
+            return addDemoResult.data
         }
-        throw new Error(addEntryResult.error)
+        throw new Error(addDemoResult.error)
     },
 }
 
 type AddVoteArgs = {
     roomId: string
     userId: string
-    entryId: string
+    demoId: string
 }
 
 const addVote = {
@@ -135,10 +135,10 @@ const addVote = {
     args: {
         roomId: { type: new GraphQLNonNull(GraphQLString) },
         userId: { type: new GraphQLNonNull(GraphQLString) },
-        entryId: { type: new GraphQLNonNull(GraphQLString) },
+        demoId: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args: AddVoteArgs) => {
-        const addVoteResult = inMemoryDatastore.addVote(args.roomId, args.userId, args.entryId)
+        const addVoteResult = inMemoryDatastore.addVote(args.roomId, args.userId, args.demoId)
         if (addVoteResult.success) {
             await pubsub.publish(EPubSubMessage.ADD_VOTE, { ...addVoteResult.data, roomId: args.roomId })
             return addVoteResult.data
@@ -154,7 +154,7 @@ const RootMutationType = new GraphQLObjectType({
         joinRoom,
         createRoom,
         updateRoom,
-        addEntry,
+        addDemo,
         addVote
     }),
 })

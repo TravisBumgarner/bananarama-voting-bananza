@@ -27,8 +27,8 @@ const JOIN_ROOM_MUTATION = gql`
             maxVotes
             icon
             status
-            entries {
-                entry,
+            demos {
+                demo,
                 id,
                 userId
             }
@@ -38,7 +38,7 @@ const JOIN_ROOM_MUTATION = gql`
             }
             votes {
                 userId
-                entryId
+                demoId
                 id
             }
         }
@@ -103,8 +103,8 @@ const Room = () => {
             data: initialMembers
         })
         dispatch({
-            type: 'ADD_ENTRIES',
-            data: joinRoom.entries
+            type: 'ADD_DEMOS',
+            data: joinRoom.demos
         })
         dispatch({
             type: 'ADD_VOTES',

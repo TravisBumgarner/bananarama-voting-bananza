@@ -3,16 +3,16 @@ type TParticipant = {
     name: string
 }
 
-type TEntry = {
+type TDemo = {
     id: string,
     userId: string
-    entry: string
+    demo: string
 }
 
 type TVote = {
     id: string,
     userId: string,
-    entryId: string
+    demoId: string
 }
 
 type TRoom = {
@@ -22,7 +22,7 @@ type TRoom = {
     maxVotes: number,
     members: TParticipant[]
     status: 'signup' | 'voting' | 'conclusion'
-    entries: TEntry[],
+    demos: TDemo[],
     votes: TVote[]
 
 }
@@ -37,6 +37,6 @@ export {
     TParticipant,
     TRoom,
     EErrorMessages,
-    TEntry,
+    TDemo,
     TVote
 }

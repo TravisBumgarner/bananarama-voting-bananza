@@ -1,5 +1,5 @@
 import { useReducer, createContext } from 'react'
-import { TRoom, TEntry, TVote } from 'types'
+import { TRoom, TDemo, TVote } from 'types'
 
 import { logger } from 'utilities'
 
@@ -15,7 +15,7 @@ type State = {
     } | null
     room: TRoom | null,
     users: Record<string, string>
-    entries: TEntry[]
+    demos: TDemo[]
     votes: TVote[]
 }
 
@@ -25,7 +25,7 @@ const EMPTY_STATE: State = {
     user: null,
     users: {},
     room: null,
-    entries: [],
+    demos: [],
     votes: []
 }
 
@@ -68,9 +68,9 @@ type UpdateRoom = {
     data: Partial<TRoom>
 }
 
-type AddEntries = {
-    type: 'ADD_ENTRIES',
-    data: TEntry[]
+type AddDemos = {
+    type: 'ADD_DEMOS',
+    data: TDemo[]
 }
 
 type AddVotes = {
@@ -89,7 +89,7 @@ type Action =
     | Join
     | EnterRoom
     | UpdateRoom
-    | AddEntries
+    | AddDemos
     | AddUsers
     | AddVotes
     | ResetState
@@ -127,8 +127,8 @@ const reducer = (state: State, action: Action): State => {
         case 'UPDATE_ROOM': {
             return { ...state, room: { ...state.room!, ...action.data } }
         }
-        case 'ADD_ENTRIES': {
-            return { ...state, entries: [...state.entries, ...action.data] }
+        case 'ADD_DEMOS': {
+            return { ...state, demos: [...state.demos, ...action.data] }
         }
         case 'ADD_VOTES': {
             return { ...state, votes: [...state.votes, ...action.data] }

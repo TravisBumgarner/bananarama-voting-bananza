@@ -1,7 +1,7 @@
 import { GraphQLObjectType } from 'graphql'
 import pubsub, { EPubSubMessage } from '../pubsub'
 
-import { MemberChangeType, RoomUpdateType, AddEntryType, AddVoteType } from './types'
+import { MemberChangeType, RoomUpdateType, AddDemoType, AddVoteType } from './types'
 
 const memberChange = {
     type: MemberChangeType,
@@ -11,9 +11,9 @@ const memberChange = {
     }
 }
 
-const addEntry = {
-    type: AddEntryType,
-    subscribe: () => pubsub.asyncIterator(EPubSubMessage.ADD_ENTRY),
+const addDemo = {
+    type: AddDemoType,
+    subscribe: () => pubsub.asyncIterator(EPubSubMessage.ADD_DEMO),
     resolve: (payload) => {
         return payload
     }
@@ -41,7 +41,7 @@ const RootQueryType = new GraphQLObjectType({
     fields: {
         memberChange,
         roomUpdate,
-        addEntry,
+        addDemo,
         addVote
     },
 })

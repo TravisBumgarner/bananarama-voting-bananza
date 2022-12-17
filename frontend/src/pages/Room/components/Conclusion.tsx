@@ -4,55 +4,55 @@ import styled from 'styled-components'
 import { Heading, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
-import { TEntry } from 'types'
+import { TDemo } from 'types'
 
-const EntriesWrapper = styled.ul`
+const DemosWrapper = styled.ul`
     list-style: none;
     margin: 0;
     padding: 0;
     box-sizing: border-box
 `
 
-const EntryWrapper = styled.li`
+const DemoWrapper = styled.li`
     border: 4px solid ${colors.blueberry.base};
     border-radius: 1rem;
     padding: 0;
     margin: 0 0 1rem 0;
 `
-type EntryProps = {
-    entry: TEntry
+type DemoProps = {
+    demo: TDemo
     votes: number
 }
-const Entry = ({ entry, votes }: EntryProps) => {
+const Demo = ({ demo, votes }: DemoProps) => {
     const { state } = useContext(context)
 
     return (
-        <EntryWrapper>
-            <Heading.H3> &quot;{entry.entry}&quot; - {state.users[entry.userId]} {'🍌'.repeat(votes)}</Heading.H3>
-        </EntryWrapper>
+        <DemoWrapper>
+            <Heading.H3> &quot;{demo.demo}&quot; - {state.users[demo.userId]} {'🍌'.repeat(votes)}</Heading.H3>
+        </DemoWrapper>
     )
 }
 
 const Conclusion = () => {
     const { state } = useContext(context)
-    const votesByEntryId = useMemo(() => {
+    const votesByDemoID = useMemo(() => {
         return state.votes.reduce(
-            (accum, { entryId }) => {
-                if (!(entryId in accum)) accum[entryId] = 1 //eslint-disable-line
-                else accum[entryId] += 1 //eslint-disable-line
+            (accum, { demoId }) => {
+                if (!(demoId in accum)) accum[demoId] = 1 //eslint-disable-line
+                else accum[demoId] += 1 //eslint-disable-line
                 return accum
             },
             {} as Record<string, number>
         )
     }, [])
 
-    const Results = [...state.entries]
-        .sort((a, b) => votesByEntryId[b.id] - votesByEntryId[a.id])
-        .map((entry) => (
-            <Entry
-                entry={entry}
-                key={entry.id}
-                votes={votesByEntryId[entry.id]}
+    const Results = [...state.demos]
+        .sort((a, b) => votesByDemoID[b.id] - votesByDemoID[a.id])
+        .map((demo) => (
+            <Demo
+                demo={demo}
+                key={demo.id}
+                votes={votesByDemoID[demo.id]}
             />
         ))
 
@@ -61,9 +61,9 @@ const Conclusion = () => {
             <RoomWrapper>
                 <Heading.H2>Conclusion</Heading.H2>
 
-                <EntriesWrapper>
+                <DemosWrapper>
                     {Results}
-                </EntriesWrapper>
+                </DemosWrapper>
             </RoomWrapper>
         </div>
     )
