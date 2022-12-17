@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const TerserPlugin = require('terser-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const PLUGIN_VARS = {
@@ -84,10 +83,6 @@ const webpackConfig = {
     ],
     devtool: process.env.NODE_ENV === 'production' ? false : 'inline-source-map',
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-    optimization: {
-        minimize: true,
-        minimizer: [new TerserPlugin()],
-    },
 }
 
 module.exports = webpackConfig
