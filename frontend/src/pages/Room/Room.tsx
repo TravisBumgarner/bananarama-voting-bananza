@@ -314,7 +314,6 @@ const Room = () => {
     return (
         <Wrapper>
             <Sidebar>
-
                 {Admin}
                 <RoomMembers />
             </Sidebar>
