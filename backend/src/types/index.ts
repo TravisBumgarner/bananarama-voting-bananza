@@ -1,4 +1,4 @@
-type TParticipant = {
+type TMember = {
     id: string
     name: string
 }
@@ -17,10 +17,10 @@ type TVote = {
 
 type TRoom = {
     id: string,
-    ownerId: TParticipant['id'],
+    ownerId: TMember['id'],
     icon: 'banana',
     maxVotes: number,
-    members: TParticipant[]
+    members: TMember[]
     status: 'signup' | 'voting' | 'conclusion'
     demos: TDemo[],
     votes: TVote[]
@@ -34,7 +34,7 @@ enum EErrorMessages {
 }
 
 export {
-    TParticipant,
+    TMember,
     TRoom,
     EErrorMessages,
     TDemo,

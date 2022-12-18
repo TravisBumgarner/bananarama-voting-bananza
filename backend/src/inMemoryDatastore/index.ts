@@ -1,7 +1,7 @@
 import { v4 as uuid4 } from 'uuid'
 import { hri } from 'human-readable-ids'
 
-import { TRoom, TParticipant, EErrorMessages, TDemo, TVote } from '../types'
+import { TRoom, TMember, EErrorMessages, TDemo, TVote } from '../types'
 
 type Success<T> = {
     success: true
@@ -24,7 +24,7 @@ class InMemoryDatastore {
         this.rooms = {}
     }
 
-    createRoom(owner: TParticipant): Response<TRoom> {
+    createRoom(owner: TMember): Response<TRoom> {
         const roomId = hri.random()
         this.rooms[roomId] = {
             id: roomId,
@@ -70,7 +70,7 @@ class InMemoryDatastore {
         }
     }
 
-    addMember(roomId: string, member: TParticipant): Response {
+    addMember(roomId: string, member: TMember): Response {
         if (roomId in this.rooms) {
             const currentMemberIds = this.rooms[roomId].members.map(({ id }) => id)
             if (!currentMemberIds.includes(member.id)) {

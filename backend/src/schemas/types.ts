@@ -16,9 +16,9 @@ const RoomStatusEnum = new GraphQLEnumType({
     }
 })
 
-const ParticipantType = new GraphQLObjectType({
-    name: 'Participant',
-    description: 'This represents a Participant',
+const RoomMemberType = new GraphQLObjectType({
+    name: 'RoomMember',
+    description: 'This represents a Room Member',
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
         name: { type: new GraphQLNonNull(GraphQLString) },
@@ -76,7 +76,7 @@ const RoomType = new GraphQLObjectType({
         ownerId: { type: new GraphQLNonNull(GraphQLString) },
         maxVotes: { type: new GraphQLNonNull(GraphQLInt) },
         icon: { type: new GraphQLNonNull(GraphQLString) },
-        members: { type: new GraphQLList(ParticipantType) },
+        members: { type: new GraphQLList(RoomMemberType) },
         status: { type: RoomStatusEnum },
         demos: { type: new GraphQLList(DemoType) },
         votes: { type: new GraphQLList(VoteType) },

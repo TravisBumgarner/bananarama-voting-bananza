@@ -8,7 +8,7 @@ import { Exactly, logger, sanitizeRoomId } from 'utilities'
 import { context } from 'context'
 import { colors } from 'theme'
 import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
-import { Conclusion, Participants, Signup, Voting } from './components'
+import { Conclusion, RoomMembers, Signup, Voting } from './components'
 
 const AdminWrapper = styled.div`
     border: 4px solid ${colors.blueberry.base};
@@ -312,7 +312,7 @@ const Room = () => {
                     <Heading.H3>Admin</Heading.H3>
                     {Controls}
                 </AdminWrapper>
-                <Participants />
+                <RoomMembers />
             </Sidebar>
             {Content}
         </Wrapper>

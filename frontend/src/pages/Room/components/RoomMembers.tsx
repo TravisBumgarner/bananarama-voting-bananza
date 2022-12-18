@@ -18,14 +18,14 @@ const List = styled.ul`
     text-align: center;
 `
 
-const ParticipantsWrapper = styled.div`
+const RoomMembersWrapper = styled.div`
     border-radius: 1rem;
     border: 4px solid ${colors.blueberry.base};
     padding: 1rem;
     box-sizing: border-box;
 `
 
-const DefaultParticipants = () => {
+const DefaultMembers = () => {
     const { state } = useContext(context)
     return (
         <List>
@@ -47,7 +47,7 @@ const DefaultParticipants = () => {
     )
 }
 
-const VotingParticipants = () => {
+const VotingMembers = () => {
     const { state } = useContext(context)
 
     const votesCastByUser = useMemo(() => {
@@ -80,32 +80,32 @@ const VotingParticipants = () => {
     )
 }
 
-const Participants = () => {
+const RoomMembers = () => {
     const { state } = useContext(context)
 
     let Body: JSX.Element
     switch (state.room!.status) {
         case 'signup':
         case 'conclusion': {
-            Body = <DefaultParticipants />
+            Body = <DefaultMembers />
             break
         }
         case 'voting': {
-            Body = <VotingParticipants />
+            Body = <VotingMembers />
             break
         }
     }
 
-    const participants = useMemo(() => {
+    const roomMembers = useMemo(() => {
         return state.room!.members.length
     }, [state.room!.members])
 
     return (
-        <ParticipantsWrapper>
-            <Heading.H2>{participants} Participant{participants !== 1 && 's'}</Heading.H2>
+        <RoomMembersWrapper>
+            <Heading.H2>{roomMembers} Members{roomMembers !== 1 && 's'}</Heading.H2>
             {Body}
-        </ParticipantsWrapper>
+        </RoomMembersWrapper>
     )
 }
 
-export default Participants
+export default RoomMembers
