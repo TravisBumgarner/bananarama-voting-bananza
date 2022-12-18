@@ -120,8 +120,8 @@ const Voting = () => {
     })
 
     const votesCast = useMemo(() => {
-        return state.votes.filter(({ userId }) => userId === state.user!.id).length
-    }, [state.votes])
+        return state.room!.votes.filter(({ userId }) => userId === state.user!.id).length
+    }, [state.room!.votes])
 
     return (
         <div>

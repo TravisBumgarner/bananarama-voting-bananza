@@ -42,7 +42,7 @@ const Conclusion = () => {
             return accum!
         }, {} as Record<string, number>)
 
-        state.votes.forEach(({ demoId }) => data[demoId] += 1) //eslint-disable-line
+        state.room!.votes.forEach(({ demoId }) => data[demoId] += 1) //eslint-disable-line
 
         return data
     }, [])

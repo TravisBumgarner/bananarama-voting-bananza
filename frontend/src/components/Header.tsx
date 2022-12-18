@@ -1,7 +1,7 @@
 import { useCallback, useContext } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Button, Heading, Icon } from 'sharedComponents'
+import { Button, Heading } from 'sharedComponents'
 import { colors } from 'theme'
 import { context } from 'context'
 import styled from 'styled-components'

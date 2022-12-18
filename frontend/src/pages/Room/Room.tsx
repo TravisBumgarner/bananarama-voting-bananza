@@ -106,19 +106,11 @@ const Room = () => {
 
         dispatch({
             type: 'ENTER_ROOM',
-            data: joinRoom // Shouldnt be all data
+            data: joinRoom
         })
         dispatch({
             type: 'ADD_USERS',
             data: initialMembers
-        })
-        dispatch({
-            type: 'ADD_DEMOS',
-            data: joinRoom.demos
-        })
-        dispatch({
-            type: 'ADD_VOTES',
-            data: joinRoom.votes
         })
 
         setIsLoading(false)

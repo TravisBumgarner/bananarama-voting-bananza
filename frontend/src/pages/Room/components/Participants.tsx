@@ -55,10 +55,10 @@ const VotingParticipants = () => {
         const votesCounter: Record<string, number> = {}
         Object.keys(state.users).forEach((key) => { votesCounter[key] = 0 })
 
-        state.votes.forEach(({ userId }) => { votesCounter[userId] += 1 })
+        state.room!.votes.forEach(({ userId }) => { votesCounter[userId] += 1 })
 
         return votesCounter
-    }, [state.votes, state.users])
+    }, [state.room!.votes, state.users])
 
     return (
         <List>
