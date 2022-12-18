@@ -1,5 +1,5 @@
 import { useReducer, createContext } from 'react'
-import { TRoom, TDemo, TVote } from 'types'
+import { TRoom, TDemo, TVote, TRoomMember } from 'types'
 
 import { logger } from 'utilities'
 
@@ -35,9 +35,9 @@ type AddMessage = {
     }
 }
 
-type AddUsers = {
-    type: 'ADD_USERS'
-    data: Record<string, string>
+type AddMembers = {
+    type: 'ADD_MEMBERS'
+    data: TRoomMember[]
 }
 
 type DeleteMessage = {
@@ -89,7 +89,7 @@ type Action =
     | EnterRoom
     | UpdateRoom
     | AddDemos
-    | AddUsers
+    | AddMembers
     | AddWinners
     | AddVotes
     | ResetState
@@ -138,8 +138,8 @@ const reducer = (state: State, action: Action): State => {
         case 'ADD_VOTES': {
             return { ...state, room: { ...state.room!, votes: [...state.room!.votes, ...action.data] } }
         }
-        case 'ADD_USERS': {
-            return { ...state, room: { ...state.room!, members: { ...state.room!.members, ...action.data } } }
+        case 'ADD_MEMBERS': {
+            return { ...state, room: { ...state.room!, members: [...state.room!.members, ...action.data] } }
         }
         default: {
             logger(`Swallowing action: ${JSON.stringify(action)}`)

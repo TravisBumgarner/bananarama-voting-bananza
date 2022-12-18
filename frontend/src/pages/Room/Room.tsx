@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { Exactly, logger, sanitizeRoomId } from 'utilities'
 import { context } from 'context'
 import { colors } from 'theme'
-import { TRoom, TMemberChange, TRoomUpdate } from '../../types'
+import { TRoom, TRoomMemberChange, TRoomUpdate } from '../../types'
 import { Conclusion, RoomMembers, Signup, Voting } from './components'
 
 const AdminWrapper = styled.div`
@@ -132,7 +132,7 @@ const Room = () => {
         onError: onUpdateRoomError
     })
 
-    useSubscription<{ memberChange: TMemberChange }>(MEMBER_CHANGE_SUBSCRIPTION, {
+    useSubscription<{ memberChange: TRoomMemberChange }>(MEMBER_CHANGE_SUBSCRIPTION, {
         onError: (error) => {
             logger(error)
             dispatch({
@@ -148,8 +148,8 @@ const Room = () => {
             const { userId, status, userName } = data.data.memberChange
             if (status === 'join') {
                 dispatch({
-                    type: 'ADD_USERS',
-                    data: { [userId]: userName }
+                    type: 'ADD_MEMBERS',
+                    data: [{ id: userId, name: userName }]
                 })
             }
         },
