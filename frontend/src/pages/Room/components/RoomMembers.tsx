@@ -102,7 +102,7 @@ const RoomMembers = () => {
 
     return (
         <RoomMembersWrapper>
-            <Heading.H2>{roomMembers} Members{roomMembers !== 1 && 's'}</Heading.H2>
+            <Heading.H2>{roomMembers} Member{roomMembers !== 1 && 's'}</Heading.H2>
             {Body}
         </RoomMembersWrapper>
     )

@@ -216,11 +216,11 @@ const Room = () => {
         navigator.clipboard.writeText(message)
     }
 
-    const Controls = useMemo(() => {
+    const Admin = useMemo(() => {
         if (!state.room || !state.user || state.room.ownerId !== state.user.id) return null
-
+        let content
         if (state.room.status === 'signup') {
-            return (
+            content = (
                 <>
                     <div>
                         <Button
@@ -250,7 +250,7 @@ const Room = () => {
             )
         }
         if (state.room.status === 'voting') {
-            return (
+            content = (
                 <Button
                     type="button"
                     fullWidth
@@ -262,7 +262,7 @@ const Room = () => {
             )
         }
         if (state.room.status === 'conclusion') {
-            return (
+            content = (
                 <>
                     <Button
                         type="button"
@@ -283,6 +283,13 @@ const Room = () => {
                 </>
             )
         }
+
+        return (
+            <AdminWrapper>
+                <Heading.H3>Admin</Heading.H3>
+                {content}
+            </AdminWrapper>
+        )
     }, [state.room, state.user, maxVotes])
 
     const Content = useMemo(() => {
@@ -308,10 +315,8 @@ const Room = () => {
     return (
         <Wrapper>
             <Sidebar>
-                <AdminWrapper>
-                    <Heading.H3>Admin</Heading.H3>
-                    {Controls}
-                </AdminWrapper>
+
+                {Admin}
                 <RoomMembers />
             </Sidebar>
             {Content}
