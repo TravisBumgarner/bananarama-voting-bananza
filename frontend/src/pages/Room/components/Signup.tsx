@@ -38,9 +38,10 @@ const DemoWrapper = styled.li`
 
 const Demo = ({ demo }: { demo: TDemo }) => {
     const { state } = useContext(context)
+    const user = state.room!.members.find((member) => member.id === demo.userId)
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {state.users[demo.userId]}</Heading.H3>
+            <Heading.H3> &quot;{demo.demo}&quot; - {user?.name}</Heading.H3>
         </DemoWrapper>
     )
 }

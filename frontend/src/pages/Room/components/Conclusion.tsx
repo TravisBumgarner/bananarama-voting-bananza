@@ -25,10 +25,11 @@ type DemoProps = {
 }
 const Demo = ({ demo, votes }: DemoProps) => {
     const { state } = useContext(context)
+    const user = state.room!.members.find((member) => member.id === demo.userId)
 
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {state.users[demo.userId]} {'🍌'.repeat(votes)}</Heading.H3>
+            <Heading.H3> &quot;{demo.demo}&quot; - {user?.name} {'🍌'.repeat(votes)}</Heading.H3>
         </DemoWrapper>
     )
 }

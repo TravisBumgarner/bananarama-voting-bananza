@@ -14,8 +14,6 @@ type State = {
         id: string
     } | null
     room: TRoom | null,
-    users: Record<string, string>
-    // votes: TVote[]
     winners: TDemo['id'][]
 }
 
@@ -23,9 +21,7 @@ const EMPTY_STATE: State = {
     message: null,
     hasErrored: false,
     user: null,
-    users: {},
     room: null,
-    // votes: [],
     winners: []
 }
 
@@ -111,7 +107,6 @@ const context = createContext(
 )
 
 const reducer = (state: State, action: Action): State => {
-    console.log(action, state.room)
     switch (action.type) {
         case 'RESET_ROOM_STATE': {
             return { ...EMPTY_STATE, user: state.user }
@@ -144,7 +139,7 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, room: { ...state.room!, votes: [...state.room!.votes, ...action.data] } }
         }
         case 'ADD_USERS': {
-            return { ...state, users: { ...state.users, ...action.data } }
+            return { ...state, room: { ...state.room!, members: { ...state.room!.members, ...action.data } } }
         }
         default: {
             logger(`Swallowing action: ${JSON.stringify(action)}`)

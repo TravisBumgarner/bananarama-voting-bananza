@@ -99,20 +99,10 @@ const Room = () => {
     const [maxVotes, setMaxVotes] = useState(2)
 
     const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
-        const initialMembers = joinRoom.members.reduce((accum, current) => {
-            accum[current.id] = current.name
-            return accum
-        }, {} as Record<string, string>)
-
         dispatch({
             type: 'ENTER_ROOM',
             data: joinRoom
         })
-        dispatch({
-            type: 'ADD_USERS',
-            data: initialMembers
-        })
-
         setIsLoading(false)
     }, [])
     const onJoinRoomFailure = useCallback((error: ApolloError) => {
@@ -221,7 +211,7 @@ const Room = () => {
         if (winnersDetails.length > 1) message += `${winnersDetails.length} way tie!\n`
         message += `${(new Date().toDateString())}\n`
         winnersDetails.forEach(({ userId, demo }) => {
-            message += `${state.users[userId]} - ${demo}\n\n`
+            message += `${state.room!.members.find((member) => member.id === userId)} - ${demo}\n\n`
         })
         navigator.clipboard.writeText(message)
     }
@@ -313,7 +303,7 @@ const Room = () => {
 
     if (isLoading) return <Loading />
 
-    if (!state.room || !state.users) return <p>no details</p>
+    if (!state.room || !state.room.members) return <p>No details</p>
 
     return (
         <Wrapper>

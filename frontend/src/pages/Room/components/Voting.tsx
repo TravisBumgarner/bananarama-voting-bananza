@@ -83,10 +83,11 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => 
             }
         })
     }, [])
+    const user = state.room!.members.find((member) => member.id === demo.userId)
 
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {state.users[demo.userId]}</Heading.H3>
+            <Heading.H3> &quot;{demo.demo}&quot; - {user?.name}</Heading.H3>
             <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="pear" onClick={handleSubmit} />
         </DemoWrapper>
     )

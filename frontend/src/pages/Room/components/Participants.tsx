@@ -29,18 +29,17 @@ const DefaultParticipants = () => {
     const { state } = useContext(context)
     return (
         <List>
-            {Object
-                .keys(state.users)
+            {state.room!.members
                 .sort((a, b) => {
-                    return state.users[b].toLowerCase() < state.users[a].toLowerCase()
+                    return b.name.toLowerCase() < a.name.toLowerCase()
                         ? 1
                         : -1
                 })
-                .map((id) => {
+                .map(({ id, name }) => {
                     return (
 
                         <ListItem key={id}>
-                            {state.users[id]}
+                            {name}
                         </ListItem>
                     )
                 })}
@@ -53,28 +52,27 @@ const VotingParticipants = () => {
 
     const votesCastByUser = useMemo(() => {
         const votesCounter: Record<string, number> = {}
-        Object.keys(state.users).forEach((key) => { votesCounter[key] = 0 })
+        state.room!.members.forEach(({ id }) => { votesCounter[id] = 0 })
 
         state.room!.votes.forEach(({ userId }) => { votesCounter[userId] += 1 })
 
         return votesCounter
-    }, [state.room!.votes, state.users])
+    }, [state.room!.votes, state.room!.members])
 
     return (
         <List>
-            {Object
-                .keys(state.users)
+            {state.room!.members
                 .sort((a, b) => {
-                    return state.users[b].toLowerCase() < state.users[a].toLowerCase()
+                    return b.name.toLowerCase() < a.name.toLowerCase()
                         ? 1
                         : -1
                 })
-                .map((id) => {
+                .map(({ id, name }) => {
                     const votesRemaining = state.room!.maxVotes - votesCastByUser[id]
                     const icon = votesRemaining > 0 ? '🍌'.repeat(votesRemaining) : '✅'
                     return (
                         <ListItem key={id}>
-                            {state.users[id]} {icon}
+                            {name} {icon}
                         </ListItem>
                     )
                 })}
@@ -99,8 +97,8 @@ const Participants = () => {
     }
 
     const participants = useMemo(() => {
-        return Object.keys(state.users).length
-    }, [state.users])
+        return state.room!.members.length
+    }, [state.room!.members])
 
     return (
         <ParticipantsWrapper>
