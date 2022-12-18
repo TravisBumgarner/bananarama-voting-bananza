@@ -144,7 +144,6 @@ const Room = () => {
         },
         onData: ({ data }) => {
             if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
-
             const { userId, status, userName } = data.data.memberChange
             if (status === 'join') {
                 dispatch({
@@ -286,7 +285,7 @@ const Room = () => {
 
         return (
             <AdminWrapper>
-                <Heading.H3>Admin</Heading.H3>
+                <Heading.H2>Admin</Heading.H2>
                 {content}
             </AdminWrapper>
         )

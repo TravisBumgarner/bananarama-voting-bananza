@@ -4,7 +4,7 @@ import { colors } from 'theme'
 
 const H1 = styled.h1`
     font-size: 3rem;
-    color: ${colors.blueberry.base};
+    color: ${colors.banana.base};
     margin: 1rem 0;
     text-align: center;
     width: 100%;
