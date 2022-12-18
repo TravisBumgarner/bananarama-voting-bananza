@@ -1,7 +1,7 @@
 import { useEffect, useContext } from 'react'
 import styled from 'styled-components'
 
-import { Paragraph, Button, Icon } from 'sharedComponents'
+import { Paragraph, Button } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 
@@ -57,7 +57,7 @@ const AlertMessage = () => {
         }, state.message?.timeToLiveMS ? state.message.timeToLiveMS : DEFAULT_TTL)
     }, [])
 
-    if (!state.message) return
+    if (!state.message) return null
 
     return (
         <AlertMessagePositioner>
