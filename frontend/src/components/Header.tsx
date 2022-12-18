@@ -12,7 +12,7 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     
-    border: 4px solid ${colors.blueberry.base};
+    border: 2px solid ${colors.blueberry.base};
     border-radius: 1rem;
     padding: 1rem;
     margin-bottom: 1rem;

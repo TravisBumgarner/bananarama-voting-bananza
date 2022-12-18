@@ -39,7 +39,7 @@ const DemoWrapper = styled.li`
     align-items: center;
 
     > h3 {
-        border: 4px solid ${colors.blueberry.base};
+        border: 2px solid ${colors.blueberry.base};
         border-radius: 1rem;
         margin: 0.25rem 0.25rem 0.25rem 0;
         padding: 0.5rem;
@@ -83,11 +83,9 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => 
             }
         })
     }, [])
-    const user = state.room!.members.find((member) => member.id === demo.userId)
-
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {user?.name}</Heading.H3>
+            <Heading.H3> &quot;{demo.demo}&quot; - {demo.presenter}</Heading.H3>
             <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="pear" onClick={handleSubmit} />
         </DemoWrapper>
     )

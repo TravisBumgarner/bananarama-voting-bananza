@@ -90,12 +90,12 @@ class InMemoryDatastore {
         }
     }
 
-    addDemo(roomId: string, userId: string, demo: string): Response<TDemo> {
+    addDemo(roomId: string, presenter: string, demo: string): Response<TDemo> {
         if (roomId in this.rooms) {
             const newDemo = {
                 id: uuid4(),
                 demo,
-                userId
+                presenter
             }
             this.rooms[roomId].demos.push(newDemo)
             return {

@@ -14,7 +14,7 @@ const DemosWrapper = styled.ul`
 `
 
 const DemoWrapper = styled.li`
-    border: 4px solid ${colors.blueberry.base};
+    border: 2px solid ${colors.blueberry.base};
     border-radius: 1rem;
     padding: 0;
     margin: 0 0 1rem 0;
@@ -24,12 +24,9 @@ type DemoProps = {
     votes: number
 }
 const Demo = ({ demo, votes }: DemoProps) => {
-    const { state } = useContext(context)
-    const user = state.room!.members.find((member) => member.id === demo.userId)
-
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {user?.name} {'🍌'.repeat(votes)}</Heading.H3>
+            <Heading.H3> &quot;{demo.demo}&quot; - {demo.presenter} {'🍌'.repeat(votes)}</Heading.H3>
         </DemoWrapper>
     )
 }

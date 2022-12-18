@@ -20,7 +20,7 @@ const List = styled.ul`
 
 const RoomMembersWrapper = styled.div`
     border-radius: 1rem;
-    border: 4px solid ${colors.blueberry.base};
+    border: 2px solid ${colors.blueberry.base};
     padding: 1rem;
     box-sizing: border-box;
 `

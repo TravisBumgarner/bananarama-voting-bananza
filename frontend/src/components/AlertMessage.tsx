@@ -27,7 +27,7 @@ const AlertMessageWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 4px solid ${colors.banana.base};
+    border: 2px solid ${colors.banana.base};
     border-radius: 1rem;
     background-color: ${colors.coffee.base};
     @keyframes fade {

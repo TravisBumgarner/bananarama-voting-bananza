@@ -30,7 +30,7 @@ const AddDemoType = new GraphQLObjectType({
     description: 'This represents a demo added',
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
-        userId: { type: new GraphQLNonNull(GraphQLString) },
+        presenter: { type: new GraphQLNonNull(GraphQLString) },
         roomId: { type: new GraphQLNonNull(GraphQLString) },
         demo: { type: new GraphQLNonNull(GraphQLString) },
     }),
@@ -53,7 +53,7 @@ const DemoType = new GraphQLObjectType({
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
         demo: { type: new GraphQLNonNull(GraphQLString) },
-        userId: { type: new GraphQLNonNull(GraphQLString) },
+        presenter: { type: new GraphQLNonNull(GraphQLString) },
     }),
 })
 

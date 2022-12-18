@@ -5,7 +5,7 @@ type TRoomMember = {
 
 type TDemo = {
     id: string
-    userId: string
+    presenter: string
     roomId: string
     demo: string
 }

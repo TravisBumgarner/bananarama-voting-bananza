@@ -107,7 +107,7 @@ const joinRoom = {
 
 type AddDemoArgs = {
     roomId: string
-    userId: string
+    presenter: string
     demo: string
 }
 
@@ -116,11 +116,11 @@ const addDemo = {
     description: 'Create a Demo',
     args: {
         roomId: { type: new GraphQLNonNull(GraphQLString) },
-        userId: { type: new GraphQLNonNull(GraphQLString) },
+        presenter: { type: new GraphQLNonNull(GraphQLString) },
         demo: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args: AddDemoArgs) => {
-        const addDemoResult = inMemoryDatastore.addDemo(args.roomId, args.userId, args.demo)
+        const addDemoResult = inMemoryDatastore.addDemo(args.roomId, args.presenter, args.demo)
         if (addDemoResult.success) {
             await pubsub.publish(EPubSubMessage.ADD_DEMO, { ...addDemoResult.data, roomId: args.roomId })
             return addDemoResult.data

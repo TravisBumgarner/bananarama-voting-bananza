@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { colors } from 'theme'
 
 const RoomWrapper = styled.div`
-    border: 4px solid ${colors.blueberry.base};
+    border: 2px solid ${colors.blueberry.base};
     border-radius: 1rem;
     padding: 1rem;
     margin: 0 0 0 0;

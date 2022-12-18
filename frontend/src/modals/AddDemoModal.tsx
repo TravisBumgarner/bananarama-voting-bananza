@@ -10,8 +10,8 @@ type AddDemoProps = {
 }
 
 const ADD_DEMO_MUTATION = gql`
-    mutation AddDemo($roomId: String!, $userId: String!, $demo: String!) {
-        addDemo(roomId: $roomId, userId: $userId, demo: $demo) {
+    mutation AddDemo($roomId: String!, $presenter: String!, $demo: String!) {
+        addDemo(roomId: $roomId, presenter: $presenter, demo: $demo) {
             id
     }
     }    
@@ -26,8 +26,9 @@ const ButtonWrapper = styled.div`
 `
 
 const AddDemo = ({ closeModal }: AddDemoProps) => {
-    const [demo, setDemo] = useState<string>('')
     const { state, dispatch } = useContext(context)
+    const [demo, setDemo] = useState<string>('')
+    const [presenter, setPresenter] = useState<string>(state.user!.name)
 
     const onAddDemoSuccess = useCallback(() => {
         closeModal()
@@ -45,7 +46,7 @@ const AddDemo = ({ closeModal }: AddDemoProps) => {
         addDemoMutation({
             variables: {
                 demo,
-                userId: state.user!.id,
+                presenter,
                 roomId: state.room!.id
             }
         })
@@ -61,6 +62,12 @@ const AddDemo = ({ closeModal }: AddDemoProps) => {
                         name="demo"
                         value={demo}
                         handleChange={(data) => setDemo(data)}
+                    />
+                    <Input
+                        label="Who is presenting?"
+                        name="presenter"
+                        value={presenter}
+                        handleChange={(data) => setPresenter(data)}
                     />
                     <ButtonWrapper>
                         <Button

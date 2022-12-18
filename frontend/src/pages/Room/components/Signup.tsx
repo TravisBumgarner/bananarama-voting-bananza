@@ -13,7 +13,7 @@ const ADD_DEMO_SUBSCRIPTION = gql`
   subscription AddDemo {
     addDemo {
         roomId
-        userId
+        presenter
         demo,
         id
     }
@@ -29,7 +29,7 @@ const DemosWrapper = styled.ul`
 `
 
 const DemoWrapper = styled.li`
-    border: 4px solid ${colors.blueberry.base};
+    border: 2px solid ${colors.blueberry.base};
     border-radius: 1rem;
     margin: 0 0 1rem 0;
     padding: 1rem;
@@ -37,11 +37,9 @@ const DemoWrapper = styled.li`
 `
 
 const Demo = ({ demo }: { demo: TDemo }) => {
-    const { state } = useContext(context)
-    const user = state.room!.members.find((member) => member.id === demo.userId)
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {user?.name}</Heading.H3>
+            <Heading.H3> &quot;{demo.demo}&quot; - {demo.presenter}</Heading.H3>
         </DemoWrapper>
     )
 }
@@ -56,19 +54,19 @@ const Signup = () => {
             dispatch({
                 type: 'ADD_MESSAGE',
                 data: {
-                    message: 'Failed to add demo.'
+                    message: 'Something went wrong.'
                 }
             })
         },
         onData: ({ data }) => {
             if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
 
-            const { userId, roomId, demo, id } = data.data.addDemo
+            const { presenter, roomId, demo, id } = data.data.addDemo
             if (roomId === state.room.id) {
                 dispatch({
                     type: 'ADD_DEMOS',
                     data: [{
-                        userId, roomId, demo, id
+                        presenter, roomId, demo, id
                     }]
                 })
             }

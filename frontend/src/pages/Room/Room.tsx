@@ -11,7 +11,7 @@ import { TRoom, TRoomMemberChange, TRoomUpdate } from '../../types'
 import { Conclusion, RoomMembers, Signup, Voting } from './components'
 
 const AdminWrapper = styled.div`
-    border: 4px solid ${colors.blueberry.base};
+    border: 2px solid ${colors.blueberry.base};
     border-radius: 1rem;
     margin-bottom: 1rem;
     padding: 1rem 1rem 0 1rem;
@@ -38,7 +38,7 @@ const JOIN_ROOM_MUTATION = gql`
             demos {
                 demo,
                 id,
-                userId
+                presenter
             }
             members {
                 name

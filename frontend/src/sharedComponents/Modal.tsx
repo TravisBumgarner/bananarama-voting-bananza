@@ -52,7 +52,7 @@ const Modal = ({
                 maxWidth: '80vw',
                 minWidth: '500px',
                 borderRadius: '1rem',
-                borderWidth: '4px'
+                borderWidth: '2px'
             },
         }}
     >
