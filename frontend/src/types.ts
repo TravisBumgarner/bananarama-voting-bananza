@@ -26,6 +26,7 @@ type TRoom = {
     status: 'signup' | 'voting' | 'conclusion'
     demos: TDemo[]
     votes: TVote[]
+    winners: TDemo['id'][]
 }
 
 type TMemberChange = {

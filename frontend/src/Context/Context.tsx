@@ -14,7 +14,6 @@ type State = {
         id: string
     } | null
     room: TRoom | null,
-    winners: TDemo['id'][]
 }
 
 const EMPTY_STATE: State = {
@@ -22,7 +21,6 @@ const EMPTY_STATE: State = {
     hasErrored: false,
     user: null,
     room: null,
-    winners: []
 }
 
 type HasErrored = {
@@ -133,7 +131,9 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, room: { ...state.room!, demos: [...state.room!.demos, ...action.data] } }
         }
         case 'ADD_WINNERS': {
-            return { ...state, winners: [...action.data] }
+            return {
+                ...state, room: { ...state.room!, winners: [...action.data] }
+            }
         }
         case 'ADD_VOTES': {
             return { ...state, room: { ...state.room!, votes: [...state.room!.votes, ...action.data] } }

@@ -205,13 +205,13 @@ const Room = () => {
     }, [state.room, maxVotes])
 
     const copyResults = () => {
-        const winnersDetails = state.room!.demos.filter(({ id }) => state.winners.includes(id))
+        const winnersDetails = state.room!.demos.filter(({ id }) => state.room!.winners.includes(id))
         let message = ''
 
         if (winnersDetails.length > 1) message += `${winnersDetails.length} way tie!\n`
         message += `${(new Date().toDateString())}\n`
         winnersDetails.forEach(({ userId, demo }) => {
-            message += `${state.room!.members.find((member) => member.id === userId)} - ${demo}\n\n`
+            message += `${state.room!.members.find((member) => member.id === userId)?.name} - ${demo}\n\n`
         })
         navigator.clipboard.writeText(message)
     }
