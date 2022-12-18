@@ -223,7 +223,7 @@ const Room = () => {
     }, [state.room, maxVotes])
 
     const copyResults = () => {
-        const winnersDetails = state.demos.filter(({ id }) => state.winners.includes(id))
+        const winnersDetails = state.room!.demos.filter(({ id }) => state.winners.includes(id))
         let message = ''
 
         if (winnersDetails.length > 1) message += `${winnersDetails.length} way tie!\n`

@@ -3,7 +3,7 @@ import { useContext, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Button, Input, Icon } from 'sharedComponents'
+import { Button, Input } from 'sharedComponents'
 import { context } from 'context'
 import { colors } from 'theme'
 
@@ -41,7 +41,7 @@ const Lobby = () => {
     const { dispatch, state } = useContext(context)
     const [roomId, setRoomId] = useState('')
     const createRoom = useCallback(async () => {
-        const response = await createRoomMutation({ variables: { ownerId: state.user.id, ownerName: state.user.name } })
+        const response = await createRoomMutation({ variables: { ownerId: state.user!.id, ownerName: state.user!.name } })
         if (response.data?.createRoom.id) {
             navigate(response.data?.createRoom.id)
         } else {

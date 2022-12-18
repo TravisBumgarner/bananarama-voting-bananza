@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Heading, RoomWrapper } from 'sharedComponents'
@@ -37,9 +37,9 @@ const Conclusion = () => {
     const { state, dispatch } = useContext(context)
 
     const talliedVotes = useMemo(() => {
-        const data = state.demos.reduce((accum, { id }) => {
+        const data = state.room!.demos.reduce((accum, { id }) => {
             accum[id] = 0
-            return accum
+            return accum!
         }, {} as Record<string, number>)
 
         state.votes.forEach(({ demoId }) => data[demoId] += 1) //eslint-disable-line
@@ -57,7 +57,7 @@ const Conclusion = () => {
         dispatch({ type: 'ADD_WINNERS', data: winners })
     }, [])
 
-    const Results = [...state.demos]
+    const Results = [...state.room!.demos]
         .sort((a, b) => talliedVotes[b.id] - talliedVotes[a.id])
         .map((demo) => (
             <Demo

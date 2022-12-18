@@ -79,6 +79,7 @@ const Signup = () => {
             <RoomWrapper>
                 <Heading.H2>Demos</Heading.H2>
                 <Button
+                    type="button"
                     fullWidth
                     variation="pear"
                     label="Add Demo"
@@ -86,7 +87,7 @@ const Signup = () => {
                     onClick={() => setShowAddDemoModal(true)}
                 />
                 <DemosWrapper>
-                    {state.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
+                    {state.room!.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
                 </DemosWrapper>
             </RoomWrapper>
             <Modal

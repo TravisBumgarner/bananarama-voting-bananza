@@ -15,7 +15,6 @@ type State = {
     } | null
     room: TRoom | null,
     users: Record<string, string>
-    demos: TDemo[]
     votes: TVote[]
     winners: TDemo['id'][]
 }
@@ -26,7 +25,6 @@ const EMPTY_STATE: State = {
     user: null,
     users: {},
     room: null,
-    demos: [],
     votes: [],
     winners: []
 }
@@ -136,7 +134,7 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, room: { ...state.room!, ...action.data } }
         }
         case 'ADD_DEMOS': {
-            return { ...state, demos: [...state.demos, ...action.data] }
+            return { ...state, room: { ...state.room!, demos: [...state.room!.demos, ...action.data] } }
         }
         case 'ADD_WINNERS': {
             return { ...state, winners: [...action.data] }

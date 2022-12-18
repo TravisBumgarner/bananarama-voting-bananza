@@ -128,7 +128,7 @@ const Voting = () => {
             <RoomWrapper>
                 <Heading.H2>Voting</Heading.H2>
                 <DemosWrapper>
-                    {state.demos.map((demo) => (
+                    {state.room!.demos.map((demo) => (
                         <Demo
                             isCastingVote={isCastingVote}
                             setIsCastingVote={setIsCastingVote}
