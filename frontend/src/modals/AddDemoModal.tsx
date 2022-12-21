@@ -34,7 +34,7 @@ const AddDemo = ({ closeModal }: AddDemoProps) => {
         closeModal()
     }, [])
     const onAddDemoFailure = useCallback((error: ApolloError) => {
-        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
+        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
     }, [])
     const [addDemoMutation] = useMutation<any>(ADD_DEMO_MUTATION, {
         onCompleted: onAddDemoSuccess,

@@ -106,7 +106,7 @@ const Room = () => {
         setIsLoading(false)
     }, [])
     const onJoinRoomFailure = useCallback((error: ApolloError) => {
-        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
+        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
         setIsLoading(false)
         navigate('/')
     }, [])
@@ -124,7 +124,7 @@ const Room = () => {
         setIsLoading(false)
     }, [state.room])
     const onUpdateRoomError = useCallback((error: ApolloError) => {
-        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
+        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
         setIsLoading(false)
     }, [])
     const [updateRoomMutation] = useMutation<any>(UPDATE_ROOM_MUTATION, {

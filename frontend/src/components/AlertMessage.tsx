@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useContext } from 'react'
 import styled from 'styled-components'
 
 import { Paragraph, Button } from 'sharedComponents'
@@ -35,8 +35,8 @@ const AlertMessageWrapper = styled.div`
         10%,90% { opacity: 1 }
     }
 
-    ${({ timeToLiveMS }: { timeToLiveMS: number }) => `
-            animation: fade ${timeToLiveMS / 1000}s linear;
+    ${() => `
+            animation: fade ${DEFAULT_TTL / 1000}s linear;
         `}
 
     > ${Paragraph} {
@@ -51,17 +51,11 @@ const AlertMessage = () => {
         dispatch({ type: 'DELETE_MESSAGE' })
     }
 
-    useEffect(() => {
-        setTimeout(() => {
-            dispatch({ type: 'DELETE_MESSAGE' })
-        }, state.message?.timeToLiveMS ? state.message.timeToLiveMS : DEFAULT_TTL)
-    }, [])
-
     if (!state.message) return null
 
     return (
         <AlertMessagePositioner>
-            <AlertMessageWrapper timeToLiveMS={state.message.timeToLiveMS || DEFAULT_TTL}>
+            <AlertMessageWrapper>
                 <Paragraph style={{ color: colors.banana.base }}>{state.message.body}</Paragraph>
                 <Button type="button" label="Ok!" icon="done_all" onClick={handleSubmit} variation="pear" />
             </AlertMessageWrapper>

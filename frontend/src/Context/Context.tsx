@@ -5,8 +5,7 @@ import { logger } from 'utilities'
 
 type State = {
     message: {
-        body: string,
-        timeToLiveMS: number | undefined
+        body: string
     } | null
     hasErrored: boolean
     user: {
@@ -31,7 +30,6 @@ type AddMessage = {
     type: 'ADD_MESSAGE'
     data: {
         message: string
-        timeToLiveMS?: number
     }
 }
 
@@ -105,6 +103,7 @@ const context = createContext(
 )
 
 const reducer = (state: State, action: Action): State => {
+    console.log(action.type)
     switch (action.type) {
         case 'RESET_ROOM_STATE': {
             return { ...state, room: null }
@@ -113,7 +112,7 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, hasErrored: true }
         }
         case 'ADD_MESSAGE': {
-            return { ...state, message: { body: action.data.message, timeToLiveMS: action.data.timeToLiveMS } }
+            return { ...state, message: { body: action.data.message } }
         }
         case 'DELETE_MESSAGE': {
             return { ...state, message: null }
