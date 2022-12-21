@@ -5,7 +5,7 @@ import { TRoom, TRoomMember, EErrorMessages, TDemo, TVote } from '../types'
 
 type Success<T> = {
     success: true
-    data?: T
+    data: T
 }
 
 type Failure = {
@@ -57,11 +57,12 @@ class InMemoryDatastore {
         return ({ success: false, error: EErrorMessages.RoomDoesNotExist })
     }
 
-    deleteRoom(id: string): Response {
+    deleteRoom(id: string): Response<undefined> {
         const wasDeleted = delete this.rooms[id]
         if (wasDeleted) {
             return {
-                success: true
+                success: true,
+                data: undefined
             }
         }
         return {
@@ -70,13 +71,14 @@ class InMemoryDatastore {
         }
     }
 
-    addMember(roomId: string, member: TRoomMember): Response {
+    addMember(roomId: string, member: TRoomMember): Response<undefined> {
         if (roomId in this.rooms) {
             const currentMemberIds = this.rooms[roomId].members.map(({ id }) => id)
             if (!currentMemberIds.includes(member.id)) {
                 this.rooms[roomId].members.push(member)
                 return {
                     success: true,
+                    data: undefined
                 }
             }
             return {

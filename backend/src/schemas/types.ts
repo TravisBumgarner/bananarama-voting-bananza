@@ -25,8 +25,8 @@ const RoomMemberType = new GraphQLObjectType({
     }),
 })
 
-const AddDemoType = new GraphQLObjectType({
-    name: 'AddDemo',
+const DemoSubscription = new GraphQLObjectType({
+    name: 'DemoSubscription',
     description: 'This represents a demo added',
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
@@ -36,8 +36,8 @@ const AddDemoType = new GraphQLObjectType({
     }),
 })
 
-const AddVoteType = new GraphQLObjectType({
-    name: 'AddVote',
+const VoteSubscription = new GraphQLObjectType({
+    name: 'VoteSubscription',
     description: 'This represents a vote added',
     fields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) },
@@ -83,8 +83,8 @@ const RoomType = new GraphQLObjectType({
     }),
 })
 
-const MemberChangeType = new GraphQLObjectType({
-    name: 'MemberChange',
+const MemberSubscription = new GraphQLObjectType({
+    name: 'MemberSubscription',
     description: 'This represents a Member Change',
     fields: () => ({
         roomId: { type: new GraphQLNonNull(GraphQLString) },
@@ -94,8 +94,8 @@ const MemberChangeType = new GraphQLObjectType({
     }),
 })
 
-const RoomUpdateType = new GraphQLObjectType({
-    name: 'RoomUpdate',
+const RoomSubscription = new GraphQLObjectType({
+    name: 'RoomSubscription',
     description: 'This represents a Room Update',
     fields: () => ({
         roomId: { type: new GraphQLNonNull(GraphQLString) },
@@ -106,11 +106,11 @@ const RoomUpdateType = new GraphQLObjectType({
 
 export {
     RoomType,
-    MemberChangeType,
+    MemberSubscription,
     RoomStatusEnum,
-    RoomUpdateType,
+    RoomSubscription,
     DemoType,
-    AddDemoType,
+    VoteSubscription,
     VoteType,
-    AddVoteType
+    DemoSubscription
 }

@@ -75,7 +75,15 @@ const Lobby = () => {
                     label="Enter an Existing Room Name"
                     handleChange={(value: string) => setRoomId(value)}
                 />
-                <Button label="Join Room" icon="door_open" fullWidth onClick={joinRoom} type="button" variation="pear" />
+                <Button
+                    disabled={roomId.length === 0}
+                    label="Join Room"
+                    icon="door_open"
+                    fullWidth
+                    onClick={joinRoom}
+                    type="button"
+                    variation="pear"
+                />
             </div>
         </div>
     )

@@ -1,48 +1,80 @@
-import { GraphQLObjectType } from 'graphql'
-import pubsub, { EPubSubMessage } from '../pubsub'
+import { GraphQLObjectType, GraphQLNonNull, GraphQLString } from 'graphql'
+import { withFilter } from 'graphql-subscriptions'
+import { Action, EPubSubActionType, subscribeEvent } from '../pubsub'
+import { MemberSubscription, RoomSubscription, DemoSubscription, VoteSubscription } from './types'
 
-import { MemberChangeType, RoomUpdateType, AddDemoType, AddVoteType } from './types'
-
-const memberChange = {
-    type: MemberChangeType,
-    subscribe: () => pubsub.asyncIterator(EPubSubMessage.MEMBER_CHANGE_EVENT),
-    resolve: (payload) => {
-        return payload
-    }
+type SubscriptionArgs = {
+    roomId: string
 }
 
-const addDemo = {
-    type: AddDemoType,
-    subscribe: () => pubsub.asyncIterator(EPubSubMessage.ADD_DEMO),
-    resolve: (payload) => {
-        return payload
-    }
+const member = {
+    type: MemberSubscription,
+    args: {
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    subscribe: withFilter(
+        () => subscribeEvent(EPubSubActionType.MEMBER_UPDATE_ACTION),
+        (
+            payload: Extract<Action, { type: EPubSubActionType.MEMBER_UPDATE_ACTION }>,
+            variables: SubscriptionArgs
+        ) => payload.data.roomId === variables.roomId
+    ),
+    resolve: (payload) => payload
 }
 
-const addVote = {
-    type: AddVoteType,
-    subscribe: () => pubsub.asyncIterator(EPubSubMessage.ADD_VOTE),
-    resolve: (payload) => {
-        return payload
-    }
+const demo = {
+    type: DemoSubscription,
+    args: {
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    subscribe: withFilter(
+        () => subscribeEvent(EPubSubActionType.ADD_DEMO_ACTION),
+        (
+            payload: Extract<Action, { type: EPubSubActionType.ADD_DEMO_ACTION }>['data'],
+            variables: SubscriptionArgs
+        ) => payload.roomId === variables.roomId
+    ),
+    resolve: (payload) => payload
 }
 
-const roomUpdate = {
-    type: RoomUpdateType,
-    subscribe: () => pubsub.asyncIterator(EPubSubMessage.ROOM_UPDATE_EVENT),
-    resolve: (payload) => {
-        return payload
-    }
+const vote = {
+    type: VoteSubscription,
+    args: {
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    subscribe: withFilter(
+        () => subscribeEvent(EPubSubActionType.ADD_VOTE_ACTION),
+        (
+            payload: (Extract<Action, { type: EPubSubActionType.ADD_VOTE_ACTION }>)['data'],
+            variables: SubscriptionArgs
+        ) => payload.roomId === variables.roomId
+    ),
+    resolve: (payload) => payload
+}
+
+const room = {
+    type: RoomSubscription,
+    args: {
+        roomId: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    subscribe: withFilter(
+        () => subscribeEvent(EPubSubActionType.ROOM_UPDATE_ACTION),
+        (
+            payload: Extract<Action, { type: EPubSubActionType.ROOM_UPDATE_ACTION }>['data'],
+            variables: SubscriptionArgs
+        ) => payload.roomId === variables.roomId
+    ),
+    resolve: (payload) => payload
 }
 
 const RootQueryType = new GraphQLObjectType({
     name: 'Subscription',
     description: 'Root Subscription',
     fields: {
-        memberChange,
-        roomUpdate,
-        addDemo,
-        addVote
+        room,
+        member,
+        vote,
+        demo
     },
 })
 

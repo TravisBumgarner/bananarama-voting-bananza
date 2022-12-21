@@ -9,9 +9,9 @@ import { TDemo } from 'types'
 import { logger } from 'utilities'
 import { AddDemoModal } from '../../../modals'
 
-const ADD_DEMO_SUBSCRIPTION = gql`
-  subscription AddDemo {
-    addDemo {
+const DEMO_SUBSCRIPTION = gql`
+  subscription Demo($roomId: String!) {
+    demo(roomId: $roomId) {
         roomId
         presenter
         demo,
@@ -48,7 +48,10 @@ const Signup = () => {
     const [showAddDemoModal, setShowAddDemoModal] = useState(false)
     const { state, dispatch } = useContext(context)
 
-    useSubscription<{ addDemo: TDemo }>(ADD_DEMO_SUBSCRIPTION, {
+    useSubscription<{ demo: TDemo }>(DEMO_SUBSCRIPTION, {
+        variables: {
+            roomId: state.room!.id
+        },
         onError: (error) => {
             logger(error)
             dispatch({
@@ -59,17 +62,14 @@ const Signup = () => {
             })
         },
         onData: ({ data }) => {
-            if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
-
-            const { presenter, roomId, demo, id } = data.data.addDemo
-            if (roomId === state.room.id) {
-                dispatch({
-                    type: 'ADD_DEMOS',
-                    data: [{
-                        presenter, roomId, demo, id
-                    }]
-                })
-            }
+            if (!state.room || !data.data) return
+            const { presenter, roomId, demo, id } = data.data.demo
+            dispatch({
+                type: 'ADD_DEMOS',
+                data: [{
+                    presenter, roomId, demo, id
+                }]
+            })
         },
     })
 

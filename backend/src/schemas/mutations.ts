@@ -1,6 +1,6 @@
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString, } from 'graphql'
 
-import pubsub, { EPubSubMessage } from '../pubsub'
+import { EPubSubActionType, publishEvent } from '../pubsub'
 import { EErrorMessages, TRoom } from '../types'
 import inMemoryDatastore from '../inMemoryDatastore'
 import { RoomStatusEnum, RoomType, DemoType, VoteType } from './types'
@@ -57,10 +57,13 @@ const updateRoom = {
         })
 
         if (updateRoomResult.success) {
-            await pubsub.publish(EPubSubMessage.ROOM_UPDATE_EVENT, {
-                roomId: args.roomId,
-                status: args.status,
-                ...(args.maxVotes ? { maxVotes: args.maxVotes } : {})
+            await publishEvent({
+                type: EPubSubActionType.ROOM_UPDATE_ACTION,
+                data: {
+                    roomId: args.roomId,
+                    status: args.status,
+                    ...(args.maxVotes ? { maxVotes: args.maxVotes } : {})
+                }
             })
 
             return updateRoomResult.data
@@ -88,11 +91,14 @@ const joinRoom = {
         const addMemberResult = inMemoryDatastore.addMember(args.roomId, { name: args.userName, id: args.userId })
         if (addMemberResult.success || addMemberResult.error === EErrorMessages.MemberAlreadyExists) {
             if (addMemberResult.success) {
-                await pubsub.publish(EPubSubMessage.MEMBER_CHANGE_EVENT, {
-                    roomId: args.roomId,
-                    userId: args.userId,
-                    userName: args.userName,
-                    status: 'join'
+                await publishEvent({
+                    type: EPubSubActionType.MEMBER_UPDATE_ACTION,
+                    data: {
+                        roomId: args.roomId,
+                        userId: args.userId,
+                        userName: args.userName,
+                        status: 'join'
+                    }
                 })
             }
             const getRoomResult = inMemoryDatastore.getRoom(args.roomId)
@@ -122,7 +128,10 @@ const addDemo = {
     resolve: async (_, args: AddDemoArgs) => {
         const addDemoResult = inMemoryDatastore.addDemo(args.roomId, args.presenter, args.demo)
         if (addDemoResult.success) {
-            await pubsub.publish(EPubSubMessage.ADD_DEMO, { ...addDemoResult.data, roomId: args.roomId })
+            await publishEvent({
+                type: EPubSubActionType.ADD_DEMO_ACTION,
+                data: { ...addDemoResult.data, roomId: args.roomId }
+            })
             return addDemoResult.data
         }
         throw new Error(addDemoResult.error)
@@ -146,7 +155,10 @@ const addVote = {
     resolve: async (_, args: AddVoteArgs) => {
         const addVoteResult = inMemoryDatastore.addVote(args.roomId, args.userId, args.demoId)
         if (addVoteResult.success) {
-            await pubsub.publish(EPubSubMessage.ADD_VOTE, { ...addVoteResult.data, roomId: args.roomId })
+            await publishEvent({
+                type: EPubSubActionType.ADD_VOTE_ACTION,
+                data: { ...addVoteResult.data, roomId: args.roomId }
+            })
             return addVoteResult.data
         }
         throw new Error(addVoteResult.error)

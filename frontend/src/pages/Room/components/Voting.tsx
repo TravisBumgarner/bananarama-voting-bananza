@@ -8,9 +8,9 @@ import { colors } from 'theme'
 import { TDemo, TVote } from 'types'
 import { logger } from 'utilities'
 
-const ADD_VOTE_SUBSCRIPTION = gql`
-  subscription AddVote {
-    addVote {
+const VOTE_SUBSCRIPTION = gql`
+  subscription Vote($roomId: String!) {
+    vote(roomId: $roomId) {
         roomId
         userId
         demoId
@@ -19,7 +19,7 @@ const ADD_VOTE_SUBSCRIPTION = gql`
   }
 `
 
-const ADD_VOTE_MUTATION = gql`
+const ADD_VOTE_ACTION_MUTATION = gql`
     mutation AddVote($roomId: String!, $userId: String!, $demoId: String!) {
         addVote(roomId: $roomId, userId: $userId, demoId: $demoId) {
             id
@@ -67,7 +67,7 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => 
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
         setIsCastingVote(false)
     }, [])
-    const [addVoteMutation] = useMutation<any>(ADD_VOTE_MUTATION, {
+    const [addVoteMutation] = useMutation<any>(ADD_VOTE_ACTION_MUTATION, {
         onCompleted: onAddVoteSuccess,
         onError: onAddVoteFailure
     })
@@ -95,26 +95,26 @@ const Voting = () => {
     const { state, dispatch } = useContext(context)
     const [isCastingVote, setIsCastingVote] = useState(false)
 
-    useSubscription<{ addVote: TVote }>(ADD_VOTE_SUBSCRIPTION, {
+    useSubscription<{ vote: TVote }>(VOTE_SUBSCRIPTION, {
+        variables: {
+            roomId: state.room!.id
+        },
         onError: (error) => {
             logger(error)
             dispatch({
                 type: 'ADD_MESSAGE',
                 data: {
-                    message: 'Failed to cast vote.'
+                    message: 'Hmm something went wrong, try reloading.'
                 }
             })
         },
         onData: ({ data }) => {
-            if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
-
-            const { userId, demoId, roomId, id } = data.data.addVote
-            if (roomId === state.room.id) {
-                dispatch({
-                    type: 'ADD_VOTES',
-                    data: [{ userId, roomId, demoId, id }]
-                })
-            }
+            if (!state.room || !data.data) return
+            const { userId, demoId, roomId, id } = data.data.vote
+            dispatch({
+                type: 'ADD_VOTES',
+                data: [{ userId, roomId, demoId, id }]
+            })
         },
     })
 

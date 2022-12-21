@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { Exactly, logger, sanitizeRoomId } from 'utilities'
 import { context } from 'context'
 import { colors } from 'theme'
-import { TRoom, TRoomMemberChange, TRoomUpdate } from '../../types'
+import { TRoom, TRoomMemberChange } from '../../types'
 import { Conclusion, RoomMembers, Signup, Voting } from './components'
 
 const AdminWrapper = styled.div`
@@ -62,9 +62,9 @@ const UPDATE_ROOM_MUTATION = gql`
     }    
 `
 
-const MEMBER_CHANGE_SUBSCRIPTION = gql`
-  subscription MemberChange {
-    memberChange {
+const MEMBER_SUBSCRIPTION = gql`
+  subscription Member($roomId: String!) {
+    member(roomId: $roomId) {
         userId
         roomId
         status
@@ -73,9 +73,9 @@ const MEMBER_CHANGE_SUBSCRIPTION = gql`
   }
 `
 
-const ROOM_UPDATE_SUBSCRIPTION = gql`
-subscription RoomUpdate {
-    roomUpdate {
+const ROOM_SUBSCRIPTION = gql`
+subscription Room($roomId: String!) {
+    room(roomId: $roomId) {
        roomId,
        status,
        maxVotes
@@ -132,19 +132,23 @@ const Room = () => {
         onError: onUpdateRoomError
     })
 
-    useSubscription<{ memberChange: TRoomMemberChange }>(MEMBER_CHANGE_SUBSCRIPTION, {
+    useSubscription<{ member: TRoomMemberChange }>(MEMBER_SUBSCRIPTION, {
+        variables: {
+            roomId
+        },
         onError: (error) => {
             logger(error)
             dispatch({
                 type: 'ADD_MESSAGE',
                 data: {
-                    message: 'Failed to do the thing.'
+                    message: 'Hmm something went wrong, try reloading.'
                 }
             })
         },
         onData: ({ data }) => {
-            if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
-            const { userId, status, userName } = data.data.memberChange
+            console.log(data)
+            if (!state.room || !data.data) return
+            const { userId, status, userName } = data.data.member
             if (status === 'join') {
                 dispatch({
                     type: 'ADD_MEMBERS',
@@ -154,24 +158,24 @@ const Room = () => {
         },
     })
 
-    useSubscription<{ roomUpdate: TRoomUpdate }>(ROOM_UPDATE_SUBSCRIPTION, {
+    useSubscription<{ room: TRoom }>(ROOM_SUBSCRIPTION, {
+        variables: {
+            roomId
+        },
         onError: (error) => {
             logger(error)
             dispatch({
                 type: 'ADD_MESSAGE',
                 data: {
-                    message: 'Failed to update room.'
+                    message: 'Hmm something went wrong, try reloading.'
                 }
             })
         },
         onData: ({ data }) => {
-            if (!state.room || !data.data) return // This shouldn't fire before the room's details have been populated
+            if (!state.room || !data.data) return
 
-            const { status, roomId: roomIdToUpdate, maxVotes: updatedMaxVotes } = data.data.roomUpdate
-            // For now, all events for all rooms are broadcast everywhere.
-            if (roomIdToUpdate === state.room.id) {
-                dispatch({ type: 'UPDATE_ROOM', data: { status, ...(updatedMaxVotes ? { maxVotes: updatedMaxVotes } : {}) } })
-            }
+            const { status, maxVotes: updatedMaxVotes } = data.data.room
+            dispatch({ type: 'UPDATE_ROOM', data: { status, ...(updatedMaxVotes ? { maxVotes: updatedMaxVotes } : {}) } })
         },
     })
 
