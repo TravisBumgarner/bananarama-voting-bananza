@@ -213,8 +213,8 @@ const Room = () => {
 
         if (winnersDetails.length > 1) message += `${winnersDetails.length} way tie!\n`
         message += `${(new Date().toDateString())}\n`
-        winnersDetails.forEach(({ userId, demo }) => {
-            message += `${state.room!.members.find((member) => member.id === userId)?.name} - ${demo}\n\n`
+        winnersDetails.forEach(({ presenter, demo }) => {
+            message += `${presenter} - ${demo}\n\n`
         })
         navigator.clipboard.writeText(message)
     }
