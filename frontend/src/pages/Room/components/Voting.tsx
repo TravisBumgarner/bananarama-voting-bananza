@@ -64,7 +64,7 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => 
     }, [])
 
     const onAddVoteFailure = useCallback((error: ApolloError) => {
-        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message, timeToLiveMS: 5000 } })
+        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
         setIsCastingVote(false)
     }, [])
     const [addVoteMutation] = useMutation<any>(ADD_VOTE_ACTION_MUTATION, {
