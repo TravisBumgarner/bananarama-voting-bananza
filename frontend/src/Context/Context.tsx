@@ -107,7 +107,7 @@ const context = createContext(
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case 'RESET_ROOM_STATE': {
-            return { ...EMPTY_STATE, user: state.user }
+            return { ...state, room: null }
         }
         case 'HAS_ERRORED': {
             return { ...state, hasErrored: true }

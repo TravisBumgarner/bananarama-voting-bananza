@@ -56,7 +56,7 @@ const App = () => {
         <>
             <AppWrapper>
                 <Header />
-                {state.message ? <AlertMessage /> : null}
+                <AlertMessage />
                 <Router />
             </AppWrapper>
             <Modal
