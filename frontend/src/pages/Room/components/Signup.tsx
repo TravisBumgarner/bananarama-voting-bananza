@@ -2,7 +2,7 @@ import { gql, useSubscription } from '@apollo/client'
 import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Modal, RoomWrapper } from 'sharedComponents'
+import { Button, Heading, Modal, Paragraph, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { snippets } from 'theme'
 import { TDemo } from 'types'
@@ -30,16 +30,21 @@ const DemosWrapper = styled.ul`
 
 const DemoWrapper = styled.li`
     ${snippets.subSection};
-    border-radius: 1rem;
+    border-radius: 0.7em;
     margin: 0 0 1rem 0;
     padding: 1rem;
     box-sizing: border-box;
+
+    &:last-child{
+        margin-bottom: 0;
+    }
 `
 
 const Demo = ({ demo }: { demo: TDemo }) => {
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {demo.presenter}</Heading.H3>
+            <Heading.H3>{demo.demo}</Heading.H3>
+            <Paragraph>{demo.presenter}</Paragraph>
         </DemoWrapper>
     )
 }
@@ -74,7 +79,7 @@ const Signup = () => {
     })
 
     return (
-        <div>
+        <>
             <RoomWrapper>
                 <Heading.H2>Demos</Heading.H2>
                 <DemosWrapper>
@@ -96,7 +101,7 @@ const Signup = () => {
             >
                 <AddDemoModal closeModal={() => setShowAddDemoModal(false)} />
             </Modal>
-        </div>
+        </>
     )
 }
 

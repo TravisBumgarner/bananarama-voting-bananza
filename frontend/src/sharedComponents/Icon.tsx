@@ -14,12 +14,11 @@ type IconProps = {
     | 'delete'
     | 'remove'
     | 'door_front'
-    color: string
 }
 
-const Icon = ({ name, color }: IconProps) => {
+const Icon = ({ name }: IconProps) => {
     return (
-        <span style={{ color, fontWeight: 900 }} className="material-symbols-outlined">
+        <span style={{ fontWeight: 900 }} className="material-symbols-outlined">
             {name}
         </span>
     )

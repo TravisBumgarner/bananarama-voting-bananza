@@ -49,7 +49,7 @@ const Modal = ({
                 position: 'static',
                 maxWidth: '80vw',
                 minWidth: '500px',
-                borderRadius: '1rem',
+                borderRadius: '0.7rem',
                 borderWidth: '0',
                 background: colors.green.lighten,
             },

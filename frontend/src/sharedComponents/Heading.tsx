@@ -17,9 +17,10 @@ const H2 = styled.h2`
 `
 
 const H3 = styled.h3`
-    color: ${colors.rotten.lighten};
+    color: ${colors.rotten.base};
     margin: 0.25rem 0;
-    text-align: center;
+    text-align: left;
+    font-size: 1.5rem;
 `
 
 export { H1, H2, H3 }

@@ -9,7 +9,8 @@ const ListItem = styled.li`
     list-style: none;
     color: ${colors.rotten.base};
     margin: 0;
-    padding: 0
+    padding: 0;
+    font-weight: 900;
 `
 
 const List = styled.ul`

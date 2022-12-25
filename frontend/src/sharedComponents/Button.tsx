@@ -7,7 +7,7 @@ import Icon, { IconProps } from './Icon'
 type ButtonProps = {
     label?: string
     icon?: IconProps['name']
-    variation: | 'banana' | 'rotten'
+    variation: | 'banana' | 'rotten' | 'cancel'
     disabled?: boolean
     fullWidth?: boolean
     onClick?: () => void
@@ -20,7 +20,7 @@ const StyledButton = styled.button`
     padding: 0.5rem 0;
     background-color: transparent;
     font-weight: 700;
-    border-radius: 1rem;
+    border-radius: 0.7em;
     margin: 1rem 0;
     justify-content: center; 
     display: flex;
@@ -67,7 +67,23 @@ const StyledButton = styled.button`
                     background-color: transparent;
                 }
             `
-        } if (variation === 'banana') {
+        }
+
+        if (variation === 'cancel') {
+            return `
+                color: ${colors.rotten.lighten};
+                border: 0;
+                
+                &:hover {
+                    color: ${colors.rotten.base};
+                    border-color: ${colors.rotten.base};
+                    background-color: ${colors.rotten.lighten};
+                    background-color: transparent;
+                }
+            `
+        }
+
+        if (variation === 'banana') {
             return `
                 color: ${colors.banana.base};
                 border-color: ${colors.banana.base};
@@ -87,7 +103,7 @@ const Button = ({ label, icon, variation, fullWidth, disabled, onClick, type }: 
     return (
         <StyledButton type={type} onClick={onClick} icon={icon} variation={variation} disabled={disabled} fullWidth={fullWidth}>
             {label && <span className="label">{label}</span>}
-            {icon && <Icon name={icon} color={disabled ? colors.superrotten.base : colors[variation].base} />}
+            {icon && <Icon name={icon} />}
         </StyledButton>
     )
 }

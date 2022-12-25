@@ -5,7 +5,7 @@ import { colors } from 'theme'
 const Input = styled.input`
     font-size: 1rem;
     border: 0;
-    border-bottom : 4px solid ${colors.rotten.lightest};
+    border-bottom : 4px solid ${colors.supergreen.base};
     padding: 0.5rem 1rem;
     background-color: transparent;
     font-weight: 700;

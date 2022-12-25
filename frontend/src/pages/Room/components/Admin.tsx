@@ -90,7 +90,7 @@ const Admin = () => {
                         onClick={() => setMaxVotes((prev) => prev + 1)}
                     />
                 </div>
-                <div style={{ textAlign: 'center', fontSize: '1rem', margin: '0.5rem' }}>
+                <div style={{ textAlign: 'center', margin: '1rem 0' }}>
                     <Paragraph color={colors.rotten.base}>{maxVotes} Votes per Member</Paragraph>
                 </div>
                 <Button

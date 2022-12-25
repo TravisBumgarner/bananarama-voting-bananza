@@ -68,6 +68,8 @@ subscription Room($roomId: String!) {
 
 const Wrapper = styled.div`
     display: flex;
+    justify-content: center;
+    align-items: start;
 
     div:last-child{
         width: 100%;

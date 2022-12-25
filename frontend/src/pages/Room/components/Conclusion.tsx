@@ -15,7 +15,7 @@ const DemosWrapper = styled.ul`
 
 const DemoWrapper = styled.li`
     border: 2px solid ${colors.rotten.base};
-    border-radius: 1rem;
+    border-radius: 0.7em;
     padding: 0;
     margin: 0 0 1rem 0;
 `
@@ -66,14 +66,12 @@ const Conclusion = () => {
         ))
 
     return (
-        <div>
-            <RoomWrapper>
-                <Heading.H2>Conclusion</Heading.H2>
-                <DemosWrapper>
-                    {Results}
-                </DemosWrapper>
-            </RoomWrapper>
-        </div>
+        <RoomWrapper>
+            <Heading.H2>Conclusion</Heading.H2>
+            <DemosWrapper>
+                {Results}
+            </DemosWrapper>
+        </RoomWrapper>
     )
 }
 

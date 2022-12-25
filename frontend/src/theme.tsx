@@ -1,5 +1,5 @@
 import { createGlobalStyle, css } from 'styled-components'
-import { darken, lighten } from 'polished'
+import { darken, lighten, transparentize } from 'polished'
 
 const colorFactory = (color: string) => ({
     base: color,
@@ -45,14 +45,16 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const section = css`
-    border-radius: 1rem;
+    border-radius: 0.7em;
     background-color: ${colors.green.base};
     border: 2px solid ${colors.green.darken};
 `
 
 const subSection = css`
-    border-radius: 1rem;
-    background: linear-gradient(270deg, ${colors.green.lightest} 9%, ${colors.green.lighten} 79%);
+    border-radius: 0.7em;
+    /* background: linear-gradient(153deg, ${colors.banana.base} 0%, ${colors.green.base} 100%); */
+    background: ${transparentize(0.2, colors.banana.lighten)};
+    border: 2px solid ${colors.rotten.base};
 `
 
 const snippets = {

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Paragraph, Button } from 'sharedComponents'
 import { context } from 'context'
-import { colors } from 'theme'
+import { colors, snippets } from 'theme'
 
 const DEFAULT_TTL = 5000
 
@@ -27,9 +27,7 @@ const AlertMessageWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 2px solid ${colors.banana.base};
-    border-radius: 1rem;
-    background-color: ${colors.banana.base};
+    ${snippets.section};
     @keyframes fade {
         0%,100% { opacity: 0 }
         10%,90% { opacity: 1 }

@@ -40,7 +40,7 @@ const DemoWrapper = styled.li`
 
     > h3 {
         border: 2px solid ${colors.rotten.base};
-        border-radius: 1rem;
+        border-radius: 0.7em;
         margin: 0.25rem 0.25rem 0.25rem 0;
         padding: 0.5rem;
         flex-grow: 1;
@@ -123,22 +123,20 @@ const Voting = () => {
     }, [state.room!.votes])
 
     return (
-        <div>
-            <RoomWrapper>
-                <Heading.H2>Voting</Heading.H2>
-                <DemosWrapper>
-                    {state.room!.demos.map((demo) => (
-                        <Demo
-                            isCastingVote={isCastingVote}
-                            setIsCastingVote={setIsCastingVote}
-                            demo={demo}
-                            key={demo.id}
-                            canVote={state.room!.maxVotes > votesCast}
-                        />
-                    ))}
-                </DemosWrapper>
-            </RoomWrapper>
-        </div>
+        <RoomWrapper>
+            <Heading.H2>Voting</Heading.H2>
+            <DemosWrapper>
+                {state.room!.demos.map((demo) => (
+                    <Demo
+                        isCastingVote={isCastingVote}
+                        setIsCastingVote={setIsCastingVote}
+                        demo={demo}
+                        key={demo.id}
+                        canVote={state.room!.maxVotes > votesCast}
+                    />
+                ))}
+            </DemosWrapper>
+        </RoomWrapper>
     )
 }
 

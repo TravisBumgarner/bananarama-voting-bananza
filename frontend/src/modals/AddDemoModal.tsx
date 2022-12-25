@@ -73,7 +73,7 @@ const AddDemo = ({ closeModal }: AddDemoProps) => {
                         <Button
                             type="button"
                             key="cancel"
-                            variation="rotten"
+                            variation="cancel"
                             label="Cancel"
                             // icon="cancel"
                             onClick={() => closeModal()}
