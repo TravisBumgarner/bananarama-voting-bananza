@@ -4,20 +4,20 @@ import { colors } from 'theme'
 
 const H1 = styled.h1`
     font-size: 3rem;
-    color: ${colors.blueberry.base};
+    color: ${colors.supergreen.base};
     margin: 1rem 0;
     text-align: center;
     width: 100%;
 `
 
 const H2 = styled.h2`
-    color: ${colors.blueberry.base};
+    color: ${colors.supergreen.base};
     margin: 0.5rem 0;
     text-align: center;
 `
 
 const H3 = styled.h3`
-    color: ${colors.blueberry.base};
+    color: ${colors.rotten.lighten};
     margin: 0.25rem 0;
     text-align: center;
 `

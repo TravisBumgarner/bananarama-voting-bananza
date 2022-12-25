@@ -57,7 +57,7 @@ const AlertMessage = () => {
         <AlertMessagePositioner>
             <AlertMessageWrapper>
                 <Paragraph style={{ color: colors.banana.base }}>{state.message.body}</Paragraph>
-                <Button type="button" label="Ok!" icon="done_all" onClick={handleSubmit} variation="apple" />
+                <Button type="button" label="Ok!" icon="done_all" onClick={handleSubmit} variation="banana" />
             </AlertMessageWrapper>
         </AlertMessagePositioner>
     )

@@ -14,7 +14,7 @@ const DemosWrapper = styled.ul`
 `
 
 const DemoWrapper = styled.li`
-    border: 2px solid ${colors.blueberry.base};
+    border: 2px solid ${colors.rotten.base};
     border-radius: 1rem;
     padding: 0;
     margin: 0 0 1rem 0;

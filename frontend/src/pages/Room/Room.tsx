@@ -17,12 +17,12 @@ const AdminWrapper = styled.div`
 `
 
 const Sidebar = styled.div`
-    min-width: 215px;
+    width: 250px;
     margin-right: 1rem;
 
 
     button {
-        margin-top: 0;
+        margin-bottom: 0;
     }
 `
 
@@ -224,27 +224,31 @@ const Room = () => {
         if (state.room.status === 'signup') {
             content = (
                 <>
-                    <div>
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                         <Button
-                            variation="apple"
-                            icon="add"
-                            type="button"
-                            onClick={() => setMaxVotes((prev) => prev + 1)}
-                        />
-                        <Button
-                            variation="banana"
+                            variation="rotten"
                             type="button"
                             icon="remove"
+                            label="🍌"
                             disabled={maxVotes === 1}
                             onClick={() => setMaxVotes((prev) => prev - 1)}
                         />
+                        <Button
+                            variation="banana"
+                            icon="add"
+                            type="button"
+                            label="🍌"
+                            onClick={() => setMaxVotes((prev) => prev + 1)}
+                        />
+                    </div>
+                    <div style={{ textAlign: 'center', fontSize: '2rem', margin: '1rem' }}>
                         {'🍌'.repeat(maxVotes)}
                     </div>
                     <Button
                         fullWidth
                         type="button"
                         icon="how_to_vote"
-                        variation="apple"
+                        variation="banana"
                         label="Start Voting"
                         onClick={() => handleRoomChange('voting')}
                     />
@@ -256,7 +260,7 @@ const Room = () => {
                 <Button
                     type="button"
                     fullWidth
-                    variation="apple"
+                    variation="banana"
                     label="Announce Results"
                     icon="campaign"
                     onClick={() => handleRoomChange('conclusion')}
@@ -269,7 +273,7 @@ const Room = () => {
                     <Button
                         type="button"
                         fullWidth
-                        variation="apple"
+                        variation="banana"
                         label="Delete Room"
                         icon="delete"
                         onClick={() => console.log('deleting...')}
@@ -277,7 +281,7 @@ const Room = () => {
                     <Button
                         type="button"
                         fullWidth
-                        variation="apple"
+                        variation="rotten"
                         label="Copy Results"
                         icon="content_copy"
                         onClick={copyResults}

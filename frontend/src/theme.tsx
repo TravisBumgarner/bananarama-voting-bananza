@@ -9,30 +9,20 @@ const colorFactory = (color: string) => ({
     lightest: lighten(0.25, color),
 })
 
-const pear = colorFactory('#4c5d43') // should be greenish for positive actions
-const apple = colorFactory('#88AB75') // should be redish for negative actions
+const supergreen = colorFactory('#4c5d43') // should be greenish for positive actions
+const green = colorFactory('#88AB75') // should be redish for negative actions
 const banana = colorFactory('#e5cc56')
-const blueberry = colorFactory('#51372b')
-const disabled = colorFactory('#262626')
-const marble = colorFactory('#a8afb1')
-
-/*
-const pear = colorFactory('#3dad00') // should be greenish for positive actions
-const apple = colorFactory('#d74405') // should be redish for negative actions
-const banana = colorFactory('#dcd103')
-const blueberry = colorFactory('#0080a0')
-const marble = colorFactory('#a8afb1')
-*/
+const rotten = colorFactory('#51372b')
+const superrotten = colorFactory('#6f6f6f')
 
 const coffee = colorFactory('#282828')
 
 const colors = {
-    pear,
-    apple,
+    supergreen,
+    green,
     banana,
-    blueberry,
-    marble,
-    disabled,
+    rotten,
+    superrotten,
     coffee,
 }
 
@@ -59,12 +49,12 @@ const GlobalStyle = createGlobalStyle`
 
 const section = css`
     border-radius: 1rem;
-    background-color: ${colors.banana.lighten};
+    background-color: ${colors.green.lighten};
 `
 
 const subSection = css`
     border-radius: 1rem;
-    background: ${colors.banana.lightest};
+    background: linear-gradient(270deg, ${colors.green.lightest} 9%, ${colors.green.lighten} 79%);
 `
 
 const snippets = {

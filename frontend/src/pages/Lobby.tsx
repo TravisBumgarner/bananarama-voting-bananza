@@ -14,7 +14,7 @@ const FabulousOrWrapper = styled.div`
     justify-content: center;;
 
     div {
-        border: 1px solid ${colors.pear.base};
+        border: 1px solid ${colors.supergreen.base};
         width:100%;
         margin: 0 1rem;
     }
@@ -22,7 +22,7 @@ const FabulousOrWrapper = styled.div`
     p {
         text-align: center;
         font-size: 2rem;
-        color: ${colors.pear.base};
+        color: ${colors.supergreen.base};
         margin: 0.5rem 0;
     }
 `
@@ -61,7 +61,7 @@ const Lobby = () => {
                 onClick={createRoom}
                 fullWidth
                 type="button"
-                variation="apple"
+                variation="rotten"
             />
             <FabulousOrWrapper>
                 <div />
@@ -82,7 +82,7 @@ const Lobby = () => {
                     fullWidth
                     onClick={joinRoom}
                     type="button"
-                    variation="apple"
+                    variation="rotten"
                 />
             </div>
         </div>

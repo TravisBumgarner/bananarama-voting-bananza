@@ -1,10 +1,8 @@
-import { useCallback, useContext } from 'react'
 import { Link } from 'react-router-dom'
-
-import { Button, Heading } from 'sharedComponents'
-import { snippets } from 'theme'
-import { context } from 'context'
 import styled from 'styled-components'
+
+import { Heading } from 'sharedComponents'
+import { snippets } from 'theme'
 
 const Wrapper = styled.div`
     display: flex;
@@ -22,13 +20,6 @@ const Wrapper = styled.div`
 `
 
 const Header = () => {
-    const { state, dispatch } = useContext(context)
-
-    const copyRoomToClipboard = useCallback(() => {
-        dispatch({ type: 'ADD_MESSAGE', data: { message: 'Room URL copied to clipboard.' } })
-        navigator.clipboard.writeText(window.location.href)
-    }, [window.location.href])
-
     return (
         <Wrapper>
             <Link style={{ textDecoration: 'none' }} to="/">
@@ -36,18 +27,6 @@ const Header = () => {
                     Bananarama Voting Bananza!
                 </Heading.H1>
             </Link>
-            {
-                state.room?.id
-                && (
-                    <Button
-                        type="button"
-                        label="Share Room"
-                        icon="content_copy"
-                        variation="apple"
-                        onClick={copyRoomToClipboard}
-                    />
-                )
-            }
         </Wrapper>
     )
 }

@@ -39,7 +39,7 @@ const DemoWrapper = styled.li`
     align-items: center;
 
     > h3 {
-        border: 2px solid ${colors.blueberry.base};
+        border: 2px solid ${colors.rotten.base};
         border-radius: 1rem;
         margin: 0.25rem 0.25rem 0.25rem 0;
         padding: 0.5rem;
@@ -86,7 +86,7 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => 
     return (
         <DemoWrapper>
             <Heading.H3> &quot;{demo.demo}&quot; - {demo.presenter}</Heading.H3>
-            <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="apple" onClick={handleSubmit} />
+            <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="rotten" onClick={handleSubmit} />
         </DemoWrapper>
     )
 }

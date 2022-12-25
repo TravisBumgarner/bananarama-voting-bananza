@@ -14,7 +14,7 @@ const StyledNavLink = ({ to, text, addWeightForActiveLink, color }: StyledNavLin
         <NavLink
             style={({ isActive }) => ({
                 fontWeight: addWeightForActiveLink && isActive ? 700 : 100,
-                color: color || colors.apple.base,
+                color: color || colors.green.base,
             })}
             to={to}
         >

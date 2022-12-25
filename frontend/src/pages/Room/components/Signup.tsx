@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { Button, Heading, Modal, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
-import { colors, snippets } from 'theme'
+import { snippets } from 'theme'
 import { TDemo } from 'types'
 import { logger } from 'utilities'
 import { AddDemoModal } from '../../../modals'
@@ -77,17 +77,17 @@ const Signup = () => {
         <div>
             <RoomWrapper>
                 <Heading.H2>Demos</Heading.H2>
+                <DemosWrapper>
+                    {state.room!.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
+                </DemosWrapper>
                 <Button
                     type="button"
                     fullWidth
-                    variation="apple"
+                    variation="banana"
                     label="Add Demo"
                     icon="add"
                     onClick={() => setShowAddDemoModal(true)}
                 />
-                <DemosWrapper>
-                    {state.room!.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
-                </DemosWrapper>
             </RoomWrapper>
             <Modal
                 showModal={showAddDemoModal}

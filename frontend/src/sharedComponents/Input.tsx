@@ -4,19 +4,22 @@ import { colors } from 'theme'
 
 const Input = styled.input`
     font-size: 1rem;
-    border: 4px solid;
+    border: 0;
+    border-bottom : 4px solid ${colors.rotten.lightest};
     padding: 0.5rem 1rem;
     background-color: transparent;
     font-weight: 700;
-    color: ${colors.banana.base};
-    border-color: ${colors.banana.base};
+    color: ${colors.rotten.base};
     width: 100%;
     box-sizing: border-box;
-    border-radius: 1rem;
-    text-align: center;
+    text-align: left;
+
+    &:focus{
+        border-bottom : 4px solid ${colors.rotten.base};
+    }
 
     ::placeholder {
-        color: ${colors.marble.base};
+        color: ${colors.rotten.lightest};
   }
 `
 

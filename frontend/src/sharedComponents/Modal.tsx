@@ -17,13 +17,13 @@ const HeaderWrapper = styled.div`
     justify-content: space-between;
     svg {
         cursor: pointer;
-        fill: ${colors.pear.base};
+        fill: ${colors.supergreen.base};
         position: relative;
         right: -13px;
         top: -14px;
 
     &:hover {
-        fill: ${colors.pear.darken};
+        fill: ${colors.supergreen.darken};
         }
     }
     `
@@ -43,16 +43,15 @@ const Modal = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: colors.coffee.darken
+                background: `linear-gradient(153deg, ${colors.banana.lightest} 0%, ${colors.banana.lighten} 100%)`,
             },
             content: {
-                borderColor: colors.blueberry.base,
-                backgroundColor: colors.coffee.base,
                 position: 'static',
                 maxWidth: '80vw',
                 minWidth: '500px',
                 borderRadius: '1rem',
-                borderWidth: '2px'
+                borderWidth: '0',
+                background: colors.green.lighten,
             },
         }}
     >
