@@ -2,11 +2,12 @@ import { gql, useSubscription } from '@apollo/client'
 import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Modal, Paragraph, RoomWrapper } from 'sharedComponents'
+import { Button, Heading, Modal, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
-import { snippets } from 'theme'
+
 import { TDemo } from 'types'
 import { logger } from 'utilities'
+import Demo from './Demo'
 import { AddDemoModal } from '../../../modals'
 
 const DEMO_SUBSCRIPTION = gql`
@@ -27,27 +28,6 @@ const DemosWrapper = styled.ul`
     max-height:60vh;
     overflow-y: scroll;
 `
-
-const DemoWrapper = styled.li`
-    ${snippets.subSection};
-    border-radius: 0.7em;
-    margin: 0 0 1rem 0;
-    padding: 1rem;
-    box-sizing: border-box;
-
-    &:last-child{
-        margin-bottom: 0;
-    }
-`
-
-const Demo = ({ demo }: { demo: TDemo }) => {
-    return (
-        <DemoWrapper>
-            <Heading.H3>{demo.demo}</Heading.H3>
-            <Paragraph>{demo.presenter}</Paragraph>
-        </DemoWrapper>
-    )
-}
 
 const Signup = () => {
     const [showAddDemoModal, setShowAddDemoModal] = useState(false)
