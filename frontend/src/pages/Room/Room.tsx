@@ -8,6 +8,7 @@ import { logger, sanitizeRoomId } from 'utilities'
 import { context } from 'context'
 import { TRoom, TRoomMemberChange } from '../../types'
 import { Conclusion, RoomMembers, Signup, Voting, Admin } from './components'
+import MemberActions from './components/MemberActions'
 
 const Sidebar = styled.div`
     width: 250px;
@@ -70,10 +71,6 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: start;
-
-    div:last-child{
-        width: 100%;
-    }
 `
 
 const Room = () => {
@@ -183,8 +180,9 @@ const Room = () => {
     return (
         <Wrapper>
             <Sidebar>
-                <Admin />
+                <MemberActions />
                 <RoomMembers />
+                <Admin />
             </Sidebar>
             {Content}
         </Wrapper>

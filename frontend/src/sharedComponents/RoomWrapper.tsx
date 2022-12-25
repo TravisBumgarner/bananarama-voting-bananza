@@ -9,6 +9,7 @@ const RoomWrapper = styled.div`
     margin: 0 0 0 0;
     box-sizing: border-box;
     max-width: 800px;
+    width: 100%;
 `
 
 export default RoomWrapper

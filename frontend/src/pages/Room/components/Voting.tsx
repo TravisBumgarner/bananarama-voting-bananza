@@ -2,11 +2,11 @@ import { ApolloError, gql, useMutation, useSubscription } from '@apollo/client'
 import { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, RoomWrapper } from 'sharedComponents'
+import { Button, Heading, Paragraph, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
-import { colors } from 'theme'
 import { TDemo, TVote } from 'types'
 import { logger } from 'utilities'
+import DemoWrapper from './DemoWrapper'
 
 const VOTE_SUBSCRIPTION = gql`
   subscription Vote($roomId: String!) {
@@ -33,23 +33,6 @@ const DemosWrapper = styled.ul`
     padding: 0;
 `
 
-const DemoWrapper = styled.li`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    > h3 {
-        border: 2px solid ${colors.rotten.base};
-        border-radius: 0.7em;
-        margin: 0.25rem 0.25rem 0.25rem 0;
-        padding: 0.5rem;
-        flex-grow: 1;
-    }
-
-    > button {
-        margin: 0.5rem 0 0.5rem 1rem;
-    }
-`
 type DemoProps = {
     demo: TDemo
     isCastingVote: boolean
@@ -85,8 +68,13 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => 
     }, [])
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {demo.presenter}</Heading.H3>
-            <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="rotten" onClick={handleSubmit} />
+            <div>
+                <Heading.H3>{demo.demo}</Heading.H3>
+                <Paragraph>{demo.presenter}</Paragraph>
+            </div>
+            <div>
+                <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="rotten" onClick={handleSubmit} />
+            </div>
         </DemoWrapper>
     )
 }
@@ -125,6 +113,7 @@ const Voting = () => {
     return (
         <RoomWrapper>
             <Heading.H2>Voting</Heading.H2>
+
             <DemosWrapper>
                 {state.room!.demos.map((demo) => (
                     <Demo

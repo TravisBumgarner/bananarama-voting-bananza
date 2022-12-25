@@ -10,7 +10,7 @@ import { colors, snippets } from 'theme'
 
 const AdminWrapper = styled.div`
     ${snippets.section}
-    margin-bottom: 1rem;
+    margin-top: 1rem;
     padding: 1rem;
 `
 
