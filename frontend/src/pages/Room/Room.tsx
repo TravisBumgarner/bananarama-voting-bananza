@@ -113,7 +113,6 @@ const Room = () => {
             })
         },
         onData: ({ data }) => {
-            console.log(data)
             if (!state.room || !data.data) return
             const { userId, status, userName } = data.data.member
             if (status === 'join') {
