@@ -10,9 +10,9 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     
-    ${snippets.section}
-    padding: 1rem;
-    margin-bottom: 1rem;
+    /* ${snippets.section} */
+    /* padding: 1rem; */
+    /* margin-bottom: 1rem; */
 
     > button {
         margin-left: 1rem;

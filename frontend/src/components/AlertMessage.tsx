@@ -29,7 +29,7 @@ const AlertMessageWrapper = styled.div`
     align-items: center;
     border: 2px solid ${colors.banana.base};
     border-radius: 1rem;
-    background-color: ${colors.coffee.base};
+    background-color: ${colors.banana.base};
     @keyframes fade {
         0%,100% { opacity: 0 }
         10%,90% { opacity: 1 }

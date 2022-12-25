@@ -14,7 +14,6 @@ import Modal from './sharedComponents/Modal'
 
 const AppWrapper = styled.div`
     min-width: 80vw;
-    margin: 1rem;
     box-sizing: border-box;
 `
 

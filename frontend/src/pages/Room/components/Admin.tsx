@@ -1,12 +1,12 @@
 import { useContext, useCallback, useState } from 'react'
-import { Button, Heading } from 'sharedComponents'
+import { Button, Heading, Paragraph } from 'sharedComponents'
 import { ApolloError, gql, useMutation } from '@apollo/client'
 
 import { TRoom } from 'types'
 import { Exactly } from 'utilities'
 import { context } from 'context'
 import styled from 'styled-components'
-import { snippets } from 'theme'
+import { colors, snippets } from 'theme'
 
 const AdminWrapper = styled.div`
     ${snippets.section}
@@ -90,8 +90,8 @@ const Admin = () => {
                         onClick={() => setMaxVotes((prev) => prev + 1)}
                     />
                 </div>
-                <div style={{ textAlign: 'center', fontSize: '2rem', margin: '1rem' }}>
-                    {'🍌'.repeat(maxVotes)}
+                <div style={{ textAlign: 'center', fontSize: '1rem', margin: '0.5rem' }}>
+                    <Paragraph color={colors.rotten.base}>{maxVotes} Votes per Member</Paragraph>
                 </div>
                 <Button
                     fullWidth

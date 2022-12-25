@@ -15,15 +15,12 @@ const banana = colorFactory('#e5cc56')
 const rotten = colorFactory('#51372b')
 const superrotten = colorFactory('#6f6f6f')
 
-const coffee = colorFactory('#282828')
-
 const colors = {
     supergreen,
     green,
     banana,
     rotten,
     superrotten,
-    coffee,
 }
 
 const GlobalStyle = createGlobalStyle`
@@ -31,7 +28,7 @@ const GlobalStyle = createGlobalStyle`
         font-size: 16px;
         font-weight: 400;
         background: rgb(255,224,75);
-        background: linear-gradient(153deg, ${colors.banana.lightest} 0%, ${colors.banana.lighten} 100%);
+        background: linear-gradient(153deg, ${colors.banana.lighten} 0%, ${colors.banana.lightest} 100%);
         font-family: 'Nunito', sans-serif;
         min-height: 100vh;
     }
@@ -49,7 +46,8 @@ const GlobalStyle = createGlobalStyle`
 
 const section = css`
     border-radius: 1rem;
-    background-color: ${colors.green.lighten};
+    background-color: ${colors.green.base};
+    border: 2px solid ${colors.green.darken};
 `
 
 const subSection = css`
