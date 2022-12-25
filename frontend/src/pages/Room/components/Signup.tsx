@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { Button, Heading, Modal, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
-import { colors } from 'theme'
+import { colors, snippets } from 'theme'
 import { TDemo } from 'types'
 import { logger } from 'utilities'
 import { AddDemoModal } from '../../../modals'
@@ -29,7 +29,7 @@ const DemosWrapper = styled.ul`
 `
 
 const DemoWrapper = styled.li`
-    border: 2px solid ${colors.blueberry.base};
+    ${snippets.subSection};
     border-radius: 1rem;
     margin: 0 0 1rem 0;
     padding: 1rem;
@@ -80,7 +80,7 @@ const Signup = () => {
                 <Button
                     type="button"
                     fullWidth
-                    variation="pear"
+                    variation="apple"
                     label="Add Demo"
                     icon="add"
                     onClick={() => setShowAddDemoModal(true)}

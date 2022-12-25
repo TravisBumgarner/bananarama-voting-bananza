@@ -1,10 +1,9 @@
 import styled from 'styled-components'
 
-import { colors } from 'theme'
+import { snippets } from 'theme'
 
 const RoomWrapper = styled.div`
-    border: 2px solid ${colors.blueberry.base};
-    border-radius: 1rem;
+    ${snippets.section};
     padding: 1rem;
     margin: 0 0 0 0;
     box-sizing: border-box;

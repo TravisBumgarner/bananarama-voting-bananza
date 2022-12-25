@@ -8,7 +8,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 
 import { GlobalStyle } from 'theme'
 import { context, Context } from 'context'
-import { AlertMessage, Header, Router } from './components'
+import { AlertMessage, PageHeader, Router } from './components'
 import { JoinModal } from './modals'
 import Modal from './sharedComponents/Modal'
 
@@ -55,7 +55,7 @@ const App = () => {
     return (
         <>
             <AppWrapper>
-                <Header />
+                <PageHeader />
                 <AlertMessage />
                 <Router />
             </AppWrapper>

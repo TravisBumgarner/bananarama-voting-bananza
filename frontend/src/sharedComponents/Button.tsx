@@ -6,7 +6,7 @@ import Icon, { IconProps } from './Icon'
 type ButtonProps = {
     label?: string
     icon?: IconProps['name']
-    variation: 'pear' | 'banana' | 'marble' | 'apple'
+    variation: | 'banana' | 'apple'
     disabled?: boolean
     fullWidth?: boolean
     onClick?: () => void
@@ -43,8 +43,8 @@ const StyledButton = styled.button`
     ${({ variation, disabled }: ButtonProps) => {
         if (disabled) {
             return `
-                color: ${colors.marble.base};
-                border-color: ${colors.marble.base};
+                color: ${colors.disabled.base};
+                border-color: ${colors.disabled.base};
 
                 &:hover {
                     cursor: not-allowed;
@@ -52,15 +52,15 @@ const StyledButton = styled.button`
             `
         }
 
-        if (variation === 'pear') {
+        if (variation === 'apple') {
             return `
-                color: ${colors.pear.base};
-                border-color: ${colors.pear.base};
+                color: ${colors.apple.base};
+                border-color: ${colors.apple.base};
 
                 &:hover {
-                    color: ${colors.pear.darken};
-                    border-color: ${colors.pear.darken};
-                    background-color: ${colors.pear.lightest};
+                    color: ${colors.apple.darken};
+                    border-color: ${colors.apple.darken};
+                    background-color: ${colors.apple.lightest};
                 }
             `
         } if (variation === 'banana') {

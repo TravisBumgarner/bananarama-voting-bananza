@@ -6,15 +6,14 @@ import styled from 'styled-components'
 
 import { Exactly, logger, sanitizeRoomId } from 'utilities'
 import { context } from 'context'
-import { colors } from 'theme'
+import { snippets } from 'theme'
 import { TRoom, TRoomMemberChange } from '../../types'
 import { Conclusion, RoomMembers, Signup, Voting } from './components'
 
 const AdminWrapper = styled.div`
-    border: 2px solid ${colors.blueberry.base};
-    border-radius: 1rem;
+    ${snippets.section}
     margin-bottom: 1rem;
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem;
 `
 
 const Sidebar = styled.div`
@@ -227,7 +226,7 @@ const Room = () => {
                 <>
                     <div>
                         <Button
-                            variation="pear"
+                            variation="apple"
                             icon="add"
                             type="button"
                             onClick={() => setMaxVotes((prev) => prev + 1)}
@@ -245,7 +244,7 @@ const Room = () => {
                         fullWidth
                         type="button"
                         icon="how_to_vote"
-                        variation="pear"
+                        variation="apple"
                         label="Start Voting"
                         onClick={() => handleRoomChange('voting')}
                     />
@@ -257,7 +256,7 @@ const Room = () => {
                 <Button
                     type="button"
                     fullWidth
-                    variation="pear"
+                    variation="apple"
                     label="Announce Results"
                     icon="campaign"
                     onClick={() => handleRoomChange('conclusion')}
@@ -270,7 +269,7 @@ const Room = () => {
                     <Button
                         type="button"
                         fullWidth
-                        variation="pear"
+                        variation="apple"
                         label="Delete Room"
                         icon="delete"
                         onClick={() => console.log('deleting...')}
@@ -278,7 +277,7 @@ const Room = () => {
                     <Button
                         type="button"
                         fullWidth
-                        variation="pear"
+                        variation="apple"
                         label="Copy Results"
                         icon="content_copy"
                         onClick={copyResults}

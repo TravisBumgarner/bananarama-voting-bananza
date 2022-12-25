@@ -2,7 +2,7 @@ import { useCallback, useContext } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Button, Heading } from 'sharedComponents'
-import { colors } from 'theme'
+import { snippets } from 'theme'
 import { context } from 'context'
 import styled from 'styled-components'
 
@@ -12,8 +12,7 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     
-    border: 2px solid ${colors.blueberry.base};
-    border-radius: 1rem;
+    ${snippets.section}
     padding: 1rem;
     margin-bottom: 1rem;
 
@@ -44,7 +43,7 @@ const Header = () => {
                         type="button"
                         label="Share Room"
                         icon="content_copy"
-                        variation="pear"
+                        variation="apple"
                         onClick={copyRoomToClipboard}
                     />
                 )

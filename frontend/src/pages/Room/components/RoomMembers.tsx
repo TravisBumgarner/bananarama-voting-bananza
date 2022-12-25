@@ -3,11 +3,11 @@ import styled from 'styled-components'
 
 import { Heading } from 'sharedComponents'
 import { context } from 'context'
-import { colors } from 'theme'
+import { colors, snippets } from 'theme'
 
 const ListItem = styled.li`
     list-style: none;
-    color: ${colors.banana.base};
+    color: ${colors.blueberry.base};
     margin: 0;
     padding: 0
 `
@@ -19,8 +19,7 @@ const List = styled.ul`
 `
 
 const RoomMembersWrapper = styled.div`
-    border-radius: 1rem;
-    border: 2px solid ${colors.blueberry.base};
+    ${snippets.section}    
     padding: 1rem;
     box-sizing: border-box;
 `

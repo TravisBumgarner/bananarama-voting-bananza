@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, css } from 'styled-components'
 import { darken, lighten } from 'polished'
 
 const colorFactory = (color: string) => ({
@@ -9,10 +9,11 @@ const colorFactory = (color: string) => ({
     lightest: lighten(0.25, color),
 })
 
-const pear = colorFactory('#88AB75') // should be greenish for positive actions
-const apple = colorFactory('#DE8F6E') // should be redish for negative actions
-const banana = colorFactory('#DBD56E')
-const blueberry = colorFactory('#2D93AD')
+const pear = colorFactory('#4c5d43') // should be greenish for positive actions
+const apple = colorFactory('#88AB75') // should be redish for negative actions
+const banana = colorFactory('#e5cc56')
+const blueberry = colorFactory('#51372b')
+const disabled = colorFactory('#262626')
 const marble = colorFactory('#a8afb1')
 
 /*
@@ -31,6 +32,7 @@ const colors = {
     banana,
     blueberry,
     marble,
+    disabled,
     coffee,
 }
 
@@ -38,8 +40,10 @@ const GlobalStyle = createGlobalStyle`
     html {
         font-size: 16px;
         font-weight: 400;
-        background-color: ${colors.coffee.base};
+        background: rgb(255,224,75);
+        background: linear-gradient(153deg, ${colors.banana.lightest} 0%, ${colors.banana.lighten} 100%);
         font-family: 'Nunito', sans-serif;
+        min-height: 100vh;
     }
 
     body {
@@ -53,4 +57,19 @@ const GlobalStyle = createGlobalStyle`
     }
 `
 
-export { GlobalStyle, colors }
+const section = css`
+    border-radius: 1rem;
+    background-color: ${colors.banana.lighten};
+`
+
+const subSection = css`
+    border-radius: 1rem;
+    background: ${colors.banana.lightest};
+`
+
+const snippets = {
+    section,
+    subSection
+}
+
+export { GlobalStyle, colors, snippets }

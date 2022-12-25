@@ -86,7 +86,7 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => 
     return (
         <DemoWrapper>
             <Heading.H3> &quot;{demo.demo}&quot; - {demo.presenter}</Heading.H3>
-            <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="pear" onClick={handleSubmit} />
+            <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="apple" onClick={handleSubmit} />
         </DemoWrapper>
     )
 }

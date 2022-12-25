@@ -82,7 +82,7 @@ const AddDemo = ({ closeModal }: AddDemoProps) => {
                             disabled={demo.length === 0}
                             key="submit"
                             type="submit"
-                            variation="pear"
+                            variation="apple"
                             icon="done_all"
                             label="Submit Demo!"
                         />
