@@ -1,20 +1,13 @@
-import { Button, Heading, Loading } from 'sharedComponents'
+import { Loading } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
 import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 import styled from 'styled-components'
 
-import { Exactly, logger, sanitizeRoomId } from 'utilities'
+import { logger, sanitizeRoomId } from 'utilities'
 import { context } from 'context'
-import { snippets } from 'theme'
 import { TRoom, TRoomMemberChange } from '../../types'
-import { Conclusion, RoomMembers, Signup, Voting } from './components'
-
-const AdminWrapper = styled.div`
-    ${snippets.section}
-    margin-bottom: 1rem;
-    padding: 1rem;
-`
+import { Conclusion, RoomMembers, Signup, Voting, Admin } from './components'
 
 const Sidebar = styled.div`
     width: 250px;
@@ -52,15 +45,6 @@ const JOIN_ROOM_MUTATION = gql`
     }
 `
 
-const UPDATE_ROOM_MUTATION = gql`
-    mutation UpdateRoom($userId: String!, $roomId: String!, $status: RoomStatusEnum!, $maxVotes: Int) {
-        updateRoom(userId: $userId, roomId: $roomId, status: $status, maxVotes: $maxVotes) {
-            id,
-            status
-        }
-    }    
-`
-
 const MEMBER_SUBSCRIPTION = gql`
   subscription Member($roomId: String!) {
     member(roomId: $roomId) {
@@ -95,7 +79,6 @@ const Room = () => {
     const [isLoading, setIsLoading] = useState(true)
     const { dispatch, state } = useContext(context)
     const navigate = useNavigate()
-    const [maxVotes, setMaxVotes] = useState(2)
 
     const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
         dispatch({
@@ -112,23 +95,6 @@ const Room = () => {
     const [joinRoomMutation] = useMutation<any>(JOIN_ROOM_MUTATION, {
         onCompleted: onJoinRoomSuccess,
         onError: onJoinRoomFailure
-    })
-
-    const onUpdateRoomSuccess = useCallback((data: { updateRoom: Exactly<TRoom, 'status'> }) => {
-        if (!state.room) return // This shouldn't fire before the room's details have been populated
-        dispatch({
-            type: 'UPDATE_ROOM',
-            data: { status: data.updateRoom.status }
-        })
-        setIsLoading(false)
-    }, [state.room])
-    const onUpdateRoomError = useCallback((error: ApolloError) => {
-        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
-        setIsLoading(false)
-    }, [])
-    const [updateRoomMutation] = useMutation<any>(UPDATE_ROOM_MUTATION, {
-        onCompleted: onUpdateRoomSuccess,
-        onError: onUpdateRoomError
     })
 
     useSubscription<{ member: TRoomMemberChange }>(MEMBER_SUBSCRIPTION, {
@@ -193,111 +159,6 @@ const Room = () => {
         })
     }, [sanitizeRoomId, state.user])
 
-    const handleRoomChange = useCallback((status: TRoom['status']) => {
-        if (!state.room) return
-
-        const variables = {
-            status,
-            userId: state.user!.id,
-            roomId: state.room.id,
-            ...(status === 'voting' ? { maxVotes } : {})
-        }
-
-        updateRoomMutation({ variables })
-    }, [state.room, maxVotes])
-
-    const copyResults = () => {
-        const winnersDetails = state.room!.demos.filter(({ id }) => state.room!.winners.includes(id))
-        let message = ''
-
-        if (winnersDetails.length > 1) message += `${winnersDetails.length} way tie!\n`
-        message += `${(new Date().toDateString())}\n`
-        winnersDetails.forEach(({ presenter, demo }) => {
-            message += `${presenter} - ${demo}\n\n`
-        })
-        navigator.clipboard.writeText(message)
-    }
-
-    const Admin = useMemo(() => {
-        if (!state.room || !state.user || state.room.ownerId !== state.user.id) return null
-        let content
-        if (state.room.status === 'signup') {
-            content = (
-                <>
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <Button
-                            variation="rotten"
-                            type="button"
-                            icon="remove"
-                            label="🍌"
-                            disabled={maxVotes === 1}
-                            onClick={() => setMaxVotes((prev) => prev - 1)}
-                        />
-                        <Button
-                            variation="banana"
-                            icon="add"
-                            type="button"
-                            label="🍌"
-                            onClick={() => setMaxVotes((prev) => prev + 1)}
-                        />
-                    </div>
-                    <div style={{ textAlign: 'center', fontSize: '2rem', margin: '1rem' }}>
-                        {'🍌'.repeat(maxVotes)}
-                    </div>
-                    <Button
-                        fullWidth
-                        type="button"
-                        icon="how_to_vote"
-                        variation="banana"
-                        label="Start Voting"
-                        onClick={() => handleRoomChange('voting')}
-                    />
-                </>
-            )
-        }
-        if (state.room.status === 'voting') {
-            content = (
-                <Button
-                    type="button"
-                    fullWidth
-                    variation="banana"
-                    label="Announce Results"
-                    icon="campaign"
-                    onClick={() => handleRoomChange('conclusion')}
-                />
-            )
-        }
-        if (state.room.status === 'conclusion') {
-            content = (
-                <>
-                    <Button
-                        type="button"
-                        fullWidth
-                        variation="banana"
-                        label="Delete Room"
-                        icon="delete"
-                        onClick={() => console.log('deleting...')}
-                    />
-                    <Button
-                        type="button"
-                        fullWidth
-                        variation="rotten"
-                        label="Copy Results"
-                        icon="content_copy"
-                        onClick={copyResults}
-                    />
-                </>
-            )
-        }
-
-        return (
-            <AdminWrapper>
-                <Heading.H2>Admin</Heading.H2>
-                {content}
-            </AdminWrapper>
-        )
-    }, [state.room, state.user, maxVotes])
-
     const Content = useMemo(() => {
         if (!state.room) return
 
@@ -321,7 +182,7 @@ const Room = () => {
     return (
         <Wrapper>
             <Sidebar>
-                {Admin}
+                <Admin />
                 <RoomMembers />
             </Sidebar>
             {Content}
