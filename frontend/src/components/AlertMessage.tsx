@@ -27,7 +27,9 @@ const AlertMessageWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    ${snippets.section};
+    border-radius: 0.7em;
+    background-color: ${colors.rotten.lighten};
+    border: 2px solid ${colors.rotten.base};
     @keyframes fade {
         0%,100% { opacity: 0 }
         10%,90% { opacity: 1 }

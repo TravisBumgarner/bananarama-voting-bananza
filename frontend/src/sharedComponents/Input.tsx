@@ -1,12 +1,12 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { colors } from 'theme'
 
 const Input = styled.input`
     font-size: 1rem;
     border: 0;
-    border-bottom : 4px solid ${colors.supergreen.base};
-    padding: 0.5rem 1rem;
+    border-bottom : 2px solid ${colors.supergreen.base};
+    padding: 0.5rem 0;
     background-color: transparent;
     font-weight: 700;
     color: ${colors.rotten.base};
@@ -23,12 +23,41 @@ const Input = styled.input`
   }
 `
 
-const LabelWrapper = styled.div`
-    margin: 0.5rem 0;
+const sharedLabelCSS = css`
+    top: -5px;
+    transition: all 0.5s;
+    font-size: 0.8rem
+`
+const LabelWrapper = styled.div<{ showPlaceholder: boolean }>`
+    margin: 1rem 0;
+    position: relative;
+    height: 50px;
+    display: flex;
+    align-items: end;
+
     ${Input}{
         display: block;
         width: 100%;
         box-sizing: border-box;
+    }
+
+    > span {
+        position: absolute;
+        top: 20px;
+        left: 0;
+        pointer-events: none;
+        opacity: 0.5;
+        transition: all 0.5s;
+
+        ${({ showPlaceholder }) => {
+        return showPlaceholder
+            ? sharedLabelCSS
+            : ''
+    }}
+    }
+
+    ${Input}:focus + span {
+        ${sharedLabelCSS}
     }
 `
 
@@ -37,20 +66,22 @@ type LabelProps = {
     label?: string
     value: string
     handleChange: (value: string) => void
-    marble?: boolean
+    disabled?: boolean
 }
 
 const Label = ({
-    value, name, label, handleChange, marble
+    value, name, label, handleChange, disabled
 }: LabelProps) => (
-    <LabelWrapper>
+    <LabelWrapper showPlaceholder={value.length > 0}>
         <Input
-            placeholder={label}
+            disabled={disabled}
+            // placeholder={label}
             autoComplete="on"
             name={name}
             onChange={(event) => handleChange(event.target.value)}
             value={value}
         />
+        <span>{label}</span>
     </LabelWrapper>
 )
 
