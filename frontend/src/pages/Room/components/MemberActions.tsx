@@ -78,8 +78,8 @@ const MemberActions = () => {
     if (state.room.status === 'voting') {
         content = (
             <div>
-                <Paragraph>Drag the bananas onto your favorite demos!</Paragraph>
-                <div>
+                <Paragraph align="center">Drag bananas to your favorite demos to vote!</Paragraph>
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                     {[...Array(state.room.maxVotes)].map((_, index) => {
                         return <VotingBanana key={index} bananaIndex={index} /> //eslint-disable-line
                     })}
