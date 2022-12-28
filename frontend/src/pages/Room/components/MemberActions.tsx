@@ -80,7 +80,7 @@ const MemberActions = () => {
             <div>
                 <Paragraph>Drag the bananas onto your favorite demos!</Paragraph>
                 <div>
-                    {[...Array(5)].map((_, index) => {
+                    {[...Array(state.room.maxVotes)].map((_, index) => {
                         return <VotingBanana key={index} bananaIndex={index} /> //eslint-disable-line
                     })}
                 </div>

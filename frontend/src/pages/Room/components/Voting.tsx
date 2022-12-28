@@ -1,8 +1,8 @@
 import { ApolloError, gql, useMutation, useSubscription } from '@apollo/client'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Paragraph, RoomWrapper } from 'sharedComponents'
+import { Heading, Paragraph, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { TDemo, TVote } from 'types'
 import { logger } from 'utilities'
@@ -36,65 +36,67 @@ const DemosWrapper = styled.ul`
 
 type DemoProps = {
     demo: TDemo
-    isCastingVote: boolean
-    setIsCastingVote: React.Dispatch<React.SetStateAction<boolean>>
-    canVote: boolean
+    // isCastingVote: boolean
+    // setIsCastingVote: React.Dispatch<React.SetStateAction<boolean>>
+    // canVote: boolean
     binIndex: number
 }
-const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote, binIndex }: DemoProps) => {
+const Demo = ({ demo, binIndex }: DemoProps) => {
     const { state, dispatch } = useContext(context)
-    const [votes, setVotes] = useState(0)
 
-    const { matchedBinIndex, dragEnterCallback, hoveredBinIndex, dragLeaveCallback } = useDragAndDrop()
-
-    useEffect(() => {
-        if (matchedBinIndex === binIndex) {
-            setVotes((prev) => prev + 1)
-        }
-    }, [matchedBinIndex])
+    const { matchedBinIndex, dragEnterCallback, hoveredBinIndex } = useDragAndDrop()
 
     const onAddVoteSuccess = useCallback(() => {
-        setIsCastingVote(false)
+        // setIsCastingVote(false)
     }, [])
 
     const onAddVoteFailure = useCallback((error: ApolloError) => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
-        setIsCastingVote(false)
+        // setIsCastingVote(false)
     }, [])
     const [addVoteMutation] = useMutation<any>(ADD_VOTE_ACTION_MUTATION, {
         onCompleted: onAddVoteSuccess,
         onError: onAddVoteFailure
     })
 
-    const handleSubmit = useCallback(async () => {
-        if (!state.room) return
-        setIsCastingVote(true)
+    const castVote = useCallback(async () => {
+        // setIsCastingVote(true)
         await addVoteMutation({
             variables: {
                 userId: state.user!.id,
-                roomId: state.room.id,
+                roomId: state.room!.id,
                 demoId: demo.id
             }
         })
     }, [])
 
+    useEffect(() => {
+        if (matchedBinIndex === binIndex) {
+            castVote()
+        }
+    }, [matchedBinIndex])
+
     // isHovered Currently doesn't work.
     const isHovered = useMemo(() => hoveredBinIndex === binIndex, [hoveredBinIndex, binIndex])
     const onDragEnter = useCallback(() => dragEnterCallback(binIndex), [binIndex])
+
+    const votesCastByMember = useMemo(() => {
+        console.log(state.room!.votes)
+        return state.room!.votes.filter(({ userId }) => userId === state.user?.id).length
+    }, [state.room?.votes.length])
 
     return (
         <DemoWrapper
             isHovered={isHovered}
             onDragEnter={onDragEnter}
-            onDragLeave={dragLeaveCallback}
+        // onDragLeave={dragLeaveCallback} currently doesn't work
         >
             <div>
                 <Heading.H3>{demo.demo}</Heading.H3>
                 <Paragraph>{demo.presenter}</Paragraph>
-                <p>Votes: {votes}</p>
             </div>
-            <div>
-                <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="rotten" onClick={handleSubmit} />
+            <div style={{ fontSize: '3rem' }}>
+                {'🍌'.repeat(votesCastByMember)}
             </div>
         </DemoWrapper>
     )
@@ -102,7 +104,7 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote, binIndex }: Demo
 
 const Voting = () => {
     const { state, dispatch } = useContext(context)
-    const [isCastingVote, setIsCastingVote] = useState(false)
+    // const [isCastingVote, setIsCastingVote] = useState(false)
 
     useSubscription<{ vote: TVote }>(VOTE_SUBSCRIPTION, {
         variables: {
@@ -127,9 +129,9 @@ const Voting = () => {
         },
     })
 
-    const votesCast = useMemo(() => {
-        return state.room!.votes.filter(({ userId }) => userId === state.user!.id).length
-    }, [state.room!.votes])
+    // const votesCast = useMemo(() => {
+    //     return state.room!.votes.filter(({ userId }) => userId === state.user!.id).length
+    // }, [state.room!.votes])
 
     return (
         <RoomWrapper>
@@ -138,12 +140,12 @@ const Voting = () => {
             <DemosWrapper>
                 {state.room!.demos.map((demo, index) => (
                     <Demo
-                        isCastingVote={isCastingVote}
-                        setIsCastingVote={setIsCastingVote}
+                        // isCastingVote={isCastingVote}
+                        // setIsCastingVote={setIsCastingVote}
                         demo={demo}
                         key={demo.id}
                         binIndex={index}
-                        canVote={state.room!.maxVotes > votesCast}
+                    // canVote={state.room!.maxVotes > votesCast}
                     />
                 ))}
             </DemosWrapper>
