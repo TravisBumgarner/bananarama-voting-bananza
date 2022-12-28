@@ -45,7 +45,7 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote, binIndex }: Demo
     const { state, dispatch } = useContext(context)
     const [votes, setVotes] = useState(0)
 
-    const { matchedBinIndex, dragEnterCallback } = useDragAndDrop()
+    const { matchedBinIndex, dragEnterCallback, hoveredBinIndex, dragLeaveCallback } = useDragAndDrop()
 
     useEffect(() => {
         if (matchedBinIndex === binIndex) {
@@ -77,9 +77,16 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote, binIndex }: Demo
             }
         })
     }, [])
+
+    // isHovered Currently doesn't work.
+    const isHovered = useMemo(() => hoveredBinIndex === binIndex, [hoveredBinIndex, binIndex])
+    const onDragEnter = useCallback(() => dragEnterCallback(binIndex), [binIndex])
+
     return (
         <DemoWrapper
-            onDragEnter={(event) => dragEnterCallback(event, binIndex)}
+            isHovered={isHovered}
+            onDragEnter={onDragEnter}
+            onDragLeave={dragLeaveCallback}
         >
             <div>
                 <Heading.H3>{demo.demo}</Heading.H3>

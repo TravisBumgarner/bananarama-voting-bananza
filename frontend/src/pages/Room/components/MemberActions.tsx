@@ -39,7 +39,7 @@ const VotingBanana = ({ bananaIndex }: { bananaIndex: number }) => {
     return (
         <VotingBananaWrapper
             disabled={hasBeenBinned}
-            onDragStart={(event) => dragStartCallback(event, bananaIndex)}
+            onDragStart={() => dragStartCallback(bananaIndex)}
             draggable={!hasBeenBinned}
             onDragEnd={onDragEnd}
         >🍌
