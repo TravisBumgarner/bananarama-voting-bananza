@@ -1,11 +1,12 @@
 import { ApolloError, gql, useMutation, useSubscription } from '@apollo/client'
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Button, Heading, Paragraph, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
 import { TDemo, TVote } from 'types'
 import { logger } from 'utilities'
+import { useDragAndDrop } from 'hooks'
 import DemoWrapper from './DemoWrapper'
 
 const VOTE_SUBSCRIPTION = gql`
@@ -38,9 +39,19 @@ type DemoProps = {
     isCastingVote: boolean
     setIsCastingVote: React.Dispatch<React.SetStateAction<boolean>>
     canVote: boolean
+    binIndex: number
 }
-const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => {
+const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote, binIndex }: DemoProps) => {
     const { state, dispatch } = useContext(context)
+    const [votes, setVotes] = useState(0)
+
+    const { matchedBinIndex, dragEnterCallback } = useDragAndDrop()
+
+    useEffect(() => {
+        if (matchedBinIndex === binIndex) {
+            setVotes((prev) => prev + 1)
+        }
+    }, [matchedBinIndex])
 
     const onAddVoteSuccess = useCallback(() => {
         setIsCastingVote(false)
@@ -67,10 +78,13 @@ const Demo = ({ demo, isCastingVote, setIsCastingVote, canVote }: DemoProps) => 
         })
     }, [])
     return (
-        <DemoWrapper>
+        <DemoWrapper
+            onDragEnter={(event) => dragEnterCallback(event, binIndex)}
+        >
             <div>
                 <Heading.H3>{demo.demo}</Heading.H3>
                 <Paragraph>{demo.presenter}</Paragraph>
+                <p>Votes: {votes}</p>
             </div>
             <div>
                 <Button type="button" label="Vote 🍌" disabled={isCastingVote || !canVote} variation="rotten" onClick={handleSubmit} />
@@ -115,12 +129,13 @@ const Voting = () => {
             <Heading.H2>Voting</Heading.H2>
 
             <DemosWrapper>
-                {state.room!.demos.map((demo) => (
+                {state.room!.demos.map((demo, index) => (
                     <Demo
                         isCastingVote={isCastingVote}
                         setIsCastingVote={setIsCastingVote}
                         demo={demo}
                         key={demo.id}
+                        binIndex={index}
                         canVote={state.room!.maxVotes > votesCast}
                     />
                 ))}

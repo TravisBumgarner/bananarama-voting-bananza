@@ -40,6 +40,9 @@
       "modals": [
         "src/modals/"
       ],
+      "hooks": [
+        "src/hooks/"
+      ],
     }
   }
 }

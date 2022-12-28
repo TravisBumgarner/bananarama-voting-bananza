@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Button, Heading, Modal, Paragraph } from 'sharedComponents'
 
 import styled from 'styled-components'
@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { context } from 'context'
 
 import { snippets } from 'theme'
+import { useDragAndDrop } from 'hooks'
 import { AddDemoModal } from '../../../modals'
 
 const MemberActionsWrapper = styled.div`
@@ -13,6 +14,38 @@ const MemberActionsWrapper = styled.div`
     margin-bottom: 1rem;
     padding: 1rem;
 `
+
+const VotingBananaWrapper = styled.div<{ disabled: boolean }>`
+  width: 50px;
+  height: 50px;
+  filter: grayscale(${({ disabled }) => (disabled ? 1 : 0)});
+  cursor: ${({ disabled }) => (disabled ? ' not-allowed' : ' grab')};
+  font-size: 40px;
+`
+const VotingBanana = ({ bananaIndex }: { bananaIndex: number }) => {
+    const { dragStartCallback, dropCallback, matchedItemIndex, matchedBinIndex } = useDragAndDrop()
+    const [hasBeenBinned, setHasBeenBinned] = useState(false)
+
+    useEffect(() => {
+        if (matchedItemIndex === bananaIndex && matchedBinIndex > -1) {
+            setHasBeenBinned(true)
+        }
+    }, [matchedItemIndex])
+
+    const onDragEnd = () => {
+        dropCallback()
+    }
+
+    return (
+        <VotingBananaWrapper
+            disabled={hasBeenBinned}
+            onDragStart={(event) => dragStartCallback(event, bananaIndex)}
+            draggable={!hasBeenBinned}
+            onDragEnd={onDragEnd}
+        >🍌
+        </VotingBananaWrapper>
+    )
+}
 
 const MemberActions = () => {
     const { state } = useContext(context)
@@ -46,7 +79,11 @@ const MemberActions = () => {
         content = (
             <div>
                 <Paragraph>Drag the bananas onto your favorite demos!</Paragraph>
-                <p style={{ fontSize: '3rem', margin: 0, textAlign: 'center' }}>🍌🍌🍌</p>
+                <div>
+                    {[...Array(5)].map((_, index) => {
+                        return <VotingBanana key={index} bananaIndex={index} /> //eslint-disable-line
+                    })}
+                </div>
             </div>
         )
     }
