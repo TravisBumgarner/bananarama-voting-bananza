@@ -27,7 +27,7 @@ const VotingBanana = ({ bananaIndex }: { bananaIndex: number }) => {
     const [hasBeenBinned, setHasBeenBinned] = useState(false)
 
     useEffect(() => {
-        if (matchedItemIndex === bananaIndex && matchedBinIndex > -1) {
+        if (matchedItemIndex === bananaIndex && matchedBinIndex !== null) {
             setHasBeenBinned(true)
         }
     }, [matchedItemIndex])

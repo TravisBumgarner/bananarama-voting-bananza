@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useMemo, useRef, useState } from 'react'
 
 // Could be extended to support multiple things being dragged and dropped.
 // This could be done by chaging the shape of draggedItemIndex to be Record<string, number>
@@ -7,23 +7,23 @@ import { createContext, useContext, useMemo, useState } from 'react'
 const votingContext = createContext(
     {
     } as {
-        draggedItem: readonly [number, React.Dispatch<React.SetStateAction<number>>]
-        hoveredBin: readonly [number, React.Dispatch<React.SetStateAction<number>>]
-        matchedBin: readonly [number, React.Dispatch<React.SetStateAction<number>>]
-        matchedItem: readonly [number, React.Dispatch<React.SetStateAction<number>>]
+        draggedItem: React.MutableRefObject<number | null>
+        hoveredBin: React.MutableRefObject<number | null>
+        matchedBin: readonly [number | null, React.Dispatch<React.SetStateAction<number | null>>]
+        matchedItem: readonly [number | null, React.Dispatch<React.SetStateAction<number | null>>]
     },
 )
 
 const VotingContext = ({ children }: { children: React.ReactChild }) => {
-    const [matchedBinIndex, setMatchedBinIndex] = useState<number>(-1)
-    const [matchedItemIndex, setMatchedItemIndex] = useState<number>(-1)
+    const [matchedBinIndex, setMatchedBinIndex] = useState<number | null>(null)
+    const [matchedItemIndex, setMatchedItemIndex] = useState<number | null>(null)
 
-    const [draggedItemIndex, setDraggedItemIndex] = useState<number>(-1)
-    const [hoveredBinIndex, setHoveredItemIndex] = useState<number>(-1)
+    const draggedItemIndex = useRef<number | null>(null)
+    const hoveredBinIndex = useRef<number | null>(null)
 
     const store = useMemo(() => ({
-        draggedItem: [draggedItemIndex, setDraggedItemIndex] as const,
-        hoveredBin: [hoveredBinIndex, setHoveredItemIndex] as const,
+        draggedItem: draggedItemIndex,
+        hoveredBin: hoveredBinIndex,
         matchedBin: [matchedBinIndex, setMatchedBinIndex] as const,
         matchedItem: [matchedItemIndex, setMatchedItemIndex] as const,
     }), [draggedItemIndex, hoveredBinIndex, matchedBinIndex, matchedItemIndex])
@@ -32,29 +32,29 @@ const VotingContext = ({ children }: { children: React.ReactChild }) => {
 
 const useDragAndDrop = () => {
     const {
-        draggedItem: [draggedItemIndex, setDraggedItemIndex],
-        hoveredBin: [hoveredBinIndex, setHoveredItemIndex],
+        draggedItem,
+        hoveredBin,
         matchedBin: [matchedBinIndex, setMatchedBinIndex],
         matchedItem: [matchedItemIndex, setMatchedItemIndex],
     } = useContext(votingContext)
 
     const dragStartCallback = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-        setMatchedBinIndex(-1)
-        setMatchedItemIndex(-1)
+        setMatchedBinIndex(null)
+        setMatchedItemIndex(null)
 
-        setDraggedItemIndex(index)
+        draggedItem.current = index
     }
 
     const dragEnterCallback = (e: React.DragEvent<HTMLElement>, index: number) => {
-        setHoveredItemIndex(index)
+        hoveredBin.current = index
     }
 
     const dropCallback = () => {
-        setMatchedBinIndex(hoveredBinIndex)
-        setMatchedItemIndex(draggedItemIndex)
+        setMatchedBinIndex(hoveredBin.current)
+        setMatchedItemIndex(draggedItem.current)
 
-        setDraggedItemIndex(-1)
-        setHoveredItemIndex(-1)
+        hoveredBin.current = null
+        draggedItem.current = null
     }
 
     // Could the function to make bins and items be put here.
