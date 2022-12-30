@@ -91,7 +91,7 @@ const Admin = () => {
                     />
                 </div>
                 <div style={{ textAlign: 'center', margin: '1rem 0' }}>
-                    <Paragraph color={colors.rotten.base}>{maxVotes} Votes per Member</Paragraph>
+                    <Paragraph align="center" color={colors.rotten.base}>{maxVotes} Votes per Member</Paragraph>
                 </div>
                 <Button
                     fullWidth

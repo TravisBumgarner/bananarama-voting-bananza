@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { Button, Heading, Modal, Paragraph } from 'sharedComponents'
 
 import styled from 'styled-components'
@@ -22,9 +22,9 @@ const VotingBananaWrapper = styled.div<{ disabled: boolean }>`
   cursor: ${({ disabled }) => (disabled ? ' not-allowed' : ' grab')};
   font-size: 40px;
 `
-const VotingBanana = ({ bananaIndex }: { bananaIndex: number }) => {
+const VotingBanana = ({ bananaIndex, canBeUsed }: { bananaIndex: number, canBeUsed: boolean }) => {
     const { dragStartCallback, dropCallback, matchedItemIndex, matchedBinIndex } = useDragAndDrop()
-    const [hasBeenBinned, setHasBeenBinned] = useState(false)
+    const [hasBeenBinned, setHasBeenBinned] = useState(!canBeUsed)
 
     useEffect(() => {
         if (matchedItemIndex === bananaIndex && matchedBinIndex !== null) {
@@ -53,6 +53,11 @@ const MemberActions = () => {
 
     if (!state.room || !state.user || state.room.ownerId !== state.user.id) return null
 
+    const voteRemaining = useMemo(() => {
+        const votesCast = state.room!.votes.filter(({ userId }) => userId === state.user!.id).length
+        return state.room!.maxVotes - votesCast
+    }, [state.room.votes.length])
+    console.log('votes remaining', voteRemaining)
     let content
     if (state.room.status === 'signup') {
         content = (
@@ -81,7 +86,7 @@ const MemberActions = () => {
                 <Paragraph align="center">Drag bananas to your favorite demos to vote!</Paragraph>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                     {[...Array(state.room.maxVotes)].map((_, index) => {
-                        return <VotingBanana key={index} bananaIndex={index} /> //eslint-disable-line
+                        return <VotingBanana canBeUsed={index < voteRemaining} key={index} bananaIndex={index} /> //eslint-disable-line
                     })}
                 </div>
             </div>
@@ -96,7 +101,7 @@ const MemberActions = () => {
 
     return (
         <MemberActionsWrapper>
-            <Heading.H2>MemberActions</Heading.H2>
+            <Heading.H2>Menu</Heading.H2>
             {content}
         </MemberActionsWrapper>
     )

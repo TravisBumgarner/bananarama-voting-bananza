@@ -25,7 +25,7 @@ const DemosWrapper = styled.ul`
     margin: 0;
     padding: 0;
     max-height:60vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 `
 
 const Demo = ({ demo }: { demo: TDemo }) => {

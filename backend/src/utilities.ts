@@ -10,8 +10,19 @@ const logger = (message: any) => {
     console.log(JSON.stringify(message)) // eslint-disable-line
 }
 
+const generateID = (length: number) => {
+    let result = ''
+    const characters = 'abcdefghjkmnopqrstuvwyxz'
+    const charactersLength = characters.length
+    for (let i = 0; i < length; i += 1) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
+}
+
 export {
     AtLeast,
     Exactly,
-    logger
+    logger,
+    generateID
 }

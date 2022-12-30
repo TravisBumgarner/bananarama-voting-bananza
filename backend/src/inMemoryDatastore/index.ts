@@ -1,5 +1,5 @@
 import { v4 as uuid4 } from 'uuid'
-import { hri } from 'human-readable-ids'
+import { generateID } from '../utilities'
 
 import { TRoom, TRoomMember, EErrorMessages, TDemo, TVote } from '../types'
 
@@ -25,7 +25,14 @@ class InMemoryDatastore {
     }
 
     createRoom(owner: TRoomMember): Response<TRoom> {
-        const roomId = hri.random()
+        let roomId = generateID(4)
+
+        while ((roomId in this.rooms)) {
+            // I seriously doubt we'll ever have collisions where this will be a problem.
+            // ~ Famous last words.
+            roomId = generateID(4)
+        }
+
         this.rooms[roomId] = {
             id: roomId,
             ownerId: owner.id,
