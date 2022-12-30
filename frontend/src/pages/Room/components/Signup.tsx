@@ -1,13 +1,13 @@
 import { gql, useSubscription } from '@apollo/client'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading, Modal, RoomWrapper } from 'sharedComponents'
+import { Heading, RoomWrapper, Paragraph } from 'sharedComponents'
 import { context } from 'context'
-import { colors } from 'theme'
+
 import { TDemo } from 'types'
 import { logger } from 'utilities'
-import { AddDemoModal } from '../../../modals'
+import DemoWrapper from './DemoWrapper'
 
 const DEMO_SUBSCRIPTION = gql`
   subscription Demo($roomId: String!) {
@@ -28,24 +28,21 @@ const DemosWrapper = styled.ul`
     overflow-y: scroll;
 `
 
-const DemoWrapper = styled.li`
-    border: 2px solid ${colors.blueberry.base};
-    border-radius: 1rem;
-    margin: 0 0 1rem 0;
-    padding: 1rem;
-    box-sizing: border-box;
-`
-
 const Demo = ({ demo }: { demo: TDemo }) => {
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {demo.presenter}</Heading.H3>
+            <div>
+                <Heading.H3>{demo.demo}</Heading.H3>
+                <Paragraph>{demo.presenter}</Paragraph>
+            </div>
+            <div>
+                {/* spaceholder */}
+            </div>
         </DemoWrapper>
     )
 }
 
 const Signup = () => {
-    const [showAddDemoModal, setShowAddDemoModal] = useState(false)
     const { state, dispatch } = useContext(context)
 
     useSubscription<{ demo: TDemo }>(DEMO_SUBSCRIPTION, {
@@ -74,29 +71,12 @@ const Signup = () => {
     })
 
     return (
-        <div>
-            <RoomWrapper>
-                <Heading.H2>Demos</Heading.H2>
-                <Button
-                    type="button"
-                    fullWidth
-                    variation="pear"
-                    label="Add Demo"
-                    icon="add"
-                    onClick={() => setShowAddDemoModal(true)}
-                />
-                <DemosWrapper>
-                    {state.room!.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
-                </DemosWrapper>
-            </RoomWrapper>
-            <Modal
-                showModal={showAddDemoModal}
-                closeModal={() => setShowAddDemoModal(false)}
-                contentLabel="Add Demo!"
-            >
-                <AddDemoModal closeModal={() => setShowAddDemoModal(false)} />
-            </Modal>
-        </div>
+        <RoomWrapper>
+            <Heading.H2>Demos</Heading.H2>
+            <DemosWrapper>
+                {state.room!.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
+            </DemosWrapper>
+        </RoomWrapper>
     )
 }
 

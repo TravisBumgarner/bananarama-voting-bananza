@@ -73,17 +73,17 @@ const AddDemo = ({ closeModal }: AddDemoProps) => {
                         <Button
                             type="button"
                             key="cancel"
-                            variation="banana"
+                            variation="cancel"
                             label="Cancel"
-                            icon="cancel"
+                            // icon="cancel"
                             onClick={() => closeModal()}
                         />
                         <Button
                             disabled={demo.length === 0}
                             key="submit"
                             type="submit"
-                            variation="pear"
-                            icon="done_all"
+                            variation="banana"
+                            // icon="done_all"
                             label="Submit Demo!"
                         />
                     </ButtonWrapper>

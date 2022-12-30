@@ -1,15 +1,16 @@
-import { useContext, useMemo } from 'react'
+import { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Heading } from 'sharedComponents'
+import { Button, Heading } from 'sharedComponents'
 import { context } from 'context'
-import { colors } from 'theme'
+import { colors, snippets } from 'theme'
 
 const ListItem = styled.li`
     list-style: none;
-    color: ${colors.banana.base};
+    color: ${colors.rotten.base};
     margin: 0;
-    padding: 0
+    padding: 0;
+    font-weight: 900;
 `
 
 const List = styled.ul`
@@ -19,8 +20,7 @@ const List = styled.ul`
 `
 
 const RoomMembersWrapper = styled.div`
-    border-radius: 1rem;
-    border: 2px solid ${colors.blueberry.base};
+    ${snippets.section}    
     padding: 1rem;
     box-sizing: border-box;
 `
@@ -81,7 +81,7 @@ const VotingMembers = () => {
 }
 
 const RoomMembers = () => {
-    const { state } = useContext(context)
+    const { state, dispatch } = useContext(context)
 
     let Body: JSX.Element
     switch (state.room!.status) {
@@ -100,10 +100,23 @@ const RoomMembers = () => {
         return state.room!.members.length
     }, [state.room!.members])
 
+    const copyRoomToClipboard = useCallback(() => {
+        dispatch({ type: 'ADD_MESSAGE', data: { message: 'Room URL copied to clipboard.' } })
+        navigator.clipboard.writeText(window.location.href)
+    }, [window.location.href])
+
     return (
         <RoomMembersWrapper>
             <Heading.H2>{roomMembers} Member{roomMembers !== 1 && 's'}</Heading.H2>
             {Body}
+            <Button
+                fullWidth
+                type="button"
+                label="Share Room"
+                icon="content_copy"
+                variation="banana"
+                onClick={copyRoomToClipboard}
+            />
         </RoomMembersWrapper>
     )
 }

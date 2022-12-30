@@ -63,7 +63,8 @@ const webpackConfig = {
             utilities: path.resolve(__dirname, 'src/utilities.ts'),
             types: path.resolve(__dirname, 'src/types.ts'),
             context: path.resolve(__dirname, 'src/Context/'),
-            modals: path.resolve(__dirname, 'src/modals/')
+            modals: path.resolve(__dirname, 'src/modals/'),
+            hooks: path.resolve(__dirname, 'src/hooks/')
         },
     },
     devServer: {

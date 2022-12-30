@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Paragraph, Button } from 'sharedComponents'
 import { context } from 'context'
-import { colors } from 'theme'
+import { colors, snippets } from 'theme'
 
 const DEFAULT_TTL = 5000
 
@@ -27,9 +27,9 @@ const AlertMessageWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 2px solid ${colors.banana.base};
-    border-radius: 1rem;
-    background-color: ${colors.coffee.base};
+    border-radius: 0.7em;
+    background-color: ${colors.rotten.lighten};
+    border: 2px solid ${colors.rotten.base};
     @keyframes fade {
         0%,100% { opacity: 0 }
         10%,90% { opacity: 1 }
@@ -57,7 +57,7 @@ const AlertMessage = () => {
         <AlertMessagePositioner>
             <AlertMessageWrapper>
                 <Paragraph style={{ color: colors.banana.base }}>{state.message.body}</Paragraph>
-                <Button type="button" label="Ok!" icon="done_all" onClick={handleSubmit} variation="pear" />
+                <Button type="button" label="Ok!" icon="done_all" onClick={handleSubmit} variation="banana" />
             </AlertMessageWrapper>
         </AlertMessagePositioner>
     )

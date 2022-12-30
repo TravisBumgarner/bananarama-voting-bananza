@@ -1,9 +1,9 @@
-import Header from './Header'
+import PageHeader from './PageHeader'
 import AlertMessage from './AlertMessage'
 import Router from './Router'
 
 export {
-    Header,
+    PageHeader,
     Router,
     AlertMessage,
 }

@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components'
-import { darken, lighten } from 'polished'
+import { createGlobalStyle, css } from 'styled-components'
+import { darken, lighten, transparentize } from 'polished'
 
 const colorFactory = (color: string) => ({
     base: color,
@@ -9,37 +9,28 @@ const colorFactory = (color: string) => ({
     lightest: lighten(0.25, color),
 })
 
-const pear = colorFactory('#88AB75') // should be greenish for positive actions
-const apple = colorFactory('#DE8F6E') // should be redish for negative actions
-const banana = colorFactory('#DBD56E')
-const blueberry = colorFactory('#2D93AD')
-const marble = colorFactory('#a8afb1')
-
-/*
-const pear = colorFactory('#3dad00') // should be greenish for positive actions
-const apple = colorFactory('#d74405') // should be redish for negative actions
-const banana = colorFactory('#dcd103')
-const blueberry = colorFactory('#0080a0')
-const marble = colorFactory('#a8afb1')
-*/
-
-const coffee = colorFactory('#282828')
+const supergreen = colorFactory('#4c5d43') // should be greenish for positive actions
+const green = colorFactory('#88AB75') // should be redish for negative actions
+const banana = colorFactory('#e5cc56')
+const rotten = colorFactory('#51372b')
+const superrotten = colorFactory('#6f6f6f')
 
 const colors = {
-    pear,
-    apple,
+    supergreen,
+    green,
     banana,
-    blueberry,
-    marble,
-    coffee,
+    rotten,
+    superrotten,
 }
 
 const GlobalStyle = createGlobalStyle`
     html {
         font-size: 16px;
         font-weight: 400;
-        background-color: ${colors.coffee.base};
+        background: rgb(255,224,75);
+        background: linear-gradient(153deg, ${colors.banana.lighten} 0%, ${colors.banana.lightest} 100%);
         font-family: 'Nunito', sans-serif;
+        min-height: 100vh;
     }
 
     body {
@@ -53,4 +44,22 @@ const GlobalStyle = createGlobalStyle`
     }
 `
 
-export { GlobalStyle, colors }
+const section = css`
+    border-radius: 0.7em;
+    background-color: ${colors.green.base};
+    border: 2px solid ${colors.green.darken};
+`
+
+const subSection = css`
+    border-radius: 0.7em;
+    /* background: linear-gradient(153deg, ${colors.banana.base} 0%, ${colors.green.base} 100%); */
+    background: ${transparentize(0.2, colors.banana.lighten)};
+    border: 2px solid ${colors.rotten.base};
+`
+
+const snippets = {
+    section,
+    subSection
+}
+
+export { GlobalStyle, colors, snippets }

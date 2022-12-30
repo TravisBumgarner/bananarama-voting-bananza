@@ -8,13 +8,13 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 
 import { GlobalStyle } from 'theme'
 import { context, Context } from 'context'
-import { AlertMessage, Header, Router } from './components'
+import { AlertMessage, PageHeader, Router } from './components'
 import { JoinModal } from './modals'
 import Modal from './sharedComponents/Modal'
+import { VotingContext } from './hooks/useDragAndDrop'
 
 const AppWrapper = styled.div`
     min-width: 80vw;
-    margin: 1rem;
     box-sizing: border-box;
 `
 
@@ -55,7 +55,7 @@ const App = () => {
     return (
         <>
             <AppWrapper>
-                <Header />
+                <PageHeader />
                 <AlertMessage />
                 <Router />
             </AppWrapper>
@@ -73,12 +73,14 @@ const App = () => {
 const ContextWrapper = () => (
     <BrowserRouter>
         <ApolloProvider client={apolloClient}>
-            <Context>
-                <>
-                    <GlobalStyle />
-                    <App />
-                </>
-            </Context>
+            <VotingContext>
+                <Context>
+                    <>
+                        <GlobalStyle />
+                        <App />
+                    </>
+                </Context>
+            </VotingContext>
         </ApolloProvider>
     </BrowserRouter>
 )

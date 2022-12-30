@@ -103,7 +103,6 @@ const context = createContext(
 )
 
 const reducer = (state: State, action: Action): State => {
-    console.log(action.type)
     switch (action.type) {
         case 'RESET_ROOM_STATE': {
             return { ...state, room: null }

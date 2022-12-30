@@ -1,10 +1,10 @@
 import { useContext, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Heading, RoomWrapper } from 'sharedComponents'
+import { Heading, Paragraph, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
-import { colors } from 'theme'
 import { TDemo } from 'types'
+import DemoWrapper from './DemoWrapper'
 
 const DemosWrapper = styled.ul`
     list-style: none;
@@ -13,20 +13,21 @@ const DemosWrapper = styled.ul`
     box-sizing: border-box
 `
 
-const DemoWrapper = styled.li`
-    border: 2px solid ${colors.blueberry.base};
-    border-radius: 1rem;
-    padding: 0;
-    margin: 0 0 1rem 0;
-`
 type DemoProps = {
     demo: TDemo
     votes: number
 }
+
 const Demo = ({ demo, votes }: DemoProps) => {
     return (
         <DemoWrapper>
-            <Heading.H3> &quot;{demo.demo}&quot; - {demo.presenter} {'🍌'.repeat(votes)}</Heading.H3>
+            <div>
+                <Heading.H3>{demo.demo}</Heading.H3>
+                <Paragraph>{demo.presenter}</Paragraph>
+            </div>
+            <div style={{ fontSize: '3rem' }}>
+                {'🍌'.repeat(votes)}
+            </div>
         </DemoWrapper>
     )
 }
@@ -66,14 +67,12 @@ const Conclusion = () => {
         ))
 
     return (
-        <div>
-            <RoomWrapper>
-                <Heading.H2>Conclusion</Heading.H2>
-                <DemosWrapper>
-                    {Results}
-                </DemosWrapper>
-            </RoomWrapper>
-        </div>
+        <RoomWrapper>
+            <Heading.H2>Conclusion</Heading.H2>
+            <DemosWrapper>
+                {Results}
+            </DemosWrapper>
+        </RoomWrapper>
     )
 }
 

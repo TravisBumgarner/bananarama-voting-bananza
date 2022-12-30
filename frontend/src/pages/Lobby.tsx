@@ -5,7 +5,12 @@ import styled from 'styled-components'
 
 import { Button, Input } from 'sharedComponents'
 import { context } from 'context'
-import { colors } from 'theme'
+import { colors, snippets } from 'theme'
+
+const Wrapper = styled.div`
+    ${snippets.section};
+    padding: 1rem;
+`
 
 const FabulousOrWrapper = styled.div`
     display: flex;
@@ -14,7 +19,7 @@ const FabulousOrWrapper = styled.div`
     justify-content: center;;
 
     div {
-        border: 1px solid ${colors.pear.base};
+        border: 1px solid ${colors.supergreen.base};
         width:100%;
         margin: 0 1rem;
     }
@@ -22,7 +27,7 @@ const FabulousOrWrapper = styled.div`
     p {
         text-align: center;
         font-size: 2rem;
-        color: ${colors.pear.base};
+        color: ${colors.supergreen.base};
         margin: 0.5rem 0;
     }
 `
@@ -54,14 +59,14 @@ const Lobby = () => {
     }, [roomId])
 
     return (
-        <div>
+        <Wrapper>
             <Button
                 label="Create Room"
                 icon="door_front"
                 onClick={createRoom}
                 fullWidth
                 type="button"
-                variation="pear"
+                variation="banana"
             />
             <FabulousOrWrapper>
                 <div />
@@ -82,10 +87,10 @@ const Lobby = () => {
                     fullWidth
                     onClick={joinRoom}
                     type="button"
-                    variation="pear"
+                    variation="banana"
                 />
             </div>
-        </div>
+        </Wrapper>
     )
 }
 
