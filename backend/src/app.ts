@@ -21,7 +21,8 @@ const CORS_DEV = [
 ]
 
 const COORS_PROD = [
-    'https://bananarama-fe-3qcnyp2pna-ue.a.run.app'
+    'https://bananarama-fe-3qcnyp2pna-ue.a.run.app',
+    'bananarama.best'
 ]
 
 // For Cors
