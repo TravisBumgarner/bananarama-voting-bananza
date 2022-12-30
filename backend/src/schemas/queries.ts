@@ -9,7 +9,7 @@ type RoomArgs = {
 
 const room = {
     type: RoomType,
-    description: 'Get a roomRoom',
+    description: 'Get a room',
     args: {
         id: { type: new GraphQLNonNull(GraphQLString) }
     },

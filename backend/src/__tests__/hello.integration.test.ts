@@ -10,47 +10,49 @@ beforeAll(async () => {
     }
 })
 
-const expectQuery = async (query: string, expected: any) => {
-    expect(await graphql({ schema, source: query })).toEqual(expected)
-}
+let createRoom
+beforeEach(async () => {
+    const args = {
+        ownerId: 'bobid',
+        ownerName: 'bobname'
+    }
 
-// Perhaps before each, create a new room
+    const createRoomSource = `
+        mutation {
+            createRoom(ownerId: "${args.ownerId}", ownerName: "${args.ownerName}") {
+                ownerId,
+                id
+            }
+        }
+    `
+    const { data } = await graphql({ schema, source: createRoomSource }) as any
+    createRoom = data.createRoom
+})
 
 describe('GRAPHQL API', () => {
-    it('create and get a room', async () => {
-        const args = {
-            ownerId: 'bobid',
-            ownerName: 'bobname'
-        }
-        await expectQuery(
-            `
-                mutation {
-                    createRoom(ownerId: "${args.ownerId}", ownerName: "${args.ownerName}") {
-                        ownerId,
-                    }
-                }
-            `,
-            {
-                data: {
-                    createRoom: {
-                        ownerId: args.ownerId
-                    }
+    it('gets a room', async () => {
+        const roomSource = `
+            query {
+                room(id: "${createRoom.id}") {
+                    ownerId,
+                    id
                 }
             }
-        )
+        `
+        const { data: { room } } = await graphql({ schema, source: roomSource }) as any
+        expect(room.id).toEqual(createRoom.id)
     })
 
-    it.skip('add a demo and update room', async () => { })
-    it.skip('not collide with other rooms', async () => { })
-
-    it.skip('join a room', async () => { })
-    it.skip('add a demo', async () => { })
-    it.skip('create a room', async () => { })
-    it.skip('create a room', async () => { })
-    it.skip('create a room', async () => { })
-    it.skip('create a room', async () => { })
-    it.skip('create a room', async () => { })
-    it.skip('create a room', async () => { })
-    it.skip('create a room', async () => { })
-    it.skip('create a room', async () => { })
+    it('deletes a room', async () => {
+        const deleteRoomSource = `
+            mutation {
+                deleteRoom(id: "${createRoom.id}", userId: "${createRoom.ownerId}") {
+                    id
+                }
+            }
+        `
+        const { data: { deleteRoom } } = await graphql({ schema, source: deleteRoomSource }) as any
+        expect(deleteRoom.id).toEqual(createRoom.id)
+        // Need a test for subscription
+    })
 })

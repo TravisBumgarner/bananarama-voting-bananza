@@ -73,6 +73,41 @@ const updateRoom = {
     },
 }
 
+type DeleteRoomArgs = {
+    userId: string
+    id: string
+}
+const deleteRoom = {
+    type: RoomType,
+    description: 'Delete a Room',
+    args: {
+        userId: { type: new GraphQLNonNull(GraphQLString) },
+        id: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    resolve: async (_, args: DeleteRoomArgs) => {
+        const currentRoomResult = inMemoryDatastore.getRoom(args.id)
+        if (!currentRoomResult.success) throw new Error(currentRoomResult.error)
+
+        const userIsNotOwner = currentRoomResult.success && currentRoomResult.data?.ownerId !== args.userId
+        if (userIsNotOwner) throw new Error(EErrorMessages.MemberIsNotRoomOwner)
+
+        const deleteRoomResult = inMemoryDatastore.deleteRoom(args.id)
+        if (deleteRoomResult.success) {
+            await publishEvent({
+                type: EPubSubActionType.ROOM_DELETE_ACTION,
+                data: {
+                    id: args.id,
+                }
+            })
+
+            console.log('deleteroom returning', deleteRoomResult.data)
+            return deleteRoomResult.data
+        }
+
+        throw new Error(deleteRoomResult.error)
+    },
+}
+
 type JoinRoomArgs = {
     roomId: string
     userId: string
@@ -173,8 +208,9 @@ const RootMutationType = new GraphQLObjectType({
         createRoom,
         updateRoom,
         addDemo,
-        addVote
-    }),
+        addVote,
+        deleteRoom
+    })
 })
 
 export default RootMutationType

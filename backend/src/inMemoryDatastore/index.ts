@@ -64,12 +64,12 @@ class InMemoryDatastore {
         return ({ success: false, error: EErrorMessages.RoomDoesNotExist })
     }
 
-    deleteRoom(id: string): Response<undefined> {
+    deleteRoom(id: string): Response<{ id: string }> {
         const wasDeleted = delete this.rooms[id]
         if (wasDeleted) {
             return {
                 success: true,
-                data: undefined
+                data: { id }
             }
         }
         return {
