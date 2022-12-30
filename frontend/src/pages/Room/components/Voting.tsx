@@ -80,9 +80,8 @@ const Demo = ({ demo, binIndex }: DemoProps) => {
     const isHovered = useMemo(() => hoveredBinIndex === binIndex, [hoveredBinIndex, binIndex])
     const onDragEnter = useCallback(() => dragEnterCallback(binIndex), [binIndex])
 
-    const votesCastByMember = useMemo(() => {
-        console.log(state.room!.votes)
-        return state.room!.votes.filter(({ userId }) => userId === state.user?.id).length
+    const votesCastByMemberForDemo = useMemo(() => {
+        return state.room!.votes.filter(({ userId, demoId }) => userId === state.user?.id && demoId === demo.id).length
     }, [state.room?.votes.length])
 
     return (
@@ -96,7 +95,7 @@ const Demo = ({ demo, binIndex }: DemoProps) => {
                 <Paragraph>{demo.presenter}</Paragraph>
             </div>
             <div style={{ fontSize: '3rem' }}>
-                {'🍌'.repeat(votesCastByMember)}
+                {'🍌'.repeat(votesCastByMemberForDemo)}
             </div>
         </DemoWrapper>
     )
@@ -104,8 +103,6 @@ const Demo = ({ demo, binIndex }: DemoProps) => {
 
 const Voting = () => {
     const { state, dispatch } = useContext(context)
-    // const [isCastingVote, setIsCastingVote] = useState(false)
-
     useSubscription<{ vote: TVote }>(VOTE_SUBSCRIPTION, {
         variables: {
             roomId: state.room!.id
@@ -129,10 +126,6 @@ const Voting = () => {
         },
     })
 
-    // const votesCast = useMemo(() => {
-    //     return state.room!.votes.filter(({ userId }) => userId === state.user!.id).length
-    // }, [state.room!.votes])
-
     return (
         <RoomWrapper>
             <Heading.H2>Voting</Heading.H2>
@@ -140,12 +133,9 @@ const Voting = () => {
             <DemosWrapper>
                 {state.room!.demos.map((demo, index) => (
                     <Demo
-                        // isCastingVote={isCastingVote}
-                        // setIsCastingVote={setIsCastingVote}
                         demo={demo}
                         key={demo.id}
                         binIndex={index}
-                    // canVote={state.room!.maxVotes > votesCast}
                     />
                 ))}
             </DemosWrapper>

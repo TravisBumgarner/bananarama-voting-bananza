@@ -54,7 +54,7 @@ type Action =
 
 const pubsub = new PubSub()
 
-const publishEvent = (action: Action) => pubsub.publish(action.type, action.data)
+const publishEvent = (action: Action) => pubsub.publish(action.type, action)
 const subscribeEvent = (actionType: EPubSubActionType) => pubsub.asyncIterator(actionType)
 
 export { EPubSubActionType, publishEvent, subscribeEvent, Action }

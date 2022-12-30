@@ -17,9 +17,11 @@ const member = {
         (
             payload: Extract<Action, { type: EPubSubActionType.MEMBER_UPDATE_ACTION }>,
             variables: SubscriptionArgs
-        ) => payload.data.roomId === variables.roomId
+        ) => {
+            return payload.data.roomId === variables.roomId
+        }
     ),
-    resolve: (payload) => payload
+    resolve: (payload) => payload.data
 }
 
 const demo = {
@@ -30,11 +32,11 @@ const demo = {
     subscribe: withFilter(
         () => subscribeEvent(EPubSubActionType.ADD_DEMO_ACTION),
         (
-            payload: Extract<Action, { type: EPubSubActionType.ADD_DEMO_ACTION }>['data'],
+            payload: Extract<Action, { type: EPubSubActionType.ADD_DEMO_ACTION }>,
             variables: SubscriptionArgs
-        ) => payload.roomId === variables.roomId
+        ) => payload.data.roomId === variables.roomId
     ),
-    resolve: (payload) => payload
+    resolve: (payload) => payload.data
 }
 
 const vote = {
@@ -45,11 +47,11 @@ const vote = {
     subscribe: withFilter(
         () => subscribeEvent(EPubSubActionType.ADD_VOTE_ACTION),
         (
-            payload: (Extract<Action, { type: EPubSubActionType.ADD_VOTE_ACTION }>)['data'],
+            payload: (Extract<Action, { type: EPubSubActionType.ADD_VOTE_ACTION }>),
             variables: SubscriptionArgs
-        ) => payload.roomId === variables.roomId
+        ) => payload.data.roomId === variables.roomId
     ),
-    resolve: (payload) => payload
+    resolve: (payload) => payload.data
 }
 
 const room = {
@@ -60,11 +62,11 @@ const room = {
     subscribe: withFilter(
         () => subscribeEvent(EPubSubActionType.ROOM_UPDATE_ACTION),
         (
-            payload: Extract<Action, { type: EPubSubActionType.ROOM_UPDATE_ACTION }>['data'],
+            payload: Extract<Action, { type: EPubSubActionType.ROOM_UPDATE_ACTION }>,
             variables: SubscriptionArgs
-        ) => payload.roomId === variables.roomId
+        ) => payload.data.roomId === variables.roomId
     ),
-    resolve: (payload) => payload
+    resolve: (payload) => payload.data
 }
 
 const RootQueryType = new GraphQLObjectType({

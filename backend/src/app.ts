@@ -7,6 +7,7 @@ import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 import { WebSocketServer } from 'ws'
 
+import { Server } from 'http'
 import { logger } from './utilities'
 import errorLookup from './errorLookup'
 import schema from './schemas'
@@ -71,15 +72,14 @@ Sentry.init({
     tracesSampleRate: 1.0,
 })
 
+let server: Server
+let wsServer: WebSocketServer
 const startup = async () => {
-    const server = await app.listen(8080, '0.0.0.0', () => {
+    server = await app.listen(8080, '0.0.0.0', () => {
         console.log('App listening at http://0.0.0.0:8080') //eslint-disable-line
     })
 
-    const wsServer = new WebSocketServer({
-        server,
-        path: '/graphql',
-    })
+    wsServer = new WebSocketServer({ server, path: '/graphql' })
     useServer({ schema }, wsServer)
 }
 

@@ -50,14 +50,12 @@ const VotingBanana = ({ bananaIndex, canBeUsed }: { bananaIndex: number, canBeUs
 const MemberActions = () => {
     const { state } = useContext(context)
     const [showAddDemoModal, setShowAddDemoModal] = useState(false)
-
-    if (!state.room || !state.user || state.room.ownerId !== state.user.id) return null
+    if (!state.room || !state.user) return null
 
     const voteRemaining = useMemo(() => {
         const votesCast = state.room!.votes.filter(({ userId }) => userId === state.user!.id).length
         return state.room!.maxVotes - votesCast
-    }, [state.room.votes.length])
-    console.log('votes remaining', voteRemaining)
+    }, [state.room.votes.length, state.room.maxVotes])
     let content
     if (state.room.status === 'signup') {
         content = (

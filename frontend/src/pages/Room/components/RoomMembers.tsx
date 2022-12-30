@@ -1,7 +1,7 @@
 import { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { Button, Heading } from 'sharedComponents'
+import { Button, Heading, Paragraph } from 'sharedComponents'
 import { context } from 'context'
 import { colors, snippets } from 'theme'
 
@@ -47,6 +47,9 @@ const DefaultMembers = () => {
     )
 }
 
+const VotingBananaWrapper = styled.span<{ wasUsed: boolean }>`
+  filter: grayscale(${({ wasUsed }) => (wasUsed ? 1 : 0)});
+`
 const VotingMembers = () => {
     const { state } = useContext(context)
 
@@ -69,10 +72,11 @@ const VotingMembers = () => {
                 })
                 .map(({ id, name }) => {
                     const votesRemaining = state.room!.maxVotes - votesCastByUser[id]
-                    const icon = votesRemaining > 0 ? '🍌'.repeat(votesRemaining) : '✅'
+
                     return (
                         <ListItem key={id}>
-                            {name} {icon}
+                            {name} <VotingBananaWrapper wasUsed>{'🍌'.repeat(votesCastByUser[id])}</VotingBananaWrapper>
+                            <VotingBananaWrapper wasUsed={false}>{'🍌'.repeat(votesRemaining)}</VotingBananaWrapper>
                         </ListItem>
                     )
                 })}
@@ -117,6 +121,7 @@ const RoomMembers = () => {
                 variation="banana"
                 onClick={copyRoomToClipboard}
             />
+            <Paragraph align="center">(Room Code: {window.location.pathname.replace('/', '')})</Paragraph>
         </RoomMembersWrapper>
     )
 }
