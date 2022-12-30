@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { Heading, Paragraph, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
-import { TDemo, TVote } from 'types'
+import { TDemo, TRoom, TVote } from 'types'
 import { logger } from 'utilities'
 import { useDragAndDrop } from 'hooks'
 import DemoWrapper from './DemoWrapper'
@@ -43,7 +43,6 @@ type DemoProps = {
 }
 const Demo = ({ demo, binIndex }: DemoProps) => {
     const { state, dispatch } = useContext(context)
-
     const { matchedBinIndex, dragEnterCallback, hoveredBinIndex } = useDragAndDrop()
 
     const onAddVoteSuccess = useCallback(() => {
@@ -101,11 +100,11 @@ const Demo = ({ demo, binIndex }: DemoProps) => {
     )
 }
 
-const Voting = () => {
-    const { state, dispatch } = useContext(context)
+const Voting = ({ room }: { room: TRoom }) => {
+    const { dispatch } = useContext(context)
     useSubscription<{ vote: TVote }>(VOTE_SUBSCRIPTION, {
         variables: {
-            roomId: state.room!.id
+            roomId: room.id
         },
         onError: (error) => {
             logger(error)
@@ -117,7 +116,7 @@ const Voting = () => {
             })
         },
         onData: ({ data }) => {
-            if (!state.room || !data.data) return
+            if (!data.data) return
             const { userId, demoId, roomId, id } = data.data.vote
             dispatch({
                 type: 'ADD_VOTES',
@@ -131,7 +130,7 @@ const Voting = () => {
             <Heading.H2>Voting</Heading.H2>
 
             <DemosWrapper>
-                {state.room!.demos.map((demo, index) => (
+                {room.demos.map((demo, index) => (
                     <Demo
                         demo={demo}
                         key={demo.id}

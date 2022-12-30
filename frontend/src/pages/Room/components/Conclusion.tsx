@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Heading, Paragraph, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
-import { TDemo } from 'types'
+import { TDemo, TRoom } from 'types'
 import DemoWrapper from './DemoWrapper'
 
 const DemosWrapper = styled.ul`
@@ -32,16 +32,16 @@ const Demo = ({ demo, votes }: DemoProps) => {
     )
 }
 
-const Conclusion = () => {
-    const { state, dispatch } = useContext(context)
+const Conclusion = ({ room }: { room: TRoom }) => {
+    const { dispatch } = useContext(context)
 
     const talliedVotes = useMemo(() => {
-        const data = state.room!.demos.reduce((accum, { id }) => {
+        const data = room.demos.reduce((accum, { id }) => {
             accum[id] = 0
             return accum!
         }, {} as Record<string, number>)
 
-        state.room!.votes.forEach(({ demoId }) => data[demoId] += 1) //eslint-disable-line
+        room.votes.forEach(({ demoId }) => data[demoId] += 1) //eslint-disable-line
 
         return data
     }, [])
@@ -56,7 +56,7 @@ const Conclusion = () => {
         dispatch({ type: 'ADD_WINNERS', data: winners })
     }, [])
 
-    const Results = [...state.room!.demos]
+    const Results = [...room.demos]
         .sort((a, b) => talliedVotes[b.id] - talliedVotes[a.id])
         .map((demo) => (
             <Demo

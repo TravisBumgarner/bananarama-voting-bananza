@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { Heading, RoomWrapper, Paragraph } from 'sharedComponents'
 import { context } from 'context'
 
-import { TDemo } from 'types'
+import { TDemo, TRoom } from 'types'
 import { logger } from 'utilities'
 import DemoWrapper from './DemoWrapper'
 
@@ -42,12 +42,12 @@ const Demo = ({ demo }: { demo: TDemo }) => {
     )
 }
 
-const Signup = () => {
-    const { state, dispatch } = useContext(context)
+const Signup = ({ room }: { room: TRoom }) => {
+    const { dispatch } = useContext(context)
 
     useSubscription<{ demo: TDemo }>(DEMO_SUBSCRIPTION, {
         variables: {
-            roomId: state.room!.id
+            roomId: room.id
         },
         onError: (error) => {
             logger(error)
@@ -59,7 +59,7 @@ const Signup = () => {
             })
         },
         onData: ({ data }) => {
-            if (!state.room || !data.data) return
+            if (!data.data) return
             const { presenter, roomId, demo, id } = data.data.demo
             dispatch({
                 type: 'ADD_DEMOS',
@@ -74,7 +74,7 @@ const Signup = () => {
         <RoomWrapper>
             <Heading.H2>Demos</Heading.H2>
             <DemosWrapper>
-                {state.room!.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
+                {room.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
             </DemosWrapper>
         </RoomWrapper>
     )
