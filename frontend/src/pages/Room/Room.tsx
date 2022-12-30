@@ -173,6 +173,13 @@ const Room = () => {
         }
     }, [state.room])
 
+    useEffect(() => {
+        if (state.room && state.room.status === 'deletion') {
+            dispatch({ type: 'ADD_MESSAGE', data: { message: 'Room has closed.' } })
+            navigate('/')
+        }
+    }, [state.room && state.room.status])
+
     if (isLoading) return <Loading />
 
     if (!state.room || !state.room.members) return <p>No details</p>

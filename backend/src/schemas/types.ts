@@ -12,7 +12,8 @@ const RoomStatusEnum = new GraphQLEnumType({
     values: {
         signup: { value: 'signup' },
         voting: { value: 'voting' },
-        conclusion: { value: 'conclusion' }
+        conclusion: { value: 'conclusion' },
+        deletion: { value: 'deletion' }
     }
 })
 

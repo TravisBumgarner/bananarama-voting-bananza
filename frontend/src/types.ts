@@ -23,7 +23,7 @@ type TRoom = {
     icon: 'banana'
     maxVotes: number
     members: TRoomMember[]
-    status: 'signup' | 'voting' | 'conclusion'
+    status: 'signup' | 'voting' | 'conclusion' | 'deletion'
     demos: TDemo[]
     votes: TVote[]
     winners: TDemo['id'][]

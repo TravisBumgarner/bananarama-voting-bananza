@@ -123,7 +123,7 @@ const Admin = () => {
                     variation="banana"
                     label="Delete Room"
                     icon="delete"
-                    onClick={() => console.log('deleting...')}
+                    onClick={() => handleRoomChange('deletion')}
                 />
                 <Button
                     type="button"

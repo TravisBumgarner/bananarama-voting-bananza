@@ -94,13 +94,13 @@ const deleteRoom = {
         const deleteRoomResult = inMemoryDatastore.deleteRoom(args.id)
         if (deleteRoomResult.success) {
             await publishEvent({
-                type: EPubSubActionType.ROOM_DELETE_ACTION,
+                type: EPubSubActionType.ROOM_UPDATE_ACTION,
                 data: {
-                    id: args.id,
+                    roomId: args.id,
+                    status: 'deletion'
                 }
             })
 
-            console.log('deleteroom returning', deleteRoomResult.data)
             return deleteRoomResult.data
         }
 

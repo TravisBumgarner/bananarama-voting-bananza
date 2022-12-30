@@ -2,7 +2,6 @@ import { PubSub } from 'graphql-subscriptions'
 
 enum EPubSubActionType {
     ROOM_UPDATE_ACTION = 'ROOM_UPDATE_ACTION',
-    ROOM_DELETE_ACTION = 'ROOM_DELETE_ACTION',
     MEMBER_UPDATE_ACTION = 'MEMBER_UPDATE_ACTION',
     ADD_DEMO_ACTION = 'ADD_DEMO_ACTION',
     ADD_VOTE_ACTION = 'ADD_VOTE_ACTION',
@@ -12,15 +11,8 @@ type RoomSubscriptionAction = {
     type: EPubSubActionType.ROOM_UPDATE_ACTION
     data: {
         roomId: string,
-        status: string,
+        status?: string,
         maxVotes?: number
-    }
-}
-
-type RoomDeleteAction = {
-    type: EPubSubActionType.ROOM_DELETE_ACTION
-    data: {
-        id: string,
     }
 }
 
@@ -59,7 +51,6 @@ type Action =
     | MemberSubscriptionAction
     | DemoSubscriptionAction
     | VoteSubscriptionAction
-    | RoomDeleteAction
 
 const pubsub = new PubSub()
 
