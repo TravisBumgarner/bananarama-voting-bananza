@@ -201,16 +201,16 @@ const Room = () => {
 
     if (state.room.status === 'conclusion' && isSplashing) {
         return <ConclusionSplash />
-
-        return (
-            <Wrapper>
-                <Sidebar>
-                    <MemberActions />
-                    <RoomMembers />
-                    <Admin room={state.room} user={state.user} />
-                </Sidebar>
-                {Content}
-            </Wrapper>
-        )
     }
-    export default Room
+    return (
+        <Wrapper>
+            <Sidebar>
+                <MemberActions />
+                <RoomMembers />
+                <Admin room={state.room} user={state.user} />
+            </Sidebar>
+            {Content}
+        </Wrapper>
+    )
+}
+export default Room
