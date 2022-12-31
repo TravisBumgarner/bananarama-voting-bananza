@@ -2,7 +2,7 @@ import { useContext, useCallback, useState } from 'react'
 import { Button, Heading, Paragraph } from 'sharedComponents'
 import { ApolloError, gql, useMutation } from '@apollo/client'
 
-import { TRoom } from 'types'
+import { TRoom, TUser } from 'types'
 import { Exactly } from 'utilities'
 import { context } from 'context'
 import styled from 'styled-components'
@@ -23,19 +23,19 @@ const UPDATE_ROOM_MUTATION = gql`
     }    
 `
 
-const Admin = () => {
-    const { state, dispatch } = useContext(context)
+const Admin = ({ room, user }: { room: TRoom, user: TUser }) => {
+    const { dispatch } = useContext(context)
     const [maxVotes, setMaxVotes] = useState(2)
 
-    if (!state.room || !state.user || state.room.ownerId !== state.user.id) return null
+    if (!room || !user || room.ownerId !== user.id) return null
 
     const onUpdateRoomSuccess = useCallback((data: { updateRoom: Exactly<TRoom, 'status'> }) => {
-        if (!state.room) return // This shouldn't fire before the room's details have been populated
+        if (room) return // This shouldn't fire before the room's details have been populated
         dispatch({
             type: 'UPDATE_ROOM',
             data: { status: data.updateRoom.status }
         })
-    }, [state.room])
+    }, [room])
     const onUpdateRoomError = useCallback((error: ApolloError) => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
     }, [])
@@ -45,20 +45,20 @@ const Admin = () => {
     })
 
     const handleRoomChange = useCallback((status: TRoom['status']) => {
-        if (!state.room) return
+        if (!room) return
 
         const variables = {
             status,
-            userId: state.user!.id,
-            roomId: state.room.id,
+            userId: user.id,
+            roomId: room.id,
             ...(status === 'voting' ? { maxVotes } : {})
         }
 
         updateRoomMutation({ variables })
-    }, [state.room, maxVotes])
+    }, [room, maxVotes])
 
     const copyResults = () => {
-        const winnersDetails = state.room!.demos.filter(({ id }) => state.room!.winners.includes(id))
+        const winnersDetails = Object.values(room.demos).filter(({ id }) => room.winners.includes(id))
         let message = ''
 
         if (winnersDetails.length > 1) message += `${winnersDetails.length} way tie!\n`
@@ -70,7 +70,7 @@ const Admin = () => {
     }
 
     let content
-    if (state.room.status === 'signup') {
+    if (room.status === 'signup') {
         content = (
             <>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -102,7 +102,7 @@ const Admin = () => {
             </>
         )
     }
-    if (state.room.status === 'voting') {
+    if (room.status === 'voting') {
         content = (
             <Button
                 type="button"
@@ -114,7 +114,7 @@ const Admin = () => {
             />
         )
     }
-    if (state.room.status === 'conclusion') {
+    if (room.status === 'conclusion') {
         content = (
             <>
                 <Button

@@ -73,7 +73,7 @@ const MemberActions = () => {
                     closeModal={() => setShowAddDemoModal(false)}
                     contentLabel="Add Demo!"
                 >
-                    <AddDemoModal closeModal={() => setShowAddDemoModal(false)} />
+                    <AddDemoModal room={room} user={user} closeModal={() => setShowAddDemoModal(false)} />
                 </Modal>
             </>
         )

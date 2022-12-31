@@ -43,16 +43,19 @@ const CREATE_ROOM_MUTATION = gql`
 const Lobby = () => {
     const [createRoomMutation] = useMutation<{ createRoom: { id: string } }>(CREATE_ROOM_MUTATION)
     const navigate = useNavigate()
-    const { dispatch, state } = useContext(context)
+    const { dispatch, state: { user } } = useContext(context)
     const [roomId, setRoomId] = useState('')
+
     const createRoom = useCallback(async () => {
-        const response = await createRoomMutation({ variables: { ownerId: state.user!.id, ownerName: state.user!.name } })
+        if (!user) return
+
+        const response = await createRoomMutation({ variables: { ownerId: user.id, ownerName: user.name } })
         if (response.data?.createRoom.id) {
             navigate(response.data?.createRoom.id)
         } else {
             dispatch({ type: 'ADD_MESSAGE', data: { message: 'Failed to create room :(' } })
         }
-    }, [state.user])
+    }, [!!user])
 
     const joinRoom = useCallback(async () => {
         navigate(roomId)

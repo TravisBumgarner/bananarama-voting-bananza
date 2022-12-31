@@ -123,10 +123,18 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, room: action.data }
         }
         case 'UPDATE_ROOM': {
-            return { ...state, room: { ...state.room!, ...action.data } }
+            if (!state.room) {
+                throw new Error('Invalid operation')
+            }
+
+            return { ...state, room: { ...state.room, ...action.data } }
         }
         case 'ADD_DEMOS': {
-            return { ...state, room: { ...state.room!, demos: { ...state.room!.demos, ...action.data } } }
+            if (!state.room) {
+                throw new Error('Invalid operation')
+            }
+
+            return { ...state, room: { ...state.room, demos: { ...state.room.demos, ...action.data } } }
         }
         case 'ADD_WINNERS': {
             return {
@@ -134,10 +142,16 @@ const reducer = (state: State, action: Action): State => {
             }
         }
         case 'ADD_VOTES': {
-            return { ...state, room: { ...state.room!, votes: { ...state.room!.votes, ...action.data } } }
+            if (!state.room) {
+                throw new Error('Invalid operation')
+            }
+            return { ...state, room: { ...state.room!, votes: { ...state.room.votes, ...action.data } } }
         }
         case 'ADD_MEMBERS': {
-            return { ...state, room: { ...state.room!, members: { ...state.room!.members, ...action.data } } }
+            if (!state.room) {
+                throw new Error('Invalid operation')
+            }
+            return { ...state, room: { ...state.room, members: { ...state.room.members, ...action.data } } }
         }
         default: {
             logger(`Swallowing action: ${JSON.stringify(action)}`)

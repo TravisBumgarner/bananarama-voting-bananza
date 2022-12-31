@@ -4,9 +4,12 @@ import { FormEvent, useCallback, useContext, useState } from 'react'
 import { Button, Input } from 'sharedComponents'
 import { context } from 'context'
 import styled from 'styled-components'
+import { TRoom, TUser } from 'types'
 
 type AddDemoProps = {
     closeModal: () => void
+    user: TUser,
+    room: TRoom
 }
 
 const ADD_DEMO_MUTATION = gql`
@@ -25,10 +28,10 @@ const ButtonWrapper = styled.div`
     }
 `
 
-const AddDemo = ({ closeModal }: AddDemoProps) => {
-    const { state, dispatch } = useContext(context)
+const AddDemo = ({ closeModal, room, user }: AddDemoProps) => {
+    const { dispatch } = useContext(context)
     const [demo, setDemo] = useState<string>('')
-    const [presenter, setPresenter] = useState<string>(state.user!.name)
+    const [presenter, setPresenter] = useState<string>(user.name)
 
     const onAddDemoSuccess = useCallback(() => {
         closeModal()
@@ -47,7 +50,7 @@ const AddDemo = ({ closeModal }: AddDemoProps) => {
             variables: {
                 demo,
                 presenter,
-                roomId: state.room!.id
+                roomId: room.id
             }
         })
         closeModal()
