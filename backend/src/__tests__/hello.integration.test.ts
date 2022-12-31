@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { graphql } from 'graphql'
+import { TRoom } from 'index'
 import schema from '../schemas'
 
 beforeAll(async () => {
@@ -10,7 +11,7 @@ beforeAll(async () => {
     }
 })
 
-let createRoom
+let createRoom: TRoom
 beforeEach(async () => {
     const args = {
         ownerId: 'bobid',
@@ -64,21 +65,52 @@ describe('GRAPHQL API', () => {
                 }
             }
         `
-        const { data: { deleteRoom } } = await graphql({ schema, source: deleteRoomSource }) as any
+        const { data: { deleteRoom } } = await graphql({ schema, source: deleteRoomSource }) as { data: { deleteRoom: { id: string } } }
         expect(deleteRoom.id).toEqual(createRoom.id)
         // Need a test for subscription
     })
 
     it('updates a room in different ways', async () => {
-        const updateRoomSource = `
+        const roomUpdates1: Partial<TRoom> = {
+            status: 'voting',
+            maxVotes: 4
+        }
+        const updateRoomSource1 = `
             mutation {
-                deleteRoom(id: "${createRoom.id}", userId: "${createRoom.ownerId}") {
-                    id
+                updateRoom(
+                    userId: "${createRoom.ownerId}",
+                    roomId:"${createRoom.id}",
+                    status: ${roomUpdates1.status},
+                    maxVotes: ${roomUpdates1.maxVotes}
+                ) {
+                    id,
+                    status,
+                    maxVotes
                 }
             }
         `
-        const { data: { deleteRoom } } = await graphql({ schema, source: updateRoomSource }) as any
-        expect(deleteRoom.id).toEqual(createRoom.id)
-        // Need a test for subscription
+        // Need to figure out how to show errors when they occur. Currently they get swallowed
+        // Probably an issue with `as X`
+        const { data: { updateRoom } } = await graphql({ schema, source: updateRoomSource1 }) as { data: { updateRoom: Partial<TRoom> } }
+
+        const expected1: Partial<TRoom> = { ...createRoom, ...roomUpdates1 }
+        expect(expected1.id).toEqual(updateRoom.id)
+        expect(expected1.status).toEqual(updateRoom.status)
+        expect(expected1.maxVotes).toEqual(updateRoom.maxVotes)
+
+        // const roomUpdates2: Partial<TRoom> = {
+        //     status: 'conclusion',
+        // }
+        // const updateRoomSource2 = `
+        //     mutation {
+        //         updateRoom(userId: "${createRoom.ownerId}", roomId:"${createRoom.id}", status: ${roomUpdates2.status}) {
+        //             id,
+        //             status
+        //         }
+        //     }
+        // `
+        // const { data: { updateRoom: actual2 } } = await graphql({ schema, source: updateRoomSource2 }) as { data: { updateRoom: Partial<TRoom> } }
+        // const expected2: Partial<TRoom> = { ...createRoom, ...roomUpdates2 }
+        // expect(expected2.status).toEqual(actual2.status)
     })
 })
