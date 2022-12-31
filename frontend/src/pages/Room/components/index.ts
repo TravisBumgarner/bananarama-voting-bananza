@@ -4,6 +4,7 @@ import Voting from './Voting'
 import RoomMembers from './RoomMembers'
 import Admin from './Admin'
 import VotingSplash from './VotingSplash'
+import ConclusionSplash from './ConclusionSplash'
 
 export {
     Conclusion,
@@ -11,5 +12,6 @@ export {
     Voting,
     RoomMembers,
     Admin,
-    VotingSplash
+    VotingSplash,
+    ConclusionSplash
 }

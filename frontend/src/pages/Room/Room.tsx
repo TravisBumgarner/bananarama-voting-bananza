@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { logger, sanitizeRoomId } from 'utilities'
 import { context } from 'context'
 import { TRoom, TRoomMemberChange } from '../../types'
-import { Conclusion, RoomMembers, Signup, Voting, Admin, VotingSplash } from './components'
+import { Conclusion, RoomMembers, Signup, Voting, Admin, VotingSplash, ConclusionSplash } from './components'
 import MemberActions from './components/MemberActions'
 
 const Sidebar = styled.div`
@@ -200,18 +200,17 @@ const Room = () => {
     }
 
     if (state.room.status === 'conclusion' && isSplashing) {
-        return <p>Conclusion splashing</p>
-    }
+        return <ConclusionSplash />
 
-    return (
-        <Wrapper>
-            <Sidebar>
-                <MemberActions />
-                <RoomMembers />
-                <Admin room={state.room} user={state.user} />
-            </Sidebar>
-            {Content}
-        </Wrapper>
-    )
-}
-export default Room
+        return (
+            <Wrapper>
+                <Sidebar>
+                    <MemberActions />
+                    <RoomMembers />
+                    <Admin room={state.room} user={state.user} />
+                </Sidebar>
+                {Content}
+            </Wrapper>
+        )
+    }
+    export default Room
