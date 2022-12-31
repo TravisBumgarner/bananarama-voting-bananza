@@ -45,14 +45,16 @@ const Lobby = () => {
     const navigate = useNavigate()
     const { dispatch, state: { user } } = useContext(context)
     const [roomId, setRoomId] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     const createRoom = useCallback(async () => {
         if (!user) return
-
+        setIsLoading(true)
         const response = await createRoomMutation({ variables: { ownerId: user.id, ownerName: user.name } })
         if (response.data?.createRoom.id) {
             navigate(response.data?.createRoom.id)
         } else {
+            setIsLoading(false)
             dispatch({ type: 'ADD_MESSAGE', data: { message: 'Failed to create room :(' } })
         }
     }, [!!user])
@@ -70,6 +72,7 @@ const Lobby = () => {
                 fullWidth
                 type="button"
                 variation="banana"
+                disabled={isLoading}
             />
             <FabulousOrWrapper>
                 <div />
