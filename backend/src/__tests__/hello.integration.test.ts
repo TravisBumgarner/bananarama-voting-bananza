@@ -55,4 +55,30 @@ describe('GRAPHQL API', () => {
         expect(deleteRoom.id).toEqual(createRoom.id)
         // Need a test for subscription
     })
+
+    it('updates a room in different ways', async () => {
+        const deleteRoomSource = `
+            mutation {
+                deleteRoom(id: "${createRoom.id}", userId: "${createRoom.ownerId}") {
+                    id
+                }
+            }
+        `
+        const { data: { deleteRoom } } = await graphql({ schema, source: deleteRoomSource }) as any
+        expect(deleteRoom.id).toEqual(createRoom.id)
+        // Need a test for subscription
+    })
+
+    it('updates a room in different ways', async () => {
+        const updateRoomSource = `
+            mutation {
+                deleteRoom(id: "${createRoom.id}", userId: "${createRoom.ownerId}") {
+                    id
+                }
+            }
+        `
+        const { data: { deleteRoom } } = await graphql({ schema, source: updateRoomSource }) as any
+        expect(deleteRoom.id).toEqual(createRoom.id)
+        // Need a test for subscription
+    })
 })

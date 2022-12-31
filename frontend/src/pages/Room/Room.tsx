@@ -190,7 +190,10 @@ const Room = () => {
 
     if (isLoading) return <Loading />
 
-    if (!state.room || !state.room.members) return <p>No details</p>
+    if (!state.room || !state.room.members || !state.user) {
+        navigate('/')
+        return
+    }
 
     if (state.room.status === 'voting' && isSplashing) {
         return <VotingSplash room={state.room} />
@@ -205,7 +208,7 @@ const Room = () => {
             <Sidebar>
                 <MemberActions />
                 <RoomMembers />
-                <Admin />
+                <Admin room={state.room} user={state.user} />
             </Sidebar>
             {Content}
         </Wrapper>
