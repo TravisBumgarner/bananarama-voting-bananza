@@ -166,14 +166,14 @@ const Room = () => {
     }, [state.room && state.room.status])
 
     const Content = useMemo(() => {
-        if (!state.room) return
+        if (!state.room || !state.user) return
 
         switch (state.room.status) {
             case 'signup': {
                 return <Signup room={state.room} />
             }
             case 'voting': {
-                return <Voting room={state.room} />
+                return <Voting user={state.user} room={state.room} />
             }
             case 'conclusion': {
                 return <Conclusion room={state.room} />

@@ -67,7 +67,7 @@ type AddDemos = {
 
 type AddVotes = {
     type: 'ADD_VOTES',
-    data: TVote[]
+    data: Record<string, TVote>
 }
 
 type AddWinners = {
@@ -134,7 +134,7 @@ const reducer = (state: State, action: Action): State => {
             }
         }
         case 'ADD_VOTES': {
-            return { ...state, room: { ...state.room!, votes: [...state.room!.votes, ...action.data] } }
+            return { ...state, room: { ...state.room!, votes: { ...state.room!.votes, ...action.data } } }
         }
         case 'ADD_MEMBERS': {
             return { ...state, room: { ...state.room!, members: { ...state.room!.members, ...action.data } } }

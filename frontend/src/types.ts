@@ -25,7 +25,7 @@ type TRoom = {
     members: Record<string, TRoomMember>
     status: 'signup' | 'voting' | 'conclusion' | 'deletion'
     demos: Record<string, TDemo>
-    votes: TVote[]
+    votes: Record<string, TVote>
     winners: TDemo['id'][]
 }
 

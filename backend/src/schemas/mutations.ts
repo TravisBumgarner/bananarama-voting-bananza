@@ -174,6 +174,7 @@ const addDemo = {
 }
 
 type AddVoteArgs = {
+    id: string
     roomId: string
     userId: string
     demoId: string

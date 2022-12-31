@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { Heading, Paragraph, RoomWrapper } from 'sharedComponents'
 import { context } from 'context'
-import { TDemo, TRoom, TVote } from 'types'
+import { TDemo, TRoom, TUser, TVote } from 'types'
 import { logger } from 'utilities'
 import { useDragAndDrop } from 'hooks'
 import DemoWrapper from './DemoWrapper'
@@ -40,9 +40,11 @@ type DemoProps = {
     // setIsCastingVote: React.Dispatch<React.SetStateAction<boolean>>
     // canVote: boolean
     binIndex: number
+    user: TUser
+    room: TRoom
 }
-const Demo = ({ demo, binIndex }: DemoProps) => {
-    const { state, dispatch } = useContext(context)
+const Demo = ({ demo, binIndex, user, room }: DemoProps) => {
+    const { dispatch } = useContext(context)
     const { matchedBinIndex, dragEnterCallback, hoveredBinIndex } = useDragAndDrop()
 
     const onAddVoteSuccess = useCallback(() => {
@@ -62,8 +64,8 @@ const Demo = ({ demo, binIndex }: DemoProps) => {
         // setIsCastingVote(true)
         await addVoteMutation({
             variables: {
-                userId: state.user!.id,
-                roomId: state.room!.id,
+                userId: user.id,
+                roomId: room.id,
                 demoId: demo.id
             }
         })
@@ -80,8 +82,8 @@ const Demo = ({ demo, binIndex }: DemoProps) => {
     const onDragEnter = useCallback(() => dragEnterCallback(binIndex), [binIndex])
 
     const votesCastByMemberForDemo = useMemo(() => {
-        return state.room!.votes.filter(({ userId, demoId }) => userId === state.user?.id && demoId === demo.id).length
-    }, [state.room?.votes.length])
+        return Object.values(room.votes).filter(({ userId, demoId }) => userId === user.id && demoId === demo.id).length
+    }, [Object.values(room.votes).length])
 
     return (
         <DemoWrapper
@@ -100,7 +102,7 @@ const Demo = ({ demo, binIndex }: DemoProps) => {
     )
 }
 
-const Voting = ({ room }: { room: TRoom }) => {
+const Voting = ({ room, user }: { room: TRoom, user: TUser }) => {
     const { dispatch } = useContext(context)
     useSubscription<{ vote: TVote }>(VOTE_SUBSCRIPTION, {
         variables: {
@@ -120,7 +122,9 @@ const Voting = ({ room }: { room: TRoom }) => {
             const { userId, demoId, roomId, id } = data.data.vote
             dispatch({
                 type: 'ADD_VOTES',
-                data: [{ userId, roomId, demoId, id }]
+                data: {
+                    [id]: { userId, roomId, demoId, id }
+                }
             })
         },
     })
@@ -135,6 +139,8 @@ const Voting = ({ room }: { room: TRoom }) => {
                         demo={demo}
                         key={demo.id}
                         binIndex={index}
+                        user={user}
+                        room={room}
                     />
                 ))}
             </DemosWrapper>

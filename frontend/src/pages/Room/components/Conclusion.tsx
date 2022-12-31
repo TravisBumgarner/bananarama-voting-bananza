@@ -41,7 +41,7 @@ const Conclusion = ({ room }: { room: TRoom }) => {
             return accum!
         }, {} as Record<string, number>)
 
-        room.votes.forEach(({ demoId }) => data[demoId] += 1) //eslint-disable-line
+        Object.values(room.votes).forEach(({ demoId }) => data[demoId] += 1) //eslint-disable-line
 
         return data
     }, [])

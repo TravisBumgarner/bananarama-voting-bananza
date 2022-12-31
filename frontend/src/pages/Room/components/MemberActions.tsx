@@ -48,16 +48,16 @@ const VotingBanana = ({ bananaIndex, canBeUsed }: { bananaIndex: number, canBeUs
 }
 
 const MemberActions = () => {
-    const { state } = useContext(context)
+    const { state: { room, user } } = useContext(context)
     const [showAddDemoModal, setShowAddDemoModal] = useState(false)
-    if (!state.room || !state.user) return null
+    if (!room || !user) return null
 
     const voteRemaining = useMemo(() => {
-        const votesCast = state.room!.votes.filter(({ userId }) => userId === state.user!.id).length
-        return state.room!.maxVotes - votesCast
-    }, [state.room.votes.length, state.room.maxVotes])
+        const votesCast = Object.values(room.votes).filter(({ userId }) => userId === user.id).length
+        return room.maxVotes - votesCast
+    }, [room.votes.length, room.maxVotes])
     let content
-    if (state.room.status === 'signup') {
+    if (room.status === 'signup') {
         content = (
             <>
                 <Button
@@ -78,19 +78,19 @@ const MemberActions = () => {
             </>
         )
     }
-    if (state.room.status === 'voting') {
+    if (room.status === 'voting') {
         content = (
             <div>
                 <Paragraph align="center">Drag bananas to your favorite demos to vote!</Paragraph>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                    {[...Array(state.room.maxVotes)].map((_, index) => {
+                    {[...Array(room.maxVotes)].map((_, index) => {
                         return <VotingBanana canBeUsed={index < voteRemaining} key={index} bananaIndex={index} /> //eslint-disable-line
                     })}
                 </div>
             </div>
         )
     }
-    if (state.room.status === 'conclusion') {
+    if (room.status === 'conclusion') {
         content = (
             <>
             </>
