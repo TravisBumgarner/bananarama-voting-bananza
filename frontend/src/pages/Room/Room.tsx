@@ -117,7 +117,7 @@ const Room = () => {
             if (status === 'join') {
                 dispatch({
                     type: 'ADD_MEMBERS',
-                    data: [{ id: userId, name: userName }]
+                    data: { [userId]: { id: userId, name: userName } }
                 })
             }
         },
@@ -162,7 +162,7 @@ const Room = () => {
     useEffect(() => {
         if (!state.room) return
         if (state.room.status === 'voting' || state.room.status === 'conclusion') setIsSplashing(true)
-        splashTimeoutRef.current = setTimeout(() => setIsSplashing(false), 300000)
+        splashTimeoutRef.current = setTimeout(() => setIsSplashing(false), 1)
     }, [state.room && state.room.status])
 
     const Content = useMemo(() => {

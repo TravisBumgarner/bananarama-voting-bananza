@@ -22,7 +22,7 @@ type TRoom = {
     ownerId: TRoomMember['id']
     icon: 'banana'
     maxVotes: number
-    members: TRoomMember[]
+    members: Record<string, TRoomMember>
     status: 'signup' | 'voting' | 'conclusion' | 'deletion'
     demos: TDemo[]
     votes: TVote[]

@@ -35,7 +35,7 @@ type AddMessage = {
 
 type AddMembers = {
     type: 'ADD_MEMBERS'
-    data: TRoomMember[]
+    data: Record<string, TRoomMember>
 }
 
 type DeleteMessage = {
@@ -137,7 +137,7 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, room: { ...state.room!, votes: [...state.room!.votes, ...action.data] } }
         }
         case 'ADD_MEMBERS': {
-            return { ...state, room: { ...state.room!, members: [...state.room!.members, ...action.data] } }
+            return { ...state, room: { ...state.room!, members: { ...state.room!.members, ...action.data } } }
         }
         default: {
             logger(`Swallowing action: ${JSON.stringify(action)}`)

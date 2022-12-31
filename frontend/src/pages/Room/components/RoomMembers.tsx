@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Button, Heading, Paragraph } from 'sharedComponents'
 import { context } from 'context'
 import { colors, snippets } from 'theme'
+import { TRoom } from 'types'
 
 const ListItem = styled.li`
     list-style: none;
@@ -25,11 +26,10 @@ const RoomMembersWrapper = styled.div`
     box-sizing: border-box;
 `
 
-const DefaultMembers = () => {
-    const { state } = useContext(context)
+const DefaultMembers = ({ members }: { members: TRoom['members'] }) => {
     return (
         <List>
-            {state.room!.members
+            {Object.values(members)
                 .sort((a, b) => {
                     return b.name.toLowerCase() < a.name.toLowerCase()
                         ? 1
@@ -50,28 +50,26 @@ const DefaultMembers = () => {
 const VotingBananaWrapper = styled.span<{ wasUsed: boolean }>`
   filter: grayscale(${({ wasUsed }) => (wasUsed ? 1 : 0)});
 `
-const VotingMembers = () => {
-    const { state } = useContext(context)
-
+const VotingMembers = ({ members, votes, maxVotes }: TRoom) => {
     const votesCastByUser = useMemo(() => {
         const votesCounter: Record<string, number> = {}
-        state.room!.members.forEach(({ id }) => { votesCounter[id] = 0 })
+        Object.values(members).forEach(({ id }) => { votesCounter[id] = 0 })
 
-        state.room!.votes.forEach(({ userId }) => { votesCounter[userId] += 1 })
+        votes.forEach(({ userId }) => { votesCounter[userId] += 1 })
 
         return votesCounter
-    }, [state.room!.votes, state.room!.members])
+    }, [votes, members])
 
     return (
         <List>
-            {state.room!.members
+            {Object.values(members)
                 .sort((a, b) => {
                     return b.name.toLowerCase() < a.name.toLowerCase()
                         ? 1
                         : -1
                 })
                 .map(({ id, name }) => {
-                    const votesRemaining = state.room!.maxVotes - votesCastByUser[id]
+                    const votesRemaining = maxVotes - votesCastByUser[id]
 
                     return (
                         <ListItem key={id}>
@@ -85,24 +83,28 @@ const VotingMembers = () => {
 }
 
 const RoomMembers = () => {
-    const { state, dispatch } = useContext(context)
+    const { state: { room }, dispatch } = useContext(context)
 
-    let Body: JSX.Element
-    switch (state.room!.status) {
-        case 'signup':
-        case 'conclusion': {
-            Body = <DefaultMembers />
-            break
+    const Body = useMemo(() => {
+        if (!room) {
+            return null
         }
-        case 'voting': {
-            Body = <VotingMembers />
-            break
-        }
-    }
 
-    const roomMembers = useMemo(() => {
-        return state.room!.members.length
-    }, [state.room!.members])
+        switch (room.status) {
+            case 'signup':
+            case 'conclusion': {
+                return <DefaultMembers members={room.members} />
+            }
+            case 'voting': {
+                return <VotingMembers {...room} />
+            }
+        }
+    }, [!!room])
+
+    const memberCount = useMemo(() => {
+        if (!room) return 0
+        return Object.values(room.members).length
+    }, [!!room])
 
     const copyRoomToClipboard = useCallback(() => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: 'Room URL copied to clipboard.' } })
@@ -111,7 +113,7 @@ const RoomMembers = () => {
 
     return (
         <RoomMembersWrapper>
-            <Heading.H2>{roomMembers} Member{roomMembers !== 1 && 's'}</Heading.H2>
+            <Heading.H2>{memberCount} Member{memberCount !== 1 && 's'}</Heading.H2>
             {Body}
             <Button
                 fullWidth
