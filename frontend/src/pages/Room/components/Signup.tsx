@@ -63,9 +63,11 @@ const Signup = ({ room }: { room: TRoom }) => {
             const { presenter, roomId, demo, id } = data.data.demo
             dispatch({
                 type: 'ADD_DEMOS',
-                data: [{
-                    presenter, roomId, demo, id
-                }]
+                data: {
+                    [id]: {
+                        presenter, roomId, demo, id
+                    }
+                }
             })
         },
     })
@@ -74,7 +76,7 @@ const Signup = ({ room }: { room: TRoom }) => {
         <RoomWrapper>
             <Heading.H2>Demos</Heading.H2>
             <DemosWrapper>
-                {room.demos.map((demo) => <Demo demo={demo} key={demo.id} />)}
+                {Object.values(room.demos).map((demo) => <Demo demo={demo} key={demo.id} />)}
             </DemosWrapper>
         </RoomWrapper>
     )

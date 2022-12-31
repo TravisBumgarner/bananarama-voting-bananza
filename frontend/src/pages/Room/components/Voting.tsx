@@ -130,7 +130,7 @@ const Voting = ({ room }: { room: TRoom }) => {
             <Heading.H2>Voting</Heading.H2>
 
             <DemosWrapper>
-                {room.demos.map((demo, index) => (
+                {Object.values(room.demos).map((demo, index) => (
                     <Demo
                         demo={demo}
                         key={demo.id}

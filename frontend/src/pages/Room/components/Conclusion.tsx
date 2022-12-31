@@ -36,7 +36,7 @@ const Conclusion = ({ room }: { room: TRoom }) => {
     const { dispatch } = useContext(context)
 
     const talliedVotes = useMemo(() => {
-        const data = room.demos.reduce((accum, { id }) => {
+        const data = Object.values(room.demos).reduce((accum, { id }) => {
             accum[id] = 0
             return accum!
         }, {} as Record<string, number>)
@@ -56,7 +56,7 @@ const Conclusion = ({ room }: { room: TRoom }) => {
         dispatch({ type: 'ADD_WINNERS', data: winners })
     }, [])
 
-    const Results = [...room.demos]
+    const Results = Object.values(room.demos)
         .sort((a, b) => talliedVotes[b.id] - talliedVotes[a.id])
         .map((demo) => (
             <Demo

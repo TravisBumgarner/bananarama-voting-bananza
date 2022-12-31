@@ -62,7 +62,7 @@ type UpdateRoom = {
 
 type AddDemos = {
     type: 'ADD_DEMOS',
-    data: TDemo[]
+    data: Record<string, TDemo>
 }
 
 type AddVotes = {
@@ -126,7 +126,7 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, room: { ...state.room!, ...action.data } }
         }
         case 'ADD_DEMOS': {
-            return { ...state, room: { ...state.room!, demos: [...state.room!.demos, ...action.data] } }
+            return { ...state, room: { ...state.room!, demos: { ...state.room!.demos, ...action.data } } }
         }
         case 'ADD_WINNERS': {
             return {
