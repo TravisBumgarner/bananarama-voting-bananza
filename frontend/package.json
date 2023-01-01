@@ -61,6 +61,6 @@
         "lint:run": "npx eslint --ext .ts,.tsx ./src/",
         "lint:fix": "npx eslint --ext .ts,.tsx ./src/ --fix",
         "deploy": "gcloud config set project root-270023 && gcloud builds submit --tag gcr.io/root-270023/bananarama-fe && gcloud run deploy bananarama-fe --image gcr.io/root-270023/bananarama-fe --platform managed --region us-east1",
-        "wdio": "wdio run ./wdio.conf.ts"
+        "e2e": "wdio run ./wdio.conf.js"
     }
 }
