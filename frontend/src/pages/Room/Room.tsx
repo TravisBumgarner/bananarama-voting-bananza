@@ -193,7 +193,7 @@ const Room = () => {
 
     if (!state.room || !state.room.members || !state.user) {
         navigate('/')
-        return
+        return null
     }
 
     // if (state.room.status === 'voting' && isSplashing) {

@@ -81,7 +81,7 @@ const MemberActions = () => {
     if (room.status === 'voting') {
         content = (
             <div>
-                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap' }}>
                     {[...Array(room.maxVotes)].map((_, index) => {
                         return <VotingBanana canBeUsed={index < voteRemaining} key={index} bananaIndex={index} /> //eslint-disable-line
                     })}
