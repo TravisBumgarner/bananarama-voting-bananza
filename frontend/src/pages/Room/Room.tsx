@@ -1,13 +1,13 @@
 import { Loading } from 'sharedComponents'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useMemo, useContext, useState, useCallback, useEffect, useRef } from 'react'
+import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
 import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 import styled from 'styled-components'
 
 import { logger, sanitizeRoomId } from 'utilities'
 import { context } from 'context'
 import { TRoom, TRoomMemberChange } from '../../types'
-import { Conclusion, RoomMembers, Signup, Voting, Admin, VotingSplash, ConclusionSplash } from './components'
+import { Conclusion, RoomMembers, Signup, Voting, Admin } from './components'
 import MemberActions from './components/MemberActions'
 
 const Sidebar = styled.div`
@@ -79,8 +79,8 @@ const Room = () => {
     const [isLoading, setIsLoading] = useState(true)
     const { dispatch, state } = useContext(context)
     const navigate = useNavigate()
-    const [isSplashing, setIsSplashing] = useState(true)
-    const splashTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    // const [isSplashing, setIsSplashing] = useState(true)
+    // const splashTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
         dispatch({
@@ -160,11 +160,11 @@ const Room = () => {
         })
     }, [sanitizeRoomId, state.user])
 
-    useEffect(() => {
-        if (!state.room) return
-        if (state.room.status === 'voting' || state.room.status === 'conclusion') setIsSplashing(true)
-        splashTimeoutRef.current = setTimeout(() => setIsSplashing(false), 1)
-    }, [state.room && state.room.status])
+    // useEffect(() => {
+    //     if (!state.room) return
+    //     if (state.room.status === 'voting' || state.room.status === 'conclusion') setIsSplashing(true)
+    //     splashTimeoutRef.current = setTimeout(() => setIsSplashing(false), 1)
+    // }, [state.room && state.room.status])
 
     const Content = useMemo(() => {
         if (!state.room || !state.user) return
@@ -180,7 +180,7 @@ const Room = () => {
                 return <Conclusion room={state.room} />
             }
         }
-    }, [state.room, isSplashing])
+    }, [state.room])
 
     useEffect(() => {
         if (state.room && state.room.status === 'deletion') {
@@ -196,13 +196,13 @@ const Room = () => {
         return
     }
 
-    if (state.room.status === 'voting' && isSplashing) {
-        return <VotingSplash room={state.room} />
-    }
+    // if (state.room.status === 'voting' && isSplashing) {
+    //     return <VotingSplash room={state.room} />
+    // }
 
-    if (state.room.status === 'conclusion' && isSplashing) {
-        return <ConclusionSplash />
-    }
+    // if (state.room.status === 'conclusion' && isSplashing) {
+    //     return <ConclusionSplash />
+    // }
     return (
         <Wrapper>
             <Sidebar>
