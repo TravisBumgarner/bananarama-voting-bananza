@@ -63,7 +63,7 @@ const MemberActions = () => {
                 <Button
                     type="button"
                     fullWidth
-                    variation="banana"
+                    variation="rotten"
                     label="Add Demo"
                     icon="add"
                     onClick={() => setShowAddDemoModal(true)}
@@ -81,12 +81,12 @@ const MemberActions = () => {
     if (room.status === 'voting') {
         content = (
             <div>
-                <Paragraph align="center">Drag bananas to your favorite demos to vote!</Paragraph>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                     {[...Array(room.maxVotes)].map((_, index) => {
                         return <VotingBanana canBeUsed={index < voteRemaining} key={index} bananaIndex={index} /> //eslint-disable-line
                     })}
                 </div>
+                <Paragraph align="center">Drag bananas to your favorite demos to vote!</Paragraph>
             </div>
         )
     }

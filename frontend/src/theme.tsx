@@ -40,7 +40,6 @@ const GlobalStyle = createGlobalStyle`
     body > div#root {
         display: flex;
         justify-content: center;
-        width: 100vw;
     }
 `
 

@@ -28,7 +28,7 @@ const AlertMessageWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     border-radius: 0.7em;
-    background-color: ${colors.rotten.lighten};
+    background-color: ${colors.banana.lighten};
     border: 2px solid ${colors.rotten.base};
     @keyframes fade {
         0%,100% { opacity: 0 }
@@ -56,8 +56,8 @@ const AlertMessage = () => {
     return (
         <AlertMessagePositioner>
             <AlertMessageWrapper>
-                <Paragraph style={{ color: colors.banana.base }}>{state.message.body}</Paragraph>
-                <Button type="button" label="Ok!" icon="done_all" onClick={handleSubmit} variation="banana" />
+                <Paragraph style={{ color: colors.rotten.base }}>{state.message.body}</Paragraph>
+                <Button type="button" label="Ok!" icon="done_all" onClick={handleSubmit} variation="rotten" />
             </AlertMessageWrapper>
         </AlertMessagePositioner>
     )

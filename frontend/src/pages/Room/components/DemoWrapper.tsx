@@ -5,7 +5,7 @@ const DemoWrapper = styled.li<{ isHovered?: boolean }>`
     ${snippets.subSection};
     border-radius: 0.7em;
     margin: 1rem 0;
-    padding: 1rem;
+    padding: 0.5rem;
     box-sizing: border-box;
     border: 4px solid transparent; 
 
@@ -26,7 +26,6 @@ const DemoWrapper = styled.li<{ isHovered?: boolean }>`
     }
 
     &:last-child{
-
         margin-bottom: 0;
     }
 `

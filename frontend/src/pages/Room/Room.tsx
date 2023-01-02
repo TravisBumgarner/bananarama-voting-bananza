@@ -11,7 +11,8 @@ import { Conclusion, RoomMembers, Signup, Voting, Admin, VotingSplash, Conclusio
 import MemberActions from './components/MemberActions'
 
 const Sidebar = styled.div`
-    width: 250px;
+    width: 190px;
+    min-width: 190px;
     margin-right: 1rem;
 
 

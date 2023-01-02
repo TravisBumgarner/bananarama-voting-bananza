@@ -13,9 +13,9 @@ const Paragraph = styled.p<ParagraphProps>`
         text-align: ${align || 'left'};
     `}
     line-height: 1.5;
-    margin: 1rem 0;
+    margin: 0.5rem 0;
     font-size: 1rem;
-    font-weight: 900;
+    font-weight: 400;
 `
 
 export default Paragraph

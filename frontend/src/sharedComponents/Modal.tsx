@@ -47,8 +47,7 @@ const Modal = ({
             },
             content: {
                 position: 'static',
-                maxWidth: '80vw',
-                minWidth: '500px',
+                width: '500px',
                 borderRadius: '0.7rem',
                 borderWidth: '0',
                 background: colors.green.lighten,

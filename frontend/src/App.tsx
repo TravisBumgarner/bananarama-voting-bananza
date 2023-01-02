@@ -15,6 +15,8 @@ import { VotingContext } from './hooks/useDragAndDrop'
 
 const AppWrapper = styled.div`
     min-width: 80vw;
+    width: 100%;
+    margin: 1rem;
     box-sizing: border-box;
 `
 

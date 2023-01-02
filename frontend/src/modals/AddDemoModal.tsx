@@ -85,7 +85,7 @@ const AddDemo = ({ closeModal, room, user }: AddDemoProps) => {
                             disabled={demo.length === 0}
                             key="submit"
                             type="submit"
-                            variation="banana"
+                            variation="rotten"
                             // icon="done_all"
                             label="Submit Demo!"
                         />

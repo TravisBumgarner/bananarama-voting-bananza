@@ -83,7 +83,7 @@ const Admin = ({ room, user }: { room: TRoom, user: TUser }) => {
                         onClick={() => setMaxVotes((prev) => prev - 1)}
                     />
                     <Button
-                        variation="banana"
+                        variation="rotten"
                         icon="add"
                         type="button"
                         label="🍌"
@@ -95,7 +95,7 @@ const Admin = ({ room, user }: { room: TRoom, user: TUser }) => {
                     fullWidth
                     type="button"
                     icon="how_to_vote"
-                    variation="banana"
+                    variation="rotten"
                     label="Start Voting"
                     onClick={() => handleRoomChange('voting')}
                 />
@@ -107,7 +107,7 @@ const Admin = ({ room, user }: { room: TRoom, user: TUser }) => {
             <Button
                 type="button"
                 fullWidth
-                variation="banana"
+                variation="rotten"
                 label="Announce Results"
                 icon="campaign"
                 onClick={() => handleRoomChange('conclusion')}
@@ -120,7 +120,7 @@ const Admin = ({ room, user }: { room: TRoom, user: TUser }) => {
                 <Button
                     type="button"
                     fullWidth
-                    variation="banana"
+                    variation="rotten"
                     label="Delete Room"
                     icon="delete"
                     onClick={() => handleRoomChange('deletion')}

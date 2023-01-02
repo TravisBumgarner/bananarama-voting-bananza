@@ -11,7 +11,7 @@ const ListItem = styled.li`
     color: ${colors.rotten.base};
     margin: 0;
     padding: 0;
-    font-weight: 900;
+    font-weight: 400;
 `
 
 const List = styled.ul`
@@ -120,10 +120,10 @@ const RoomMembers = () => {
                 type="button"
                 label="Share Room"
                 icon="content_copy"
-                variation="banana"
+                variation="rotten"
                 onClick={copyRoomToClipboard}
             />
-            <Paragraph align="center">(Room Code: {window.location.pathname.replace('/', '')})</Paragraph>
+            <Paragraph align="center">Room Code: {window.location.pathname.replace('/', '')}</Paragraph>
         </RoomMembersWrapper>
     )
 }

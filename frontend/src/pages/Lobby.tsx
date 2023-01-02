@@ -71,7 +71,7 @@ const Lobby = () => {
                 onClick={createRoom}
                 fullWidth
                 type="button"
-                variation="banana"
+                variation="rotten"
                 disabled={isLoading}
             />
             <FabulousOrWrapper>
@@ -93,7 +93,7 @@ const Lobby = () => {
                     fullWidth
                     onClick={joinRoom}
                     type="button"
-                    variation="banana"
+                    variation="rotten"
                 />
             </div>
         </Wrapper>

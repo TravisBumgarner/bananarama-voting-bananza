@@ -49,7 +49,7 @@ const JoinModal = ({ closeModal }: JoinModalProps) => {
                         icon="rocket_launch"
                         key="submit"
                         type="submit"
-                        variation="banana"
+                        variation="rotten"
                     />
                 </form>
             </div>
