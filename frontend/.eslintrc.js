@@ -48,6 +48,8 @@ module.exports = {
         'arrow-body-style': ['off'],
         'react/jsx-props-no-spreading': ['off'],
         'react/react-in-jsx-scope': ['off'],
-        'no-param-reassign': ['off']
+        'no-param-reassign': ['off'],
+        'class-methods-use-this': ['off'],
+        'max-classes-per-file': ['off']
     },
 }
