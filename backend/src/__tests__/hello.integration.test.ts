@@ -57,31 +57,18 @@ describe('GRAPHQL API', () => {
         // Need a test for subscription
     })
 
-    it('updates a room in different ways', async () => {
-        const deleteRoomSource = `
-            mutation {
-                deleteRoom(id: "${createRoom.id}", userId: "${createRoom.ownerId}") {
-                    id
-                }
-            }
-        `
-        const { data: { deleteRoom } } = await graphql({ schema, source: deleteRoomSource }) as { data: { deleteRoom: { id: string } } }
-        expect(deleteRoom.id).toEqual(createRoom.id)
-        // Need a test for subscription
-    })
-
-    it('updates a room in different ways', async () => {
-        const roomUpdates1: Partial<TRoom> = {
+    it('updates a room to voting', async () => {
+        const roomUpdates: Partial<TRoom> = {
             status: 'voting',
             maxVotes: 4
         }
-        const updateRoomSource1 = `
+        const updateRoomSource = `
             mutation {
                 updateRoom(
                     userId: "${createRoom.ownerId}",
                     roomId:"${createRoom.id}",
-                    status: ${roomUpdates1.status},
-                    maxVotes: ${roomUpdates1.maxVotes}
+                    status: ${roomUpdates.status},
+                    maxVotes: ${roomUpdates.maxVotes}
                 ) {
                     id,
                     status,
@@ -91,26 +78,37 @@ describe('GRAPHQL API', () => {
         `
         // Need to figure out how to show errors when they occur. Currently they get swallowed
         // Probably an issue with `as X`
-        const { data: { updateRoom } } = await graphql({ schema, source: updateRoomSource1 }) as { data: { updateRoom: Partial<TRoom> } }
+        const { data: { updateRoom } } = await graphql({ schema, source: updateRoomSource }) as { data: { updateRoom: Partial<TRoom> } }
 
-        const expected1: Partial<TRoom> = { ...createRoom, ...roomUpdates1 }
-        expect(expected1.id).toEqual(updateRoom.id)
-        expect(expected1.status).toEqual(updateRoom.status)
-        expect(expected1.maxVotes).toEqual(updateRoom.maxVotes)
+        const expected: Partial<TRoom> = { ...createRoom, ...roomUpdates }
+        expect(expected.id).toEqual(updateRoom.id)
+        expect(expected.status).toEqual(updateRoom.status)
+        expect(expected.maxVotes).toEqual(updateRoom.maxVotes)
+    })
 
-        // const roomUpdates2: Partial<TRoom> = {
-        //     status: 'conclusion',
-        // }
-        // const updateRoomSource2 = `
-        //     mutation {
-        //         updateRoom(userId: "${createRoom.ownerId}", roomId:"${createRoom.id}", status: ${roomUpdates2.status}) {
-        //             id,
-        //             status
-        //         }
-        //     }
-        // `
-        // const { data: { updateRoom: actual2 } } = await graphql({ schema, source: updateRoomSource2 }) as { data: { updateRoom: Partial<TRoom> } }
-        // const expected2: Partial<TRoom> = { ...createRoom, ...roomUpdates2 }
-        // expect(expected2.status).toEqual(actual2.status)
+    it('updates a room to conclusion', async () => {
+        const roomUpdates: Partial<TRoom> = {
+            status: 'conclusion',
+        }
+        const updateRoomSource = `
+            mutation {
+                updateRoom(
+                    userId: "${createRoom.ownerId}",
+                    roomId:"${createRoom.id}",
+                    status: ${roomUpdates.status},
+                ) {
+                    id,
+                    status,
+                    maxVotes
+                }
+            }
+        `
+        // Need to figure out how to show errors when they occur. Currently they get swallowed
+        // Probably an issue with `as X`
+        const { data: { updateRoom } } = await graphql({ schema, source: updateRoomSource }) as { data: { updateRoom: Partial<TRoom> } }
+
+        const expected: Partial<TRoom> = { ...createRoom, ...roomUpdates }
+        expect(expected.id).toEqual(updateRoom.id)
+        expect(expected.status).toEqual(updateRoom.status)
     })
 })
