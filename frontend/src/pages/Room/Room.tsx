@@ -4,9 +4,9 @@ import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
 import { ApolloError, gql, useMutation, useSubscription, } from '@apollo/client'
 import styled from 'styled-components'
 
-import { logger, sanitizeRoomId } from 'utilities'
+import { arrayToObject, logger, sanitizeRoomId } from 'utilities'
 import { context } from 'context'
-import { TRoom, TRoomMemberChange } from '../../types'
+import { TDemo, TRoom, TRoomMember, TRoomMemberChange, TVote } from '../../types'
 import { Conclusion, RoomMembers, Signup, Voting, Admin } from './components'
 import MemberActions from './components/MemberActions'
 
@@ -74,6 +74,18 @@ const Wrapper = styled.div`
     align-items: start;
 `
 
+type TRoomGraphQL = {
+    id: string
+    ownerId: TRoomMember['id']
+    icon: 'banana'
+    maxVotes: number
+    members: TRoomMember[]
+    status: 'signup' | 'voting' | 'conclusion' | 'deletion'
+    demos: TDemo[]
+    votes: TVote[]
+    winners: TDemo['id'][]
+}
+
 const Room = () => {
     const { roomId } = useParams()
     const [isLoading, setIsLoading] = useState(true)
@@ -82,10 +94,18 @@ const Room = () => {
     // const [isSplashing, setIsSplashing] = useState(true)
     // const splashTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-    const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoom }) => {
+    const onJoinRoomSuccess = useCallback(({ joinRoom }: { joinRoom: TRoomGraphQL }) => {
+        const { votes, members, demos, ...rest } = joinRoom
+        const mappedData = {
+            ...rest,
+            votes: arrayToObject(votes, 'id'),
+            members: arrayToObject(members, 'id'),
+            demos: arrayToObject(demos, 'id'),
+        }
+
         dispatch({
             type: 'ENTER_ROOM',
-            data: joinRoom
+            data: mappedData
         })
         setIsLoading(false)
     }, [])

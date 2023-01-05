@@ -77,8 +77,7 @@ describe('GraphQL Mutations', () => {
                 }
             }
         `
-        // Need to figure out how to show errors when they occur. Currently they get swallowed
-        // Probably an issue with `as X`
+
         const { data: { updateRoom } } = await graphql({ schema, source: updateRoomSource }) as { data: { updateRoom: Partial<TRoom> } }
 
         const expected: Partial<TRoom> = { ...startingRoom, ...roomUpdates }

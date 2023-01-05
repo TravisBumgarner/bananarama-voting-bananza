@@ -55,10 +55,9 @@ const VotingMembers = ({ members, votes, maxVotes }: TRoom) => {
         const votesCounter: Record<string, number> = {}
         Object.values(members).forEach(({ id }) => { votesCounter[id] = 0 })
 
-        votes.forEach(({ userId }) => { votesCounter[userId] += 1 })
-
+        Object.values(votes).forEach(({ userId }) => { votesCounter[userId] += 1 })
         return votesCounter
-    }, [votes, members])
+    }, [votes, members, maxVotes])
 
     return (
         <List>
@@ -99,12 +98,12 @@ const RoomMembers = () => {
                 return <VotingMembers {...room} />
             }
         }
-    }, [!!room])
+    }, [!!room, room?.members, room?.votes])
 
     const memberCount = useMemo(() => {
         if (!room) return 0
         return Object.values(room.members).length
-    }, [!!room])
+    }, [!!room, room?.members])
 
     const copyRoomToClipboard = useCallback(() => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: 'Room URL copied to clipboard.' } })

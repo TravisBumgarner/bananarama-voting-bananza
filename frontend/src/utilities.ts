@@ -25,11 +25,18 @@ const setLocalStorage = (key: string, value: any) => {
     localStorage.setItem(key, JSON.stringify(value))
 }
 
+const arrayToObject = <T extends Record<string, any>>(array: T[], key: keyof T) => array.reduce((accumulator, item) => {
+    const value = item[key]
+    accumulator[value] = item
+    return accumulator
+}, {} as Record<string, T>)
+
 export {
     logger,
     AtLeast,
     Exactly,
     sanitizeRoomId,
     getLocalStorage,
-    setLocalStorage
+    setLocalStorage,
+    arrayToObject
 }
