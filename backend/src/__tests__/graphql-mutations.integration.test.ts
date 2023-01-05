@@ -2,6 +2,7 @@ import axios from 'axios'
 import { graphql } from 'graphql'
 import { TRoom } from 'index'
 import schema from '../schemas'
+import { createBaseRoom } from './utilities'
 
 beforeAll(async () => {
     try {
@@ -11,49 +12,22 @@ beforeAll(async () => {
     }
 })
 
-let createRoom: TRoom
+let startingRoom: TRoom
 beforeEach(async () => {
-    const args = {
-        ownerId: 'bobid',
-        ownerName: 'bobname'
-    }
-
-    const createRoomSource = `
-        mutation {
-            createRoom(ownerId: "${args.ownerId}", ownerName: "${args.ownerName}") {
-                ownerId,
-                id
-            }
-        }
-    `
-    const { data } = await graphql({ schema, source: createRoomSource }) as any
-    createRoom = data.createRoom
+    startingRoom = await createBaseRoom()
 })
 
-describe('GRAPHQL API', () => {
-    it('gets a room', async () => {
-        const roomSource = `
-            query {
-                room(id: "${createRoom.id}") {
-                    ownerId,
-                    id
-                }
-            }
-        `
-        const { data: { room } } = await graphql({ schema, source: roomSource }) as any
-        expect(room.id).toEqual(createRoom.id)
-    })
-
+describe('GraphQL Mutations', () => {
     it('deletes a room', async () => {
         const deleteRoomSource = `
             mutation {
-                deleteRoom(id: "${createRoom.id}", userId: "${createRoom.ownerId}") {
+                deleteRoom(id: "${startingRoom.id}", userId: "${startingRoom.ownerId}") {
                     id
                 }
             }
         `
         const { data: { deleteRoom } } = await graphql({ schema, source: deleteRoomSource }) as any
-        expect(deleteRoom.id).toEqual(createRoom.id)
+        expect(deleteRoom.id).toEqual(startingRoom.id)
         // Need a test for subscription
     })
 
@@ -65,8 +39,8 @@ describe('GRAPHQL API', () => {
         const updateRoomSource = `
             mutation {
                 updateRoom(
-                    userId: "${createRoom.ownerId}",
-                    roomId:"${createRoom.id}",
+                    userId: "${startingRoom.ownerId}",
+                    roomId:"${startingRoom.id}",
                     status: ${roomUpdates.status},
                     maxVotes: ${roomUpdates.maxVotes}
                 ) {
@@ -80,7 +54,7 @@ describe('GRAPHQL API', () => {
         // Probably an issue with `as X`
         const { data: { updateRoom } } = await graphql({ schema, source: updateRoomSource }) as { data: { updateRoom: Partial<TRoom> } }
 
-        const expected: Partial<TRoom> = { ...createRoom, ...roomUpdates }
+        const expected: Partial<TRoom> = { ...startingRoom, ...roomUpdates }
         expect(expected.id).toEqual(updateRoom.id)
         expect(expected.status).toEqual(updateRoom.status)
         expect(expected.maxVotes).toEqual(updateRoom.maxVotes)
@@ -93,8 +67,8 @@ describe('GRAPHQL API', () => {
         const updateRoomSource = `
             mutation {
                 updateRoom(
-                    userId: "${createRoom.ownerId}",
-                    roomId:"${createRoom.id}",
+                    userId: "${startingRoom.ownerId}",
+                    roomId:"${startingRoom.id}",
                     status: ${roomUpdates.status},
                 ) {
                     id,
@@ -107,7 +81,7 @@ describe('GRAPHQL API', () => {
         // Probably an issue with `as X`
         const { data: { updateRoom } } = await graphql({ schema, source: updateRoomSource }) as { data: { updateRoom: Partial<TRoom> } }
 
-        const expected: Partial<TRoom> = { ...createRoom, ...roomUpdates }
+        const expected: Partial<TRoom> = { ...startingRoom, ...roomUpdates }
         expect(expected.id).toEqual(updateRoom.id)
         expect(expected.status).toEqual(updateRoom.status)
     })
