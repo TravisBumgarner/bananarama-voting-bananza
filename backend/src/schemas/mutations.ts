@@ -140,9 +140,11 @@ const joinRoom = {
             if (getRoomResult.success) {
                 return getRoomResult.data
             }
-            throw new Error(getRoomResult.error)
+            console.log('throwing here bbb', JSON.stringify(args))
+            // throw new Error(getRoomResult.error)
         }
-        throw new Error(addMemberResult.error)
+        console.log('throwing here aaa', JSON.stringify(args))
+        // throw new Error(addMemberResult.error)
     },
 }
 
