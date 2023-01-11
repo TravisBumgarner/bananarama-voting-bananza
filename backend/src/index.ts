@@ -7,18 +7,17 @@ import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 import { WebSocketServer } from 'ws'
 
-import { Server } from 'http'
 import { logger } from './utilities'
 import errorLookup from './errorLookup'
 import schema from './schemas'
 
 const app = express()
 
-// process.on('uncaughtException', (error: any) => logger(error))
-// process.on('unhandledRejection', (error: any) => logger(error))
+process.on('uncaughtException', (error: any) => logger(error))
+process.on('unhandledRejection', (error: any) => logger(error))
 
-// app.use(Sentry.Handlers.requestHandler())
-// app.use(Sentry.Handlers.tracingHandler())
+app.use(Sentry.Handlers.requestHandler())
+app.use(Sentry.Handlers.tracingHandler())
 
 const CORS_DEV = [
     'localhost:3000',
@@ -51,29 +50,29 @@ app.get('/ok', async (req: express.Request, res: express.Response) => {
 app.use('/graphql', graphqlHTTP(() => ({
     schema,
     graphiql: process.env.NODE_ENV !== 'production',
-    // customFormatErrorFn: (err) => {
-    //     logger(err.message)
-    //     if (err.message in errorLookup) return errorLookup[err.message]
-    //     return {
-    //         statusCode: 500,
-    //         message: 'Something went wrong'
-    //     }
-    // }
+    customFormatErrorFn: (err) => {
+        logger(err.message)
+        if (err.message in errorLookup) return errorLookup[err.message]
+        return {
+            statusCode: 500,
+            message: 'Something went wrong'
+        }
+    }
 })))
 
-// app.use(Sentry.Handlers.errorHandler())
-// app.use((err, req: express.Request, res: express.Response) => {
-//     res.statusCode = 500
-// })
+app.use(Sentry.Handlers.errorHandler())
+app.use((err, req: express.Request, res: express.Response) => {
+    res.statusCode = 500
+})
 
-// Sentry.init({
-//     dsn: 'https://f0f907615c134aff90c1a7d1ea17eb34@o4504279410671616.ingest.sentry.io/4504279411851264',
-//     integrations: [
-//         new Sentry.Integrations.Http({ tracing: true }),
-//         new Tracing.Integrations.Express({ app }),
-//     ],
-//     tracesSampleRate: 1.0,
-// })
+Sentry.init({
+    dsn: 'https://f0f907615c134aff90c1a7d1ea17eb34@o4504279410671616.ingest.sentry.io/4504279411851264',
+    integrations: [
+        new Sentry.Integrations.Http({ tracing: true }),
+        new Tracing.Integrations.Express({ app }),
+    ],
+    tracesSampleRate: 1.0,
+})
 
 const server = app.listen(8080, '0.0.0.0', () => {
     console.log('App listening at http://0.0.0.0:8080') //eslint-disable-line

@@ -22,8 +22,6 @@ const member = {
         }
     ),
     resolve: (payload) => {
-        console.log('f')
-        console.log('payload', JSON.stringify(payload))
         return payload.data
     }
 }

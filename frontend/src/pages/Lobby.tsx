@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { Button, Input } from 'sharedComponents'
 import { context } from 'context'
 import { colors, snippets } from 'theme'
+import { logger } from 'utilities'
 
 const Wrapper = styled.div`
     ${snippets.section};
@@ -55,6 +56,7 @@ const Lobby = () => {
             navigate(response.data?.createRoom.id)
         } else {
             setIsLoading(false)
+            logger(`failed to create room ${JSON.stringify(response.data)}`)
             dispatch({ type: 'ADD_MESSAGE', data: { message: 'Failed to create room :(' } })
         }
     }, [!!user])

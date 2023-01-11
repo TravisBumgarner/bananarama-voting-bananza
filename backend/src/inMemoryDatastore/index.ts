@@ -25,7 +25,6 @@ class InMemoryDatastore {
     }
 
     createRoom(owner: TRoomMember): Response<TRoom> {
-        console.log('createRoom before', JSON.stringify(this.rooms))
         let roomId = generateID(4)
 
         while ((roomId in this.rooms)) {
@@ -44,7 +43,6 @@ class InMemoryDatastore {
             demos: [],
             votes: []
         }
-        console.log('createRoom after', JSON.stringify(this.rooms))
         return {
             success: true,
             data: this.rooms[roomId]
@@ -81,7 +79,6 @@ class InMemoryDatastore {
     }
 
     addMember(roomId: string, member: TRoomMember): Response<undefined> {
-        console.log('add member', JSON.stringify(this.rooms), JSON.stringify(member))
         if (roomId in this.rooms) {
             const currentMemberIds = this.rooms[roomId].members.map(({ id }) => id)
             if (!currentMemberIds.includes(member.id)) {

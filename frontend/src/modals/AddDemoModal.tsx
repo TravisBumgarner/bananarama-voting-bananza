@@ -5,6 +5,7 @@ import { Button, Input } from 'sharedComponents'
 import { context } from 'context'
 import styled from 'styled-components'
 import { TRoom, TUser } from 'types'
+import { logger } from 'utilities'
 
 type AddDemoProps = {
     closeModal: () => void
@@ -37,6 +38,7 @@ const AddDemo = ({ closeModal, room, user }: AddDemoProps) => {
         closeModal()
     }, [])
     const onAddDemoFailure = useCallback((error: ApolloError) => {
+        logger(error.message)
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
     }, [])
     const [addDemoMutation] = useMutation<any>(ADD_DEMO_MUTATION, {

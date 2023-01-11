@@ -111,6 +111,7 @@ const Room = () => {
     }, [])
     const onJoinRoomFailure = useCallback((error: ApolloError) => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
+        logger(error.message)
         setIsLoading(false)
         navigate('/')
     }, [])
