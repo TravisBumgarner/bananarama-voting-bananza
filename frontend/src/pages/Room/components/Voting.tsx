@@ -1,5 +1,5 @@
 import { ApolloError, gql, useMutation, useSubscription } from '@apollo/client'
-import { useCallback, useContext, useEffect, useMemo } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Heading, Paragraph, RoomWrapper } from 'sharedComponents'
@@ -20,9 +20,17 @@ const VOTE_SUBSCRIPTION = gql`
   }
 `
 
-const ADD_VOTE_ACTION_MUTATION = gql`
+const ADD_VOTE_MUTATION = gql`
     mutation AddVote($roomId: String!, $userId: String!, $demoId: String!) {
         addVote(roomId: $roomId, userId: $userId, demoId: $demoId) {
+            id
+        }
+    }    
+`
+
+const DELETE_VOTE_MUTATION = gql`
+    mutation DeleteVote($roomId: String!, $userId: String!, $voteId: String!) {
+        deleteVote(roomId: $roomId, userId: $userId, voteId: $voteId) {
             id
         }
     }    
@@ -33,6 +41,62 @@ const DemosWrapper = styled.ul`
     margin: 1rem 0;
     padding: 0;
 `
+
+const VoteCast = ({ vote }: { vote: TVote }) => {
+    const [isHovering, setIsHovering] = useState(false)
+    const { dispatch } = useContext(context)
+
+    const onDeleteVoteSuccess = useCallback(() => {
+        // setIsCastingVote(false)
+    }, [])
+
+    const onDeleteVoteFailure = useCallback((error: ApolloError) => {
+        dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
+        // setIsCastingVote(false)
+    }, [])
+    const [deleteVoteMutation] = useMutation<any>(DELETE_VOTE_MUTATION, {
+        onCompleted: onDeleteVoteSuccess,
+        onError: onDeleteVoteFailure
+    })
+
+    const deleteVote = useCallback(async () => {
+        console.log({
+            voteId: vote.id,
+            userId: vote.userId,
+            roomId: vote.roomId
+        })
+        await deleteVoteMutation({
+            variables: {
+                voteId: vote.id,
+                userId: vote.userId,
+                roomId: vote.roomId
+            }
+        })
+    }, [vote.id])
+
+    const handleClick = useCallback(() => {
+        deleteVote()
+    }, [vote.id])
+
+    const handleMouseOut = useCallback(() => setIsHovering(false), [])
+    const handleMouseOver = useCallback(() => setIsHovering(true), [])
+    return (
+        <div
+            onMouseOver={handleMouseOver}
+            onFocus={handleMouseOver}
+            onMouseOut={handleMouseOut}
+            onBlur={handleMouseOut}
+            style={{ display: 'inline-block' }}
+        >
+            <button
+                style={{ background: 'transparent', border: 0, fontSize: 'inherit', cursor: 'pointer' }}
+                type="button"
+                onClick={handleClick}
+            >{isHovering ? '❌' : '🍌'}
+            </button>
+        </div>
+    )
+}
 
 type DemoProps = {
     demo: TDemo
@@ -46,6 +110,7 @@ type DemoProps = {
 const Demo = ({ demo, binIndex, user, room }: DemoProps) => {
     const { dispatch } = useContext(context)
     const { matchedBinIndex, dragEnterCallback, hoveredBinIndex } = useDragAndDrop()
+    const [votesCast, setVotesCast] = useState<TVote[]>([])
 
     const onAddVoteSuccess = useCallback(() => {
         // setIsCastingVote(false)
@@ -55,12 +120,12 @@ const Demo = ({ demo, binIndex, user, room }: DemoProps) => {
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
         // setIsCastingVote(false)
     }, [])
-    const [addVoteMutation] = useMutation<any>(ADD_VOTE_ACTION_MUTATION, {
+    const [addVoteMutation] = useMutation<any>(ADD_VOTE_MUTATION, {
         onCompleted: onAddVoteSuccess,
         onError: onAddVoteFailure
     })
 
-    const castVote = useCallback(async () => {
+    const addVote = useCallback(async () => {
         // setIsCastingVote(true)
         await addVoteMutation({
             variables: {
@@ -73,7 +138,7 @@ const Demo = ({ demo, binIndex, user, room }: DemoProps) => {
 
     useEffect(() => {
         if (matchedBinIndex === binIndex) {
-            castVote()
+            addVote()
         }
     }, [matchedBinIndex])
 
@@ -81,9 +146,11 @@ const Demo = ({ demo, binIndex, user, room }: DemoProps) => {
     const isHovered = useMemo(() => hoveredBinIndex === binIndex, [hoveredBinIndex, binIndex])
     const onDragEnter = useCallback(() => dragEnterCallback(binIndex), [binIndex])
 
-    const votesCastByMemberForDemo = useMemo(() => {
-        return Object.values(room.votes).filter(({ userId, demoId }) => userId === user.id && demoId === demo.id).length
+    useEffect(() => {
+        setVotesCast(Object.values(room.votes).filter(({ userId, demoId }) => userId === user.id && demoId === demo.id))
     }, [Object.values(room.votes).length])
+
+    const VotesCast = votesCast.map((vote) => <VoteCast key={vote.id} vote={vote} />)
 
     return (
         <DemoWrapper
@@ -96,7 +163,7 @@ const Demo = ({ demo, binIndex, user, room }: DemoProps) => {
                 <Paragraph>{demo.presenter}</Paragraph>
             </div>
             <div style={{ fontSize: '3rem' }}>
-                {'🍌'.repeat(votesCastByMemberForDemo)}
+                {VotesCast}
             </div>
         </DemoWrapper>
     )

@@ -41,7 +41,8 @@ const JOIN_ROOM_MUTATION = gql`
             votes {
                 userId
                 demoId
-                id
+                id,
+                roomId
             }
         }
     }
