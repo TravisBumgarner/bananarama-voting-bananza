@@ -3,19 +3,22 @@ import { graphqlHTTP } from 'express-graphql'
 import { useServer } from 'graphql-ws/lib/use/ws'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-// import * as Sentry from '@sentry/node'
-// import * as Tracing from '@sentry/tracing'
+import * as Sentry from '@sentry/node'
+import * as Tracing from '@sentry/tracing'
 import { WebSocketServer } from 'ws'
 
 import { Server } from 'http'
-// import { logger } from './utilities'
-// import errorLookup from './errorLookup'
+import { logger } from './utilities'
+import errorLookup from './errorLookup'
 import schema from './schemas'
 
 const app = express()
 
-// app.use(Sentry.Handlers.requestHandler())
-// app.use(Sentry.Handlers.tracingHandler())
+process.on('uncaughtException', (error: any) => logger(error))
+process.on('unhandledRejection', (error: any) => logger(error))
+
+app.use(Sentry.Handlers.requestHandler())
+app.use(Sentry.Handlers.tracingHandler())
 
 const CORS_DEV = [
     'localhost:3000',
@@ -48,29 +51,29 @@ app.get('/ok', async (req: express.Request, res: express.Response) => {
 app.use('/graphql', graphqlHTTP(() => ({
     schema,
     graphiql: process.env.NODE_ENV !== 'production',
-    // customFormatErrorFn: (err) => {
-    //     logger(err.message)
-    //     if (err.message in errorLookup) return errorLookup[err.message]
-    //     return {
-    //         statusCode: 500,
-    //         message: 'Something went wrong'
-    //     }
-    // }
+    customFormatErrorFn: (err) => {
+        logger(err.message)
+        if (err.message in errorLookup) return errorLookup[err.message]
+        return {
+            statusCode: 500,
+            message: 'Something went wrong'
+        }
+    }
 })))
 
-// app.use(Sentry.Handlers.errorHandler())
-// app.use((err, req: express.Request, res: express.Response) => {
-//     res.statusCode = 500
-// })
+app.use(Sentry.Handlers.errorHandler())
+app.use((err, req: express.Request, res: express.Response) => {
+    res.statusCode = 500
+})
 
-// Sentry.init({
-//     dsn: 'https://f0f907615c134aff90c1a7d1ea17eb34@o4504279410671616.ingest.sentry.io/4504279411851264',
-//     integrations: [
-//         new Sentry.Integrations.Http({ tracing: true }),
-//         new Tracing.Integrations.Express({ app }),
-//     ],
-//     tracesSampleRate: 1.0,
-// })
+Sentry.init({
+    dsn: 'https://f0f907615c134aff90c1a7d1ea17eb34@o4504279410671616.ingest.sentry.io/4504279411851264',
+    integrations: [
+        new Sentry.Integrations.Http({ tracing: true }),
+        new Tracing.Integrations.Express({ app }),
+    ],
+    tracesSampleRate: 1.0,
+})
 
 let server: Server
 let wsServer: WebSocketServer
