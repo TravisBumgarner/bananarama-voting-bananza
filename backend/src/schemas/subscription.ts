@@ -21,7 +21,11 @@ const member = {
             return payload.data.roomId === variables.roomId
         }
     ),
-    resolve: (payload) => payload.data
+    resolve: (payload) => {
+        console.log('f')
+        console.log('payload', JSON.stringify(payload))
+        return payload.data
+    }
 }
 
 const demo = {

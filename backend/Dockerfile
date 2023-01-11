@@ -11,5 +11,4 @@ RUN yarn run bundle
 
 EXPOSE 8080
 
-# https://maximorlov.com/process-signals-inside-docker-containers/
-CMD ["node", "build/index.js"] 
+CMD ["yarn", "run", "start"]

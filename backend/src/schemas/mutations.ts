@@ -122,9 +122,13 @@ const joinRoom = {
         userName: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args: JoinRoomArgs) => {
+        console.log('addMemberREsultargs', JSON.stringify(args))
         const addMemberResult = inMemoryDatastore.addMember(args.roomId, { name: args.userName, id: args.userId })
+        console.log('addMemberREsult', JSON.stringify(addMemberResult))
         if (addMemberResult.success || addMemberResult.error === EErrorMessages.MemberAlreadyExists) {
+            console.log('b')
             if (addMemberResult.success) {
+                console.log('c')
                 await publishEvent({
                     type: EPubSubActionType.MEMBER_UPDATE_ACTION,
                     data: {
@@ -136,6 +140,7 @@ const joinRoom = {
                 })
             }
             const getRoomResult = inMemoryDatastore.getRoom(args.roomId)
+            console.log('getRoomResult', JSON.stringify(getRoomResult))
             if (getRoomResult.success) {
                 return getRoomResult.data
             }
