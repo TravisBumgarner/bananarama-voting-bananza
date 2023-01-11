@@ -33,7 +33,6 @@ type UpdateRoomArgs = {
     maxVotes?: number
 }
 
-// Currently only designed around updating status.
 const updateRoom = {
     type: RoomType,
     description: 'Update a Room',

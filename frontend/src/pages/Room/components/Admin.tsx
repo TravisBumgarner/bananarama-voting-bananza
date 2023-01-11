@@ -3,7 +3,7 @@ import { Button, Heading, Paragraph } from 'sharedComponents'
 import { ApolloError, gql, useMutation } from '@apollo/client'
 
 import { TRoom, TUser } from 'types'
-import { Exactly } from 'utilities'
+import { Exactly, logger } from 'utilities'
 import { context } from 'context'
 import styled from 'styled-components'
 import { colors, snippets } from 'theme'
@@ -37,6 +37,7 @@ const Admin = ({ room, user }: { room: TRoom, user: TUser }) => {
         })
     }, [room])
     const onUpdateRoomError = useCallback((error: ApolloError) => {
+        logger(error.message)
         dispatch({ type: 'ADD_MESSAGE', data: { message: error.message } })
     }, [])
     const [updateRoomMutation] = useMutation<any>(UPDATE_ROOM_MUTATION, {

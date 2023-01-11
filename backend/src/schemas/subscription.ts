@@ -21,7 +21,9 @@ const member = {
             return payload.data.roomId === variables.roomId
         }
     ),
-    resolve: (payload) => payload.data
+    resolve: (payload) => {
+        return payload.data
+    }
 }
 
 const demo = {
